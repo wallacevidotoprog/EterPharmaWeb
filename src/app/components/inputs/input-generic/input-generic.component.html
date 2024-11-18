@@ -1,0 +1,10 @@
+<div class="coolinput">
+  <label [attr.for]="id" class="text">{{ label }}</label>
+  <input
+    [type]="type"
+    [id]="id"
+    placeholder="{{ ph }}"
+    [readOnly]="!!isReadOnly"
+    [(ngModel)]="value"
+  />
+</div>

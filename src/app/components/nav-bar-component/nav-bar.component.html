@@ -1,0 +1,33 @@
+<div class="container">
+  <nav>
+    <div class="logo">
+      <img src="https://1t4um7.csb.app/assets/Logo64x64.png" alt="logo" />
+      <h1>LOGO</h1>
+    </div>
+    <ul>
+      <li>
+        <a routerLink="/">Home</a>
+      </li>
+      <!-- <li>
+        <a routerLink="services">Entrega</a>
+      </li> -->
+      <li class="dropdown">
+        <a>Entrega</a>
+        <ul class="dropdown-menu">
+          <li><a routerLink="launch-order">Lançar Pedido de Entrega</a></li>
+          <li><a routerLink="start-delivery">Iniciar Entrega</a></li>
+          <li><a routerLink="finish-delivery">Finalizar Entrega</a></li>
+        </ul>
+      </li>
+      <li>
+        <a routerLink="maintenance">Manutenção</a>
+      </li>
+      <li>
+        <a routerLink="report">Relatório</a>
+      </li>
+      <li class="logout">
+        <a routerLink="login" (click)="logout()">Sair</a>
+      </li>
+    </ul>    
+  </nav>  
+</div>

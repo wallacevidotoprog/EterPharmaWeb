@@ -1,0 +1,54 @@
+<div class="container">
+  <form (ngSubmit)="onSeach()" [formGroup]="report" class="search">
+    <app-input-generic label="DE" type="date" formControlName="de" />
+    <app-input-generic label="ATÉ" type="date" formControlName="ate" />
+    <app-input-button-generic [loading]="loading" [isDisable]="false" />
+  </form>
+  <div>
+    <table class="table-fill">
+      <thead>
+        <tr>
+          <th class="text-left">ID</th>
+          <th class="text-left">Usuário</th>
+          <th class="text-left">Data</th>
+          <th class="text-left">Valor</th>
+          <th class="text-left">Kilometragem</th>
+          <th class="text-left">Rotas</th>
+          <th class="text-left">Tipo</th>
+          <th class="text-left">Ação</th>
+        </tr>
+      </thead>
+      <tbody class="table-hover">
+        @if (data) { @for (item of data; track $index) {
+        <tr class="table__row">
+          <td class="text-left" data-heading="id_delivery">
+            {{ item.id_delivery }}
+          </td>
+          <td class="text-left" data-heading="id_deliveryman">
+            {{ item.id_deliveryman }}
+          </td>
+          <td class="text-left" data-heading="date">{{ item.date }}</td>
+          <td class="text-left" data-heading="value">{{ item.value }}</td>
+          <td class="text-left" data-heading="km">{{ item.km }}</td>
+          <td class="text-left" data-heading="router">
+            {{ item.router }}
+          </td>
+          @if (item.isRate) {
+          <td class="text-left" data-heading="Type">C/ Taxa</td>
+          }@else if (item.isIfood) {
+          <td class="text-left" data-heading="Type">IFOOD</td>
+          }@else if (item.isManipulation) {
+          <td class="text-left" data-heading="Type">Manip.</td>
+          }@else {
+          <td class="text-left" data-heading="Type">S/ Taxa</td>
+          }
+          <td class="text-left action" data-heading="action">
+            <button type="button">Editar</button>
+            <button type="button">Deletar</button>
+          </td>
+        </tr>
+        } }
+      </tbody>
+    </table>
+  </div>
+</div>

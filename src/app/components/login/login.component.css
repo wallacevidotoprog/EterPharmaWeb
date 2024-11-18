@@ -1,0 +1,204 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(
+    circle,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(9, 9, 121, 1) 35%,
+    rgba(0, 212, 255, 1) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.form_main {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(222, 234, 248, 0.856);
+  padding: 30px 30px 30px 30px;
+  border-radius: 30px;
+  box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.062);
+  z-index: 100;
+}
+
+.heading {
+  font-size: 2.5em;
+  color: #2e2e2e;
+  font-weight: 700;
+  margin: 15px 0 30px 0;
+}
+
+.inputContainer {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 10px;
+}
+
+.inputField {
+  width: 100%;
+  height: 40px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid rgb(173, 173, 173);
+  border-radius: 30px;
+  margin: 10px 0;
+  color: black;
+  font-size: 0.8em;
+  font-weight: 500;
+  box-sizing: border-box;
+  padding-left: 30px;
+}
+
+.inputField:focus {
+  outline: none;
+  border-bottom: 2px solid rgb(199, 114, 255);
+}
+
+.inputField::placeholder {
+  color: rgb(80, 80, 80);
+  font-size: 1em;
+  font-weight: 500;
+}
+
+#button {
+  position: relative;
+  width: 100%;
+  border: 2px solid #8000ff;
+  background-color: #8000ff;
+  height: 40px;
+  color: white;
+  font-size: 0.8em;
+  font-weight: 500;
+  letter-spacing: 1px;
+  border-radius: 30px;
+  margin: 10px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+#button::after {
+  content: "";
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.253);
+  height: 100%;
+  width: 150px;
+  top: 0;
+  left: -200px;
+  border-bottom-right-radius: 100px;
+  border-top-left-radius: 100px;
+  filter: blur(10px);
+  transition-duration: 0.5s;
+}
+
+#button:hover::after {
+  transform: translateX(600px);
+  transition-duration: 0.5s;
+}
+
+.signupContainer {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.signupContainer p {
+  font-size: 0.9em;
+  font-weight: 500;
+  color: black;
+}
+
+.signupContainer a {
+  font-size: 0.7em;
+  font-weight: 500;
+  background-color: #2e2e2e;
+  color: white;
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+}
+
+.pyramid-loader {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: block;
+  transform-style: preserve-3d;
+  transform: rotateX(-20deg);
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: spin 4s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
+.pyramid-loader .wrapper .side {
+  width: 70px;
+  height: 70px;
+  /* you can choose any gradient or color you want */
+  /* background: radial-gradient( #2F2585 10%, #F028FD 70%, #2BDEAC 120%); */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  transform-origin: center top;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.pyramid-loader .wrapper .side1 {
+  transform: rotateZ(-30deg) rotateY(90deg);
+  background: conic-gradient(#2bdeac, #f028fd, #d8cce6, #2f2585);
+}
+
+.pyramid-loader .wrapper .side2 {
+  transform: rotateZ(30deg) rotateY(90deg);
+  background: conic-gradient(#2f2585, #d8cce6, #f028fd, #2bdeac);
+}
+
+.pyramid-loader .wrapper .side3 {
+  transform: rotateX(30deg);
+  background: conic-gradient(#2f2585, #d8cce6, #f028fd, #2bdeac);
+}
+
+.pyramid-loader .wrapper .side4 {
+  transform: rotateX(-30deg);
+  background: conic-gradient(#2bdeac, #f028fd, #d8cce6, #2f2585);
+}
+
+.pyramid-loader .wrapper .shadow {
+  width: 60px;
+  height: 60px;
+  background: #8b5ad5;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  transform: rotateX(90deg) translateZ(-40px);
+  filter: blur(12px);
+}
