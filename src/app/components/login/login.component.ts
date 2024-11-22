@@ -28,13 +28,15 @@ export class LoginComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(
         (res) => {
-          if (res.err) {
+          if (!res.data.Authentication) {
             this.canLoadin = true;
             return;
           }
           this.routerService.navigate(['']);
         },
         (error) => {
+          console.log(error);
+
           this.canLoadin = true;
           this.tAlert.warning({
             detail: 'Falhar de Autenticação',
@@ -53,11 +55,13 @@ export class LoginComponent implements OnInit {
   Login() {
     this.canLoadin = false;
     this.loginService
-      .eLogin({ user: this.user, pass: this.pass })
+      .eLogin({ email: this.user, pass: this.pass })
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(
         (res) => {
-          if (res.err) {
+          console.log(res);
+
+          if (!res.actionResult) {
             this.canLoadin = true;
             this.tAlert.error({
               detail: 'Falhar ao Logar',

@@ -13,6 +13,5 @@ export class NavBarComponent {
   protected api = inject(LoginService);
   logout() {
     this.api.eLogout().subscribe()
-
   }
 }

@@ -20,8 +20,8 @@ export class MaintenanceService {
       withCredentials: true,
     });
   }
-  add(dataMaintenace: IMaintenanceData): Observable<IRespAPI> {
-    return this.api.post<IRespAPI>(
+  add(dataMaintenace: IMaintenanceData): Observable<IRespAPI<any>> {
+    return this.api.post<IRespAPI<any>>(
       `${environment.API}api/maintenance/add`,
       dataMaintenace,
       {

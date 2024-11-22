@@ -9,8 +9,8 @@ import { IDeliveryData, IRespAPI } from './indexers.service';
 export class DeliveryService {
   private api = inject(HttpClient);
 
-  add(dataDerivery: IDeliveryData): Observable<IRespAPI> {
-    return this.api.post<IRespAPI>(`${environment.API}api/delivery/add`,dataDerivery,{headers: {
+  add(dataDerivery: IDeliveryData): Observable<IRespAPI<any>> {
+    return this.api.post<IRespAPI<any>>(`${environment.API}api/delivery/add`,dataDerivery,{headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },

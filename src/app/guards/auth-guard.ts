@@ -31,10 +31,10 @@ class eAuthGuard {
     return this.auth
     .eVerifyToken()
     .subscribe((res) => {
-      if (res.err) {
+      if (res.actionResult) {
         this.routerService.navigate(['login'])
       }
-      return !res.err
+      return !res.actionResult
     },
     (error)=>{
 

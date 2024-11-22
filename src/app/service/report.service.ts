@@ -11,8 +11,8 @@ export class ReportService {
   protected api = inject(HttpClient);
   constructor() {}
 
-  public getAll(): Observable<IRespAPI> {
-    return this.api.get<IRespAPI>(`${environment.API}api/delivery/getAll`, {
+  public getAll(): Observable<IRespAPI<any>> {
+    return this.api.get<IRespAPI<any>>(`${environment.API}api/delivery/getAll`, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',

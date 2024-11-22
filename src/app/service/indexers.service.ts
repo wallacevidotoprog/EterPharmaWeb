@@ -27,14 +27,14 @@ export interface IMaintenanceData {
   type: string | any;
   obs: string | any;
 }
-export interface IRespAPI {
-  err: boolean | any;
-  menssage: string | any;
-  data: any;
+export interface IRespAPI <T>{
+  message?: string;
+  actionResult: boolean;
+  data?: T;
 }
 
 export interface IUserLogin {
-  user: string;
+  email: string;
   pass: string;
 }
 export interface IDeliveryData {
