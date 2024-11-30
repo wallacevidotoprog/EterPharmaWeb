@@ -12,6 +12,7 @@ import { StartDeliveryComponent } from './components/pages/start-delivery/start-
 import { FinishDeliveryComponent } from './components/pages/finish-delivery/finish-delivery.component';
 import { LaunchOrderComponent } from './components/pages/launch-order/launch-order.component';
 import { LoginComponent } from './components/pages/login/login.component';
+import { SidebarLayoutComponent } from './components/sidebar-layout/sidebar-layout.component';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +32,7 @@ import { LoginComponent } from './components/pages/login/login.component';
     StartDeliveryComponent,
     FinishDeliveryComponent,
     LaunchOrderComponent,
+    SidebarLayoutComponent
   ],
 })
 export class AppComponent {

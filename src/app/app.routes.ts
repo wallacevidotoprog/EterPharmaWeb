@@ -10,12 +10,13 @@ import { ReportComponent } from './components/report/report.component';
 import { StartDeliveryComponent } from './components/pages/start-delivery/start-delivery.component';
 import { LaunchOrderComponent } from './components/pages/launch-order/launch-order.component';
 import { FinishDeliveryComponent } from './components/pages/finish-delivery/finish-delivery.component';
+import { SidebarLayoutComponent } from './components/sidebar-layout/sidebar-layout.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, title: 'login' },
   {
     path: '',
-    component: HomepageComponent,
+    component: SidebarLayoutComponent,
     title: 'Home Page',
     canActivate: [AuthGuard],
     children: [

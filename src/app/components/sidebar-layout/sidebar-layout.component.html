@@ -1,18 +1,75 @@
-<ul class="menu">
-  <li title="home"><a href="#" class="menu-button home" (click)="toggleMenu()">menu</a></li>
-  <li title="search"><a href="#" class="search">search</a></li>
-  <li title="pencil"><a href="#" class="pencil">pencil</a></li>
-  <li title="about"><a href="#" class="active about">about</a></li>
-  <li title="archive"><a href="#" class="archive">archive</a></li>
-  <li title="contact"><a href="#" class="contact">contact</a></li>
-  <li title="Logout"><a href="#" class="logout">Logout</a></li>
-</ul>
+<div class="area">
+  <nav class="main-menu">
+    <ul>
+      <li>
+        <a routerLink="/" >
+          <i class="fa fa-home fa-2x"></i>
+          <span class="nav-text"> Community Dashboard </span>
+        </a>
+      </li>
+      <li class="has-subnav">
+        <a routerLink="launch-order" >
+          <i class="fa fa-globe fa-2x"></i>
+          <span class="nav-text"> ENTREGAS </span>
+        </a>
 
-<ul #menuBar class="menu-bar">
-  <li><a href="#" class="menu-button">Menu</a></li>
-  <li><a href="#">Home</a></li>
-  <li><a href="#">Profile</a></li>
-  <li><a href="#">Editorial</a></li>
-  <li><a href="#">About</a></li>
-</ul>
-<router-outlet></router-outlet>
+      </li>
+      <li><a routerLink="launch-order" routerLinkActive="active">Lançar Pedido de Entrega</a></li>
+      <li class="has-subnav">
+        <a href="#">
+          <i class="fa fa-comments fa-2x"></i>
+          <span class="nav-text"> Group Hub Forums </span>
+        </a>
+      </li>
+      <li class="has-subnav">
+        <a href="#">
+          <i class="fa fa-camera-retro fa-2x"></i>
+          <span class="nav-text"> Survey Photos </span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fa fa-film fa-2x"></i>
+          <span class="nav-text"> Surveying Tutorials </span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fa fa-book fa-2x"></i>
+          <span class="nav-text"> Surveying Jobs </span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fa fa-cogs fa-2x"></i>
+          <span class="nav-text"> Tools & Resources </span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fa fa-map-marker fa-2x"></i>
+          <span class="nav-text"> Member Map </span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fa fa-info fa-2x"></i>
+          <span class="nav-text"> Documentation </span>
+        </a>
+      </li>
+    </ul>
+    <ul class="logout">
+      <li>
+        <a  (click)="logout()">
+          <i class="fa fa-power-off fa-2x"></i>
+          <span class="nav-text"> Logout </span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="container">
+    <router-outlet/>
+</div></div>
+
+
+
