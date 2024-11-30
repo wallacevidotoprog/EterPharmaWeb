@@ -33,6 +33,10 @@ export interface IRespAPI <T>{
   data?: T;
 }
 
+export interface IVerifyAuth {
+  Authentication: boolean;
+}
+
 export interface IUserLogin {
   email: string;
   pass: string;

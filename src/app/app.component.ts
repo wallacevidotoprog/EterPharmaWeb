@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet} from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
-import { LoginComponent } from './components/login/login.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { CommonModule } from '@angular/common';
 import { PageNotFoundComponentComponent } from './components/page-not-found-component/page-not-found-component.component';
@@ -12,6 +11,7 @@ import { NgToastModule } from 'ng-angular-popup';
 import { StartDeliveryComponent } from './components/pages/start-delivery/start-delivery.component';
 import { FinishDeliveryComponent } from './components/pages/finish-delivery/finish-delivery.component';
 import { LaunchOrderComponent } from './components/pages/launch-order/launch-order.component';
+import { LoginComponent } from './components/pages/login/login.component';
 
 @Component({
   selector: 'app-root',
@@ -28,10 +28,9 @@ import { LaunchOrderComponent } from './components/pages/launch-order/launch-ord
     PageNotFoundComponentComponent,
     AlertComponent,
     MatDialogModule,
-    LoginComponent,
     StartDeliveryComponent,
     FinishDeliveryComponent,
-    LaunchOrderComponent
+    LaunchOrderComponent,
   ],
 })
 export class AppComponent {

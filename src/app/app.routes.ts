@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './components/pages/login/login.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { PageNotFoundComponentComponent } from './components/page-not-found-component/page-not-found-component.component';
 import { AuthGuard } from './guards/auth-guard';
@@ -17,37 +17,43 @@ export const routes: Routes = [
     path: '',
     component: HomepageComponent,
     title: 'Home Page',
-    //canActivate: [AuthGuard] ,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'services',
         component: ServicesComponent,
-        title: 'Entraga'
+        title: 'Entraga',
+        canActivate: [AuthGuard],
       },
       {
         path: 'maintenance',
         component: MaintenanceComponent,
-        title: 'Manutenção'
+        title: 'Manutenção',
+        canActivate: [AuthGuard],
       },
       {
         path: 'report',
         component: ReportComponent,
-        title: 'Relatórios'
+        title: 'Relatórios',
+        canActivate: [AuthGuard],
       },
       {
         path: 'start-delivery',
         component: StartDeliveryComponent,
-        title: 'Relatórios'
+        title: 'Relatórios',
+        canActivate: [AuthGuard],
       },
       {
         path: 'launch-order',
         component: LaunchOrderComponent,
-        title: 'Relatórios'
+        title: 'Relatórios',
+        canActivate: [AuthGuard],
       },
       {
         path: 'finish-delivery',
         component: FinishDeliveryComponent,
-        title: 'Relatórios'
+        title: 'Relatórios',
+        canActivate: [AuthGuard],
       },
     ],
   },

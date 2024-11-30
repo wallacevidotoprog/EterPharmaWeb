@@ -1,11 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { LoginService } from '../../service/login.service';
+import { LoginService } from '../../../service/login.service';
 import { Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { pipe, Subject, take, takeUntil } from 'rxjs';
-import { AlertComponent, StateAlert } from '../alert/alert.component';
-import { AlertService } from '../alert/alert.service';
+import { AlertComponent, StateAlert } from '../../alert/alert.component';
+import { AlertService } from '../../alert/alert.service';
 import { NgToastService } from 'ng-angular-popup';
 @Component({
   selector: 'app-login',
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(
         (res) => {
-          if (!res.data.Authentication) {
+          if (!res.data?.Authentication) {
             this.canLoadin = true;
             return;
           }

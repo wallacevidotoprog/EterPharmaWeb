@@ -5,15 +5,16 @@ import { ServicesComponent } from '../services/services.component';
 import { StateAlert } from '../alert/alert.component';
 import { AlertService } from '../alert/alert.service';
 import { NgToastService } from 'ng-angular-popup';
+import { SidebarLayoutComponent } from "../sidebar-layout/sidebar-layout.component";
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [NavBarComponent, ServicesComponent, RouterOutlet],
+  imports: [NavBarComponent, ServicesComponent, RouterOutlet, SidebarLayoutComponent],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.css',
 })
 export class HomepageComponent {
   private tAlerts = inject(NgToastService);
   private dialogAlert = inject(AlertService);
-  
+
 }
