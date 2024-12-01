@@ -16,19 +16,25 @@ font-size:20px;
 
 
 .main-menu:hover,nav.main-menu.expanded {
-width:250px;
+
 overflow:visible;
 }
 
+.expanded{
+  width:250px;
+}
+.expanded-reverse{
+  width:60px;
+}
+
 .main-menu {
-background:#212121;
+background:#006494;
 border-right:1px solid #e5e5e5;
 position:absolute;
 top:0;
 bottom:0;
 height:100%;
 left:0;
-width:60px;
 overflow:hidden;
 -webkit-transition:width .05s linear;
 transition:width .05s linear;
@@ -51,7 +57,7 @@ position:relative;
 display:table;
 border-collapse:collapse;
 border-spacing:0;
-color:#999;
+color:white;
  font-family: arial;
 font-size: 14px;
 text-decoration:none;
@@ -113,7 +119,7 @@ padding:0;
 }
 .main-menu li:hover>a,nav.main-menu li.active>a,.dropdown-menu>li>a:hover,.dropdown-menu>li>a:focus,.dropdown-menu>.active>a,.dropdown-menu>.active>a:hover,.dropdown-menu>.active>a:focus,.no-touch .dashboard-page nav.dashboard-menu ul li:hover a,.dashboard-page nav.dashboard-menu ul li.active a {
 color:#fff;
-background-color:#000000;
+background-color:#13293d;
 }
 .area {
 float: left;
@@ -132,3 +138,53 @@ height: 100%;
   background-color: red;
   margin-left: 61px;
 }
+
+.logout{
+  background-color: #f31515bd;
+  cursor: pointer;
+}
+.logout li a:hover{
+  background-color: #f31515e8;
+}
+
+.main-menu ul .submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease-out;
+  background-color: #333;
+  border-radius: 5px;
+}
+
+.main-menu ul .submenu.open {
+  max-height: 300px; /* Ajuste conforme necessário */
+}
+
+.main-menu ul .submenu li {
+  padding: 10px;
+}
+
+.main-menu ul .submenu li a {
+  text-decoration: none;
+  color: #fff;
+}
+
+.main-menu ul .submenu li a:hover {
+  background-color: #555;
+}
+
+.submenu li{
+  background-color: #247ba0;
+  padding: auto;
+}
+li{
+  cursor: pointer;
+}
+
+.btn-expanded{
+  top: 0;
+  display: flex;
+}
+

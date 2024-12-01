@@ -1,5 +1,5 @@
 <div class="area">
-  <nav class="main-menu">
+  <nav class="main-menu" [ngClass]="isExpanded ? 'expanded' : 'expanded-reverse'">
     <ul>
       <li>
         <a routerLink="/" >
@@ -8,13 +8,16 @@
         </a>
       </li>
       <li class="has-subnav">
-        <a routerLink="launch-order" >
+        <a (click)="toggleSubmenu($event)" >
           <i class="fa fa-globe fa-2x"></i>
           <span class="nav-text"> ENTREGAS </span>
         </a>
-
+        <ul class="submenu" [ngClass]="{'open': isSubmenuOpen}">
+          <li><a routerLink="pending-deliveries">Pendentes</a></li>
+          <li><a routerLink="completed-deliveries">Finalizadas</a></li>
+          <li><a routerLink="delivery-reports">Relatórios</a></li>
+        </ul>
       </li>
-      <li><a routerLink="launch-order" routerLinkActive="active">Lançar Pedido de Entrega</a></li>
       <li class="has-subnav">
         <a href="#">
           <i class="fa fa-comments fa-2x"></i>
@@ -67,6 +70,7 @@
       </li>
     </ul>
   </nav>
+  <div class="btn-expanded">oi</div>
   <div class="container">
     <router-outlet/>
 </div></div>
