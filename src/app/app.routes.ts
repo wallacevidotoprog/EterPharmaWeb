@@ -1,16 +1,12 @@
 import { Routes } from '@angular/router';
-
-import { LoginComponent } from './components/pages/login/login.component';
-import { HomepageComponent } from './components/homepage/homepage.component';
-import { PageNotFoundComponentComponent } from './components/page-not-found-component/page-not-found-component.component';
-import { AuthGuard } from './guards/auth-guard';
-import { ServicesComponent } from './components/services/services.component';
 import { MaintenanceComponent } from './components/maintenance/maintenance.component';
+import { PageNotFoundComponentComponent } from './components/page-not-found-component/page-not-found-component.component';
+import { LoginComponent } from './components/pages/login/login.component';
+import { SidebarLayoutComponent } from './components/pages/sidebar-layout/sidebar-layout.component';
 import { ReportComponent } from './components/report/report.component';
-import { StartDeliveryComponent } from './components/pages/start-delivery/start-delivery.component';
-import { LaunchOrderComponent } from './components/pages/launch-order/launch-order.component';
-import { FinishDeliveryComponent } from './components/pages/finish-delivery/finish-delivery.component';
-import { SidebarLayoutComponent } from './components/sidebar-layout/sidebar-layout.component';
+import { ServicesComponent } from './components/services/services.component';
+import { AuthGuard } from './guards/auth-guard';
+import { DeliveryComponent } from './components/pages/delivery/delivery.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, title: 'login' },
@@ -20,6 +16,12 @@ export const routes: Routes = [
     title: 'Home Page',
     canActivate: [AuthGuard],
     children: [
+      {
+        path: 'delivery',
+        component: DeliveryComponent,
+        title: 'ENTREGAS',
+        canActivate: [AuthGuard],
+      },
       {
         path: 'services',
         component: ServicesComponent,
@@ -35,24 +37,6 @@ export const routes: Routes = [
       {
         path: 'report',
         component: ReportComponent,
-        title: 'Relatórios',
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'start-delivery',
-        component: StartDeliveryComponent,
-        title: 'Relatórios',
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'launch-order',
-        component: LaunchOrderComponent,
-        title: 'Relatórios',
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'finish-delivery',
-        component: FinishDeliveryComponent,
         title: 'Relatórios',
         canActivate: [AuthGuard],
       },
