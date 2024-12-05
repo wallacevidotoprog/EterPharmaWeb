@@ -17,6 +17,7 @@ import { NgToastModule } from 'ng-angular-popup';
     CommonModule,
     RouterOutlet,
     MatDialogModule,
+    
   ],
 })
 export class AppComponent {

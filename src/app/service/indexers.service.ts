@@ -32,11 +32,9 @@ export interface IRespAPI <T>{
   actionResult: boolean;
   data?: T;
 }
-
 export interface IVerifyAuth {
   Authentication: boolean;
 }
-
 export interface IUserLogin {
   email: string;
   pass: string;
@@ -60,4 +58,13 @@ export interface IDeliveryDataRes {
   isRate: boolean;
   isIfood: boolean;
   isManipulation: boolean;
+}
+
+export interface IOrderDelivery{
+  user_id?: number | null;
+  date: Date;
+  client_id?: number | null;
+  address_id?: number | null;
+  type_order_id?: number | null;
+  value: number;
 }

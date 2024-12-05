@@ -1,15 +1,23 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ButtonCustomComponent } from '../../inputs/button-custom/button-custom.component';
-import { InputButtonGenericComponent } from "../../inputs/input-button-generic/input-button-generic.component";
+import { ModalNewDelivaryComponent } from '../../modal/modal-new-delivery/modal-new-delivary.component';
 
 @Component({
   selector: 'app-delivery',
   standalone: true,
-  imports: [ButtonCustomComponent, InputButtonGenericComponent],
+  imports: [ButtonCustomComponent, ModalNewDelivaryComponent, CommonModule],
   templateUrl: './delivery.component.html',
-  styleUrl: './delivery.component.scss'
+  styleUrl: './delivery.component.scss',
 })
 export class DeliveryComponent {
-ButtonSVG: any;
+  isModalVisible = false;
 
+  openModal() {
+    this.isModalVisible = true;
+  }
+
+  closeModal() {
+    this.isModalVisible = false;
+  }
 }
