@@ -11,6 +11,7 @@ import {
   FormsModule,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
+import { IDatasInput } from '../../../service/indexers.service';
 
 const INPUT_FIELD_VALUE_ACESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -33,11 +34,10 @@ export class InputDropdownGenericComponent
   }
   @Input() id!: number;
   @Input() label: string = 'TIPO';
-  @Input() datas!: never[];
+  @Input() dataValues: IDatasInput[]=[];
   @Output() idDP = new EventEmitter<number>();
   @Input() isReadOnly = false;
   @Input() isValue: any;
-
   protected innerValue: any;
 
   onchange(e: Event) {
@@ -52,6 +52,7 @@ export class InputDropdownGenericComponent
     if (v !== this.innerValue) {
       this.innerValue = v;
       this.OnChangeCb(v);
+      this.idDP.emit(v);
     }
   }
 
@@ -72,7 +73,3 @@ export class InputDropdownGenericComponent
   }
 }
 
-export interface IDatasInput {
-  id: number;
-  view: string;
-}

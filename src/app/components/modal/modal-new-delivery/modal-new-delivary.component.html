@@ -8,37 +8,72 @@
         id="date"
         formControlName="date"
       />
-      <app-input-generic
-        type="number"
-        label="VALOR"
-        id="value"
-        ph="R$ 59,90"
-        formControlName="value"
+      <app-input-dropdown-generic
+        label="VENDEDOR(A)"
+        [dataValues]="datasUser"
+        formControlName="user_id"
       />
       <app-input-generic
         type="number"
-        label="KILOMETRAGEM"
-        id="km"
+        label="client_id"
+        id="client_id"
         ph="50123"
-        formControlName="km"
+        formControlName="client_id"
+        [isBtnVisible]="true"
+        btnString="Buscar/Cadastrar"
+        (click)="isRegisterAddress = false; isRegisterUser = true"
       />
       <app-input-generic
         type="text"
-        label="PLACA"
-        id="placa"
-        ph="GDI1A75"
-        formControlName="plate"
-      />
-      <!-- <app-input-dropdown-generic [datas]="dataDP" formControlName="type" /> -->
-      <app-input-generic
-        type="text"
-        label="OBSERVAÇÃO"
-        id="obs"
-        ph="Troca de óleo"
-        formControlName="obs"
+        label="address_id"
+        id="address_id"
+        ph="address_id"
+        formControlName="address_id"
+        [isBtnVisible]="true"
+        btnString="Buscar/Cadastrar"
+        (click)="isRegisterAddress = true; isRegisterUser = false"
       />
 
+      <app-input-dropdown-generic
+        label="TIPO DE ENTREGA"
+        [dataValues]="datasTypeOrder"
+        formControlName="type_order_id"
+      />
+      <app-input-generic
+        type="text"
+        label="value"
+        id="value"
+        ph="value"
+        formControlName="value"
+      />
+      <!-- <app-input-dropdown-generic [datas]="dataDP" formControlName="type"/> -->
+      <app-input-button-generic
+        [loading]="isLoad"
+        [isDisable]="!new_delivery.valid"
+      ></app-input-button-generic>
       <!-- <app-input-button-generic [isDisable]="!maintenance.valid"      ></app-input-button-generic> -->
     </form>
+  </div>
+  <div
+    class="reg-user"
+    [ngStyle]="{ display: isRegisterUser ? 'block' : 'nome' }"
+  >
+    <app-input-generic
+      type="text"
+      label="isRegisterUser"
+      id="value"
+      ph="isRegisterUser"
+    />
+  </div>
+  <div
+    class="reg-address"
+    [ngStyle]="{ display: isRegisterAddress ? 'block' : 'nome' }"
+  >
+    <app-input-generic
+      type="text"
+      label="isRegisterAddress"
+      id="value"
+      ph="isRegisterAddress"
+    />
   </div>
 </div>

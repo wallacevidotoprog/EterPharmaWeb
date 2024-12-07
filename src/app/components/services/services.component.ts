@@ -56,32 +56,32 @@ export class ServicesComponent implements OnInit {
     }
     this.loading = true;
 
-    this.apiDelivery.add({date:this.deliveryForm.value.date,
-      km:this.deliveryForm.value.km,
-      value:this.deliveryForm.value.value,
-      router:this.deliveryForm.value.router,
-      isRate: this.deliveryForm.value.isDerivery =='isRate' ? true:false,
-      isIfood:this.deliveryForm.value.isDerivery =='isIfood' ? true:false,
-      isManipulation:this.deliveryForm.value.isDerivery =='isManipulation' ? true:false,
-    }).subscribe(
-      (res) => {
-        this.loading = false;
-        this.deliveryForm.reset();
-        this.isDate = this.indrs.getDateNow();
-        this.alerts.success({
-          detail: 'Sucesso',
-          summary: 'Registro cadastrado com sucesso.',
-          duration: 5000,
-        });
-      },
-      (error) => {
-        this.loading = false;
-        this.alerts.error({
-          detail: 'Erro ',
-          summary: JSON.stringify(error),
-          duration: 5000,
-        });
-      }
-    );
+    // this.apiDelivery.add({date:this.deliveryForm.value.date,
+    //   km:this.deliveryForm.value.km,
+    //   value:this.deliveryForm.value.value,
+    //   router:this.deliveryForm.value.router,
+    //   isRate: this.deliveryForm.value.isDerivery =='isRate' ? true:false,
+    //   isIfood:this.deliveryForm.value.isDerivery =='isIfood' ? true:false,
+    //   isManipulation:this.deliveryForm.value.isDerivery =='isManipulation' ? true:false,
+    // }).subscribe(
+    //   (res) => {
+    //     this.loading = false;
+    //     this.deliveryForm.reset();
+    //     this.isDate = this.indrs.getDateNow();
+    //     this.alerts.success({
+    //       detail: 'Sucesso',
+    //       summary: 'Registro cadastrado com sucesso.',
+    //       duration: 5000,
+    //     });
+    //   },
+    //   (error) => {
+    //     this.loading = false;
+    //     this.alerts.error({
+    //       detail: 'Erro ',
+    //       summary: JSON.stringify(error),
+    //       duration: 5000,
+    //     });
+    //   }
+    // );
   }
 }

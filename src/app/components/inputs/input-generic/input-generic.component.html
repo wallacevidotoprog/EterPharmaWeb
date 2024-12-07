@@ -7,4 +7,5 @@
     [readOnly]="!!isReadOnly"
     [(ngModel)]="value"
   />
+  <button class="button"[ngStyle]="{'display' :isBtnVisible ?'block':'nome'}" type="button">{{btnString}}</button>
 </div>

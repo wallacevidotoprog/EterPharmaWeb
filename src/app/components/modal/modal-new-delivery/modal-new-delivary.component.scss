@@ -12,7 +12,7 @@
   z-index: 1000;
 }
 
-.modal-content {
+.modal-content,.reg-address,.reg-user {
   background: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -29,4 +29,12 @@
   cursor: pointer;
   background: none;
   border: none;
+}
+
+.container{
+
+  display: flex;
+}
+.reg-address,.reg-user{
+  display: none;
 }

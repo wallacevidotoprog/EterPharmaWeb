@@ -25,3 +25,17 @@ input[type="datetime-local"]{
   border: 2px #818cf8 solid;
   border-radius: 5px;
 }
+
+.button{
+  display: none;
+  position: absolute;
+  right: 10px;            /* Ajusta o botão para a direita */
+  background-color: #069ff8; /* Exemplo de estilo para o botão */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 20%;
+
+
+}

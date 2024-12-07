@@ -27,7 +27,7 @@ export interface IMaintenanceData {
   type: string | any;
   obs: string | any;
 }
-export interface IRespAPI <T>{
+export interface IRespAPI<T> {
   message?: string;
   actionResult: boolean;
   data?: T;
@@ -59,12 +59,33 @@ export interface IDeliveryDataRes {
   isIfood: boolean;
   isManipulation: boolean;
 }
-
-export interface IOrderDelivery{
+export interface IDatasInput {
+  id: number;
+  view: string;
+}
+// API
+export interface IBaseDataBase {
+  id?: number;
+  createAt?: Date;
+  updateAt?: Date;
+}
+export interface IOrderDelivery extends IBaseDataBase {
+  date?: Date;
   user_id?: number | null;
-  date: Date;
   client_id?: number | null;
   address_id?: number | null;
   type_order_id?: number | null;
-  value: number;
+  value?: number;
+}
+export interface ITypeOrder extends IBaseDataBase{
+  name: string;
+}
+export interface IUsers extends IBaseDataBase{
+  store_id?: number | null;
+  email: string;
+  phone: string;
+  name: string;
+  position_id?: number | null;
+  permissions_id ?: number | null;
+  stats: boolean;
 }

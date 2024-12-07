@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, forwardRef, Input } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -14,7 +15,7 @@ const INPUT_FIELD_VALUE_ACESSOR: any = {
 @Component({
   selector: 'app-input-generic',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule,CommonModule],
   templateUrl: './input-generic.component.html',
   styleUrl: './input-generic.component.css',
   providers: [INPUT_FIELD_VALUE_ACESSOR],
@@ -26,8 +27,10 @@ export class InputGenericComponent implements ControlValueAccessor {
   @Input() ph!: string;
   @Input() isReadOnly = false;
   @Input() isValue: any;
-
+  @Input() isBtnVisible: boolean = false;
+  @Input() btnString!: string;
   private innerValue: any;
+
 
   public get value() {
     return this.innerValue;
