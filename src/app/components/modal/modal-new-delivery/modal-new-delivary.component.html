@@ -1,5 +1,4 @@
 <div class="modal-overlay">
-  <button class="close-button" (click)="closeModal()">&times;</button>
   <div class="modal-content">
     <form (ngSubmit)="send()" [formGroup]="new_delivery">
       <app-input-generic
@@ -14,24 +13,26 @@
         formControlName="user_id"
       />
       <app-input-generic
-        type="number"
-        label="client_id"
+        type="text"
+        label="ID DO CLIENTE"
         id="client_id"
-        ph="50123"
+        ph="Clique em Buscar/Cadastrar"
         formControlName="client_id"
         [isBtnVisible]="true"
         btnString="Buscar/Cadastrar"
-        (click)="isRegisterAddress = false; isRegisterUser = true"
+        [isDisabled]="true"
+        (button_Click)="handleButtonClickedClient()"
       />
       <app-input-generic
         type="text"
-        label="address_id"
+        label="ID DO ENDEREÇO"
         id="address_id"
-        ph="address_id"
-        formControlName="address_id"
+        ph="Clique em Buscar/Cadastrar"
+        [isDisabled]="true"
         [isBtnVisible]="true"
         btnString="Buscar/Cadastrar"
-        (click)="isRegisterAddress = true; isRegisterUser = false"
+        formControlName="address_id"
+        (button_Click)="handleButtonClickedAddress()"
       />
 
       <app-input-dropdown-generic
@@ -40,40 +41,139 @@
         formControlName="type_order_id"
       />
       <app-input-generic
-        type="text"
-        label="value"
+        type="number"
+        label="VALOR"
         id="value"
-        ph="value"
+        ph="59,90"
         formControlName="value"
       />
-      <!-- <app-input-dropdown-generic [datas]="dataDP" formControlName="type"/> -->
-      <app-input-button-generic
-        [loading]="isLoad"
-        [isDisable]="!new_delivery.valid"
-      ></app-input-button-generic>
-      <!-- <app-input-button-generic [isDisable]="!maintenance.valid"      ></app-input-button-generic> -->
+      <app-input-generic
+        type="text"
+        label="Observações"
+        id="obs"
+        ph="bloco 15 apt 148"
+        formControlName="obs"
+      />
+
+      <div class="case-btn">
+        <app-input-button-generic
+          class="btn-send"
+          [loading]="isLoad"
+          [isDisable]="!new_delivery.valid"
+        />
+        <button class="btn-close" type="button" (click)="closeModal()">
+          SAIR
+        </button>
+      </div>
     </form>
   </div>
-  <div
-    class="reg-user"
-    [ngStyle]="{ display: isRegisterUser ? 'block' : 'nome' }"
-  >
-    <app-input-generic
-      type="text"
-      label="isRegisterUser"
-      id="value"
-      ph="isRegisterUser"
-    />
+  @if (isRegisterClient) {
+  <div class="reg-client">
+    <form (ngSubmit)="send()" [formGroup]="new_client">
+      <app-input-generic
+        type="number"
+        label="CPF"
+        id="cpf"
+        ph="123.123.123-20"
+        formControlName="cpf"
+      />
+      <app-input-generic
+        type="number"
+        label="RG"
+        id="rg"
+        ph="12.123.123-2"
+        formControlName="rg"
+      />
+      <app-input-generic
+        type="text"
+        label="NOME DO CLIENTE"
+        id="name"
+        ph="José Antonio"
+        formControlName="name"
+      />
+      <app-input-generic
+        type="number"
+        label="TELEFONE"
+        id="PHONE"
+        ph="(17) 9 9199-9898"
+        formControlName="phone"
+      />
+      <div class="case-btn">
+        <app-input-button-generic
+          class="btn-send"
+          [loading]="isLoad"
+          [isDisable]="!new_client.valid"
+        />
+        <button
+          class="btn-close"
+          type="button"
+          (click)="isRegisterClient = false"
+        >
+          Voltar
+        </button>
+      </div>
+    </form>
   </div>
-  <div
-    class="reg-address"
-    [ngStyle]="{ display: isRegisterAddress ? 'block' : 'nome' }"
-  >
-    <app-input-generic
+  } @else if (isRegisterAddress) {
+  <div class="reg-address">
+    <form (ngSubmit)="send()" [formGroup]="new_address">
+      <app-input-generic
+        type="number"
+        label="CEP"
+        id="cep"
+        ph="15044-692"
+        formControlName="cep"
+      />
+      <app-input-generic
+        type="number"
+        label="LOGADOURO"
+        id="place"
+        ph="Rua Auriflama"
+        formControlName="place"
+      />
+      <app-input-generic
+        type="number"
+        label="NÚMERO"
+        id="number"
+        ph="762"
+        formControlName="number"
+      />
+      <app-input-generic
+        type="text"
+        label="BAIRRO"
+        id="neighborhood"
+        ph="Res. João Pedro"
+        formControlName="neighborhood"
+      />
+      <app-input-generic
       type="text"
-      label="isRegisterAddress"
-      id="value"
-      ph="isRegisterAddress"
+      label="CIDADE"
+      id="city"
+      ph="SJRP"
+      formControlName="city"
     />
+    <app-input-generic
+    type="text"
+    label="UF"
+    id="uf"
+    ph="SP"
+    formControlName="uf"
+  />
+      <div class="case-btn">
+        <app-input-button-generic
+          class="btn-send"
+          [loading]="isLoad"
+          [isDisable]="!new_client.valid"
+        />
+        <button
+          class="btn-close"
+          type="button"
+          (click)="isRegisterAddress = false"
+        >
+          Voltar
+        </button>
+      </div>
+    </form>
   </div>
+  }
 </div>

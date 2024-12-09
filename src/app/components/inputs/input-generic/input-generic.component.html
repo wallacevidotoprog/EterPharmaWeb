@@ -3,9 +3,16 @@
   <input
     [type]="type"
     [id]="id"
-    placeholder="{{ ph }}"
-    [readOnly]="!!isReadOnly"
+    [placeholder]="ph"
     [(ngModel)]="value"
+    [disabled]="isDisabled"
   />
-  <button class="button"[ngStyle]="{'display' :isBtnVisible ?'block':'nome'}" type="button">{{btnString}}</button>
+  <button
+    class="button"
+    [ngStyle]="{ display: isBtnVisible ? 'block' : 'none' }"
+    type="button"
+    (click)="onButtonClicked()"
+  >
+    {{ btnString }}
+  </button>
 </div>

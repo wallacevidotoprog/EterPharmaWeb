@@ -30,7 +30,11 @@ export class InputDropdownGenericComponent
   implements ControlValueAccessor, OnInit
 {
   ngOnInit(): void {
-    this.value = 1;
+    // if (this.dataValues && this.dataValues.length > 0) {
+    //   this.value = this.dataValues[0].id;
+    //   console.log(this.dataValues[0].id);
+    //    // Define o valor como o id do primeiro item
+    // }
   }
   @Input() id!: number;
   @Input() label: string = 'TIPO';

@@ -27,20 +27,43 @@ import { InputGenericComponent } from '../../inputs/input-generic/input-generic.
   styleUrl: './modal-new-delivary.component.scss',
 })
 export class ModalNewDelivaryComponent implements OnInit {
+
+  protected isImputDisable:boolean=true;
+  handleButtonClickedAddress() {
+    this.toggleView('address')
+  }
+  handleButtonClickedClient() {
+    this.toggleView('client')
+
+  }
   @Input() datasTypeOrder: IDatasInput[] = [];
   @Input() datasUser: IDatasInput[] = [];
   @Output() close = new EventEmitter<IOrderDelivery | null>();
 
   protected isLoad: boolean = false;
-  protected isRegisterUser: boolean = false;
-  protected isRegisterAddress: boolean = false;
+  isRegisterClient: boolean = false;
+  isRegisterAddress: boolean = false;
   protected new_delivery!: FormGroup;
+  protected new_client!: FormGroup;
+  protected new_address!: FormGroup;
+
+  toggleView(view: 'address' | 'client') {
+    if (view === 'address') {
+      this.isRegisterAddress = true;
+      this.isRegisterClient = false;
+    } else if (view === 'client') {
+      this.isRegisterClient = true;
+      this.isRegisterAddress = false;
+    }
+  }
 
   closeModal() {
     this.close.emit(null);
   }
 
   ngOnInit(): void {
+    this.isRegisterClient = false;
+    this.isRegisterAddress = false;
     const currentDate = new Date();
     const localOffset = currentDate.getTimezoneOffset();
     currentDate.setMinutes(currentDate.getMinutes() - localOffset);
@@ -53,6 +76,21 @@ export class ModalNewDelivaryComponent implements OnInit {
       address_id: new FormControl('', Validators.required),
       type_order_id: new FormControl('', Validators.required),
       value: new FormControl('', Validators.required),
+      obs: new FormControl('', Validators.required),
+    });
+    this.new_client = new FormGroup({
+      cpf: new FormControl('', Validators.required),
+      rg: new FormControl('', Validators.required),
+      name: new FormControl('', Validators.required),
+      phone: new FormControl('', Validators.required),
+    });
+    this.new_address = new FormGroup({
+      cep: new FormControl('', Validators.required),
+      place: new FormControl('', Validators.required),
+      number: new FormControl('', Validators.required),
+      neighborhood: new FormControl('', Validators.required),
+      city: new FormControl('', Validators.required),
+      uf: new FormControl('', Validators.required),
     });
   }
 

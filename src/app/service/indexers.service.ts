@@ -76,6 +76,7 @@ export interface IOrderDelivery extends IBaseDataBase {
   address_id?: number | null;
   type_order_id?: number | null;
   value?: number;
+  obs?:string;
 }
 export interface ITypeOrder extends IBaseDataBase{
   name: string;
@@ -88,4 +89,18 @@ export interface IUsers extends IBaseDataBase{
   position_id?: number | null;
   permissions_id ?: number | null;
   stats: boolean;
+}
+export interface IAddress extends IBaseDataBase {
+  cep?: string;
+  place: string;
+  number: string;
+  neighborhood: string;
+  city: string;
+  uf: string;
+}
+export interface IClients extends IBaseDataBase{
+  cpf?: string | null;
+  rg?: string | null;
+  name: string;
+  phone: string;
 }

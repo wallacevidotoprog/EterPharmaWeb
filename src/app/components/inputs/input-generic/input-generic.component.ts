@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, forwardRef, Input } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  Output,
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormsModule,
@@ -15,7 +21,7 @@ const INPUT_FIELD_VALUE_ACESSOR: any = {
 @Component({
   selector: 'app-input-generic',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './input-generic.component.html',
   styleUrl: './input-generic.component.css',
   providers: [INPUT_FIELD_VALUE_ACESSOR],
@@ -25,12 +31,19 @@ export class InputGenericComponent implements ControlValueAccessor {
   @Input() label!: string;
   @Input() type: string = 'text';
   @Input() ph!: string;
-  @Input() isReadOnly = false;
+  @Input() isDisabled: boolean = false;
   @Input() isValue: any;
   @Input() isBtnVisible: boolean = false;
   @Input() btnString!: string;
+
+  @Output() button_Click = new EventEmitter<void>();
   private innerValue: any;
 
+  onButtonClicked() {
+    console.log('isDisabled', this.isDisabled);
+
+    this.button_Click.emit();
+  }
 
   public get value() {
     return this.innerValue;
@@ -56,21 +69,6 @@ export class InputGenericComponent implements ControlValueAccessor {
     this.OnTouchedCb = fn;
   }
   setDisabledState?(isDisabled: boolean): void {
-    this.isReadOnly = isDisabled;
-  }
-
-  getDateNow() {
-    let today = new Date();
-    let date =
-      today.getFullYear() +
-      '-' +
-      (today.getMonth() + 1).toString().padStart(2, '0') +
-      '-' +
-      today.getDate().toString().padStart(2, '0');
-    let time =
-      today.getHours().toString().padStart(2, '0') +
-      ':' +
-      today.getMinutes().toString().padStart(2, '0');
-    return date + 'T' + time;
+    this.isDisabled = isDisabled;
   }
 }
