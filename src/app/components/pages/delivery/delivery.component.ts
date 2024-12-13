@@ -5,12 +5,11 @@ import { UserServiceService } from '../../../service/user.service.service';
 import { ButtonCustomComponent } from '../../inputs/button-custom/button-custom.component';
 import { ModalNewDelivaryComponent } from '../../modal/modal-new-delivery/modal-new-delivary.component';
 import { DeliveryService } from './../../../service/delivery.service';
-import { InputGenericComponent } from "../../inputs/input-generic/input-generic.component";
 
 @Component({
   selector: 'app-delivery',
   standalone: true,
-  imports: [ButtonCustomComponent, ModalNewDelivaryComponent, CommonModule, InputGenericComponent],
+  imports: [ButtonCustomComponent, ModalNewDelivaryComponent, CommonModule],
   templateUrl: './delivery.component.html',
   styleUrl: './delivery.component.scss',
 })

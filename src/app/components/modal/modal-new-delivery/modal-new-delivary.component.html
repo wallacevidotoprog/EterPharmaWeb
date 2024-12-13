@@ -1,6 +1,8 @@
 <div class="modal-overlay">
-  <div class="modal-content">
-    <form (ngSubmit)="send()" [formGroup]="new_delivery">
+  @switch (currentState) { @case ('REGISTER_ORDER') {
+  <div class="modal-content" [ngClass]="currentState">
+    <span>REGISTRO DE ENTREGA</span>
+    <form (ngSubmit)="registerOrder()" [formGroup]="new_delivery">
       <app-input-generic
         type="datetime-local"
         label="DATE"
@@ -14,25 +16,25 @@
       />
       <app-input-generic
         type="text"
-        label="ID DO CLIENTE"
+        label="CLIENTE"
         id="client_id"
-        ph="Clique em Buscar/Cadastrar"
-        formControlName="client_id"
+        ph=" Exp.: Clique em Buscar/Cadastrar"
+        [innerValue]="client.name"
         [isBtnVisible]="true"
         btnString="Buscar/Cadastrar"
-        [isDisabled]="true"
-        (button_Click)="handleButtonClickedClient()"
+        (button_Click)="currentState = StateModel.REGISTER_CLIENT"
+        [isReadOnly]="true"
       />
       <app-input-generic
         type="text"
-        label="ID DO ENDEREÇO"
+        label="ENDEREÇO"
         id="address_id"
-        ph="Clique em Buscar/Cadastrar"
-        [isDisabled]="true"
+        ph=" Exp.: Clique em Buscar/Cadastrar"
+        [innerValue]="address.name"
         [isBtnVisible]="true"
         btnString="Buscar/Cadastrar"
-        formControlName="address_id"
-        (button_Click)="handleButtonClickedAddress()"
+        (button_Click)="currentState = StateModel.REGISTER_ADDRESS"
+        [isReadOnly]="true"
       />
 
       <app-input-dropdown-generic
@@ -44,14 +46,14 @@
         type="number"
         label="VALOR"
         id="value"
-        ph="59,90"
+        ph=" Exp.: 59,90"
         formControlName="value"
       />
       <app-input-generic
         type="text"
         label="Observações"
         id="obs"
-        ph="bloco 15 apt 148"
+        ph=" Exp.: bloco 15 apt 148"
         formControlName="obs"
       />
 
@@ -59,7 +61,7 @@
         <app-input-button-generic
           class="btn-send"
           [loading]="isLoad"
-          [isDisable]="!new_delivery.valid"
+          [isDisable]="!checkingValid()"
         />
         <button class="btn-close" type="button" (click)="closeModal()">
           SAIR
@@ -67,35 +69,36 @@
       </div>
     </form>
   </div>
-  @if (isRegisterClient) {
-  <div class="reg-client">
-    <form (ngSubmit)="send()" [formGroup]="new_client">
+  } @case ('REGISTER_CLIENT') {
+  <div class="reg-client" [ngClass]="currentState">
+    <span>REGISTRO DE CLIENTE</span>
+    <form (ngSubmit)="registerCliente()" [formGroup]="new_client">
       <app-input-generic
         type="number"
         label="CPF"
         id="cpf"
-        ph="123.123.123-20"
+        ph=" Exp.: 123.123.123-20"
         formControlName="cpf"
       />
       <app-input-generic
         type="number"
         label="RG"
         id="rg"
-        ph="12.123.123-2"
+        ph=" Exp.: 12.123.123-2"
         formControlName="rg"
       />
       <app-input-generic
         type="text"
         label="NOME DO CLIENTE"
         id="name"
-        ph="José Antonio"
+        ph=" Exp.: José Antonio"
         formControlName="name"
       />
       <app-input-generic
         type="number"
         label="TELEFONE"
         id="PHONE"
-        ph="(17) 9 9199-9898"
+        ph=" Exp.: (17) 9 9199-9898"
         formControlName="phone"
       />
       <div class="case-btn">
@@ -107,73 +110,75 @@
         <button
           class="btn-close"
           type="button"
-          (click)="isRegisterClient = false"
+          (click)="currentState = StateModel.REGISTER_ORDER"
         >
           Voltar
         </button>
       </div>
     </form>
   </div>
-  } @else if (isRegisterAddress) {
-  <div class="reg-address">
-    <form (ngSubmit)="send()" [formGroup]="new_address">
+  } @case ('REGISTER_ADDRESS') {
+  <div class="reg-address" [ngClass]="currentState">
+    <span>REGISTRO DE ENDEREÇO</span>
+    <form (ngSubmit)="registerAddress()" [formGroup]="new_address">
       <app-input-generic
         type="number"
         label="CEP"
         id="cep"
-        ph="15044-692"
+        ph=" Exp.: 15044-692"
+        (blurEvent)="onBlur()"
         formControlName="cep"
       />
       <app-input-generic
-        type="number"
+        type="text"
         label="LOGADOURO"
         id="place"
-        ph="Rua Auriflama"
+        ph=" Exp.: Rua Auriflama"
         formControlName="place"
       />
       <app-input-generic
         type="number"
         label="NÚMERO"
         id="number"
-        ph="762"
+        ph=" Exp.: 762"
         formControlName="number"
       />
       <app-input-generic
         type="text"
         label="BAIRRO"
         id="neighborhood"
-        ph="Res. João Pedro"
+        ph=" Exp.: Res. João Pedro"
         formControlName="neighborhood"
       />
       <app-input-generic
-      type="text"
-      label="CIDADE"
-      id="city"
-      ph="SJRP"
-      formControlName="city"
-    />
-    <app-input-generic
-    type="text"
-    label="UF"
-    id="uf"
-    ph="SP"
-    formControlName="uf"
-  />
+        type="text"
+        label="CIDADE"
+        id="city"
+        ph=" Exp.: SJRP"
+        formControlName="city"
+      />
+      <app-input-generic
+        type="text"
+        label="UF"
+        id="uf"
+        ph=" Exp.: SP"
+        formControlName="uf"
+      />
       <div class="case-btn">
         <app-input-button-generic
           class="btn-send"
           [loading]="isLoad"
-          [isDisable]="!new_client.valid"
+          [isDisable]="!new_address.valid"
         />
         <button
           class="btn-close"
           type="button"
-          (click)="isRegisterAddress = false"
+          (click)="currentState = StateModel.REGISTER_ORDER"
         >
           Voltar
         </button>
       </div>
     </form>
   </div>
-  }
+  } }
 </div>

@@ -104,3 +104,12 @@ export interface IClients extends IBaseDataBase{
   name: string;
   phone: string;
 }
+//API TERCEIRO
+export interface ICEP {
+  cep: string
+  state: string
+  city: string
+  neighborhood: string
+  street: string
+  service: string
+}

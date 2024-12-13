@@ -31,17 +31,19 @@ export class InputGenericComponent implements ControlValueAccessor {
   @Input() label!: string;
   @Input() type: string = 'text';
   @Input() ph!: string;
-  @Input() isDisabled: boolean = false;
+  @Input() isReadOnly: boolean = false;
   @Input() isValue: any;
   @Input() isBtnVisible: boolean = false;
   @Input() btnString!: string;
+  @Input() innerValue: any;
 
   @Output() button_Click = new EventEmitter<void>();
-  private innerValue: any;
+  @Output() blurEvent = new EventEmitter<string | number>();
 
+  onBlur() {
+    this.blurEvent.emit(this.innerValue);
+  }
   onButtonClicked() {
-    console.log('isDisabled', this.isDisabled);
-
     this.button_Click.emit();
   }
 
@@ -68,7 +70,7 @@ export class InputGenericComponent implements ControlValueAccessor {
   registerOnTouched(fn: any): void {
     this.OnTouchedCb = fn;
   }
-  setDisabledState?(isDisabled: boolean): void {
-    this.isDisabled = isDisabled;
+  setDisabledState?(isReadOnly: boolean): void {
+    this.isReadOnly = isReadOnly;
   }
 }
