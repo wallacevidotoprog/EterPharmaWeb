@@ -19,7 +19,7 @@
         label="CLIENTE"
         id="client_id"
         ph=" Exp.: Clique em Buscar/Cadastrar"
-        [innerValue]="client.name"
+        [innerValue]="clientView.name"
         [isBtnVisible]="true"
         btnString="Buscar/Cadastrar"
         (button_Click)="currentState = StateModel.REGISTER_CLIENT"
@@ -30,7 +30,7 @@
         label="ENDEREÇO"
         id="address_id"
         ph=" Exp.: Clique em Buscar/Cadastrar"
-        [innerValue]="address.name"
+        [innerValue]="addressView.name"
         [isBtnVisible]="true"
         btnString="Buscar/Cadastrar"
         (button_Click)="currentState = StateModel.REGISTER_ADDRESS"
@@ -79,6 +79,7 @@
         id="cpf"
         ph=" Exp.: 123.123.123-20"
         formControlName="cpf"
+        (blurEvent)="onBlurClientCpf()"
       />
       <app-input-generic
         type="number"
@@ -86,6 +87,7 @@
         id="rg"
         ph=" Exp.: 12.123.123-2"
         formControlName="rg"
+        (blurEvent)="onBlurClientRg()"
       />
       <app-input-generic
         type="text"
@@ -126,7 +128,7 @@
         label="CEP"
         id="cep"
         ph=" Exp.: 15044-692"
-        (blurEvent)="onBlur()"
+        (blurEvent)="onBlurAddress()"
         formControlName="cep"
       />
       <app-input-generic

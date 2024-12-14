@@ -14,9 +14,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { NgToastService } from 'ng-angular-popup';
 import { DeliveryService } from '../../../service/delivery.service';
 import {
   IAddress,
+  IClients,
   IDatasInput,
   IOrderDelivery,
 } from '../../../service/indexers.service';
@@ -41,13 +43,14 @@ import { InputGenericComponent } from '../../inputs/input-generic/input-generic.
 })
 export class ModalNewDelivaryComponent implements OnInit {
   protected deliveryService = inject(DeliveryService);
+  protected tAlert = inject(NgToastService);
 
   @Input() datasTypeOrder: IDatasInput[] = [];
   @Input() datasUser: IDatasInput[] = [];
   @Output() close = new EventEmitter<IOrderDelivery | null>();
 
-  protected client: any = { id: null, name: '' };
-  protected address: any = { id: null, name: '' };
+  protected clientView: any = { id: null, name: '' };
+  protected addressView: any = { id: null, name: '' };
   protected isImputDisable: boolean = true;
   protected isLoad: boolean = false;
   protected new_delivery!: FormGroup;
@@ -99,7 +102,7 @@ export class ModalNewDelivaryComponent implements OnInit {
       uf: new FormControl(null, Validators.required),
     });
   }
-  async onBlur() {
+  async onBlurAddress() {
     const cep = parseInt(refineStringToNumber(this.new_address.value.cep));
 
     await this.deliveryService.getCep(cep).subscribe((data) => {
@@ -109,7 +112,27 @@ export class ModalNewDelivaryComponent implements OnInit {
       this.new_address.get('uf')?.setValue(data?.state);
     });
   }
+  onBlurClientRg() {
+    this.setValuesGetCliente(
+      refineStringToNumber(this.new_client.value.rg),
+      'rg'
+    );
+  }
+  onBlurClientCpf() {
+    this.setValuesGetCliente(
+      refineStringToNumber(this.new_client.value.cpf),
+      'cpf'
+    );
+  }
 
+  async setValuesGetCliente(cod: string, type: 'rg' | 'cpf') {
+    await this.deliveryService.getClient(cod, type).subscribe((data) => {
+      this.new_client.get('cpf')?.setValue(data?.cpf);
+      this.new_client.get('rg')?.setValue(data?.rg);
+      this.new_client.get('name')?.setValue(data?.name);
+      this.new_client.get('phone')?.setValue(data?.phone);
+    });
+  }
   checkingValid(): boolean {
     return (
       this.new_delivery.valid &&
@@ -138,33 +161,86 @@ export class ModalNewDelivaryComponent implements OnInit {
       this.isLoad = true;
       await this.deliveryService.registerAddress(address).subscribe({
         next: (value) => {
-          this.address = {
+          if (!value) {
+            this.tAlert.error({
+              detail: 'Falhar ao criar novo endereço',
+              summary: value?.toString(),
+              duration: 5000,
+            });
+            return;
+          }
+          this.addressView = {
             id: value,
             name: `${address.place}, ${address.number} - ${address.neighborhood}`,
           };
-          console.log(this.address);
-
           this.addressIdIsEnabled = true;
           this.new_delivery.controls['address_id'].setValue(value);
           this.currentState = StateModel.REGISTER_ORDER;
           this.isLoad = false;
+          this.tAlert.success({
+            detail: 'Endereço inserido com sucesso',
+            summary: this.addressView.name,
+            duration: 5000,
+          });
         },
         error: (err) => {
           this.isLoad = false;
+          this.tAlert.error({
+            detail: 'Falhar ao criar novo endereço',
+            summary: err?.toString(),
+            duration: 5000,
+          });
           console.error('Erro ao registrar endereço:', err);
         },
       });
+      this.isLoad = false;
     }
   }
 
-  registerCliente() {
+  async registerCliente() {
     if (this.new_client.valid) {
-      const values = this.new_client.value;
+      const client: IClients = {
+        ...this.new_client.getRawValue(),
+      } as IClients;
 
-      this.client = { id: 99, name: values.name };
-      this.new_delivery.get('client_id')?.setValue(this.client.id);
-      this.clientIdIsEnabled = true;
-      this.currentState = StateModel.REGISTER_ORDER;
+      this.isLoad = true;
+
+      await this.deliveryService.registerClient(client).subscribe({
+        next: (value) => {
+
+          if (!value) {
+            this.tAlert.error({
+              detail: 'Falhar ao criar novo cliente',
+              summary: value?.toString(),
+              duration: 5000,
+            });
+            return;
+          }
+          this.clientView = {
+            id: value,
+            name: client.name,
+          };
+          this.clientIdIsEnabled = true;
+          this.new_delivery.controls['client_id'].setValue(value);
+          this.currentState = StateModel.REGISTER_ORDER;
+          this.tAlert.success({
+            detail: 'Cliente inserido com sucesso',
+            summary: this.clientView.name,
+            duration: 5000,
+          });
+        },
+        error: (err) => {
+
+
+          this.tAlert.error({
+            detail: 'Falhar ao criar novo cliente',
+            summary: err?.toString(),
+            duration: 5000,
+          });
+          console.error('Erro ao registrar cliente:', err);
+        },
+      });
+      this.isLoad = false;
     }
   }
 }
