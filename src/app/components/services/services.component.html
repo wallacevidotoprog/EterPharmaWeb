@@ -1,0 +1,73 @@
+<div class="container">
+  <form
+    (ngSubmit)="send()"
+    [formGroup]="deliveryForm"
+    #forDir="ngForm"
+    id="formD"
+  >
+    <app-input-generic
+      type="datetime-local"
+      label="DATE"
+      id="date"
+      [(ngModel)]="isDate"
+      formControlName="date"
+    ></app-input-generic>
+    <app-input-generic
+      type="number"
+      label="VALOR"
+      id="value"
+      ph="R$ 59,00"
+      formControlName="value"
+    ></app-input-generic>
+    <app-input-generic
+      type="number"
+      label="KILOMETRAGEM"
+      id="km"
+      ph="99999"
+      formControlName="km"
+    ></app-input-generic>
+    <app-input-generic
+      type="text"
+      label="ROTA"
+      id="router"
+      ph="R: Auriflama, 79, Eldorado"
+      formControlName="router"
+    ></app-input-generic>
+    <div class="radio-inputs">
+      <label class="radio">
+        <input type="radio" value="isFree" formControlName="isDerivery" />
+        <span class="name">Sem Taxa</span>
+      </label>
+      <label class="radio">
+        <input
+          type="radio"
+          id="isRate"
+          value="isRate"
+          formControlName="isDerivery"
+        />
+        <span class="name">Com Taxa</span>
+      </label>
+      <label class="radio">
+        <input
+          type="radio"
+          id="isIfood"
+          value="isIfood"
+          formControlName="isDerivery"
+        />
+        <span class="name">IFOOD</span>
+      </label>
+      <label class="radio">
+        <input
+          type="radio"
+          id="isManipulation"
+          value="isManipulation"
+          formControlName="isDerivery"
+        />
+        <span class="name">Manipulação</span>
+      </label>
+    </div>
+    <app-input-button-generic [loading]="loading" [isDisable]="!deliveryForm.valid"></app-input-button-generic>
+
+  </form>
+</div>
+<div></div>

@@ -1,0 +1,186 @@
+<div class="modal-overlay">
+  @switch (currentState) { @case ('REGISTER_ORDER') {
+  <div class="modal-content" [ngClass]="currentState">
+    <span>REGISTRO DE ENTREGA</span>
+    <form (ngSubmit)="registerOrder()" [formGroup]="new_delivery">
+      <app-input-generic
+        type="datetime-local"
+        label="DATE"
+        id="date"
+        formControlName="date"
+      />
+      <app-input-dropdown-generic
+        label="VENDEDOR(A)"
+        [dataValues]="datasUser"
+        formControlName="user_id"
+      />
+      <app-input-generic
+        type="text"
+        label="CLIENTE"
+        id="client_id"
+        ph=" Exp.: Clique em Buscar/Cadastrar"
+        [innerValue]="clientView.name"
+        [isBtnVisible]="true"
+        btnString="Buscar/Cadastrar"
+        (button_Click)="currentState = StateModel.REGISTER_CLIENT"
+        [isReadOnly]="true"
+      />
+      <app-input-generic
+        type="text"
+        label="ENDEREÇO"
+        id="address_id"
+        ph=" Exp.: Clique em Buscar/Cadastrar"
+        [innerValue]="addressView.name"
+        [isBtnVisible]="true"
+        btnString="Buscar/Cadastrar"
+        (button_Click)="currentState = StateModel.REGISTER_ADDRESS"
+        [isReadOnly]="true"
+      />
+
+      <app-input-dropdown-generic
+        label="TIPO DE ENTREGA"
+        [dataValues]="datasTypeOrder"
+        formControlName="type_order_id"
+      />
+      <app-input-generic
+        type="number"
+        label="VALOR"
+        id="value"
+        ph=" Exp.: 59,90"
+        formControlName="value"
+      />
+      <app-input-generic
+        type="text"
+        label="Observações"
+        id="obs"
+        ph=" Exp.: bloco 15 apt 148"
+        formControlName="obs"
+      />
+
+      <div class="case-btn">
+        <app-input-button-generic
+          class="btn-send"
+          [loading]="isLoad"
+          [isDisable]="!checkingValid()"
+        />
+        <button class="btn-close" type="button" (click)="closeModal()">
+          SAIR
+        </button>
+      </div>
+    </form>
+  </div>
+  } @case ('REGISTER_CLIENT') {
+  <div class="reg-client" [ngClass]="currentState">
+    <span>REGISTRO DE CLIENTE</span>
+    <form (ngSubmit)="registerCliente()" [formGroup]="new_client">
+      <app-input-generic
+        type="text"
+        label="CPF"
+        id="cpf"
+        ph=" Exp.: 123.123.123-20"
+        formControlName="cpf"
+        (blurEvent)="onBlurClientCpf()"
+      />
+      <app-input-generic
+        type="text"
+        label="RG"
+        id="rg"
+        ph=" Exp.: 12.123.123-2"
+        formControlName="rg"
+        (blurEvent)="onBlurClientRg()"
+      />
+      <app-input-generic
+        type="text"
+        label="NOME DO CLIENTE"
+        id="name"
+        ph=" Exp.: José Antonio"
+        formControlName="name"
+      />
+      <app-input-generic
+        type="text"
+        label="TELEFONE"
+        id="PHONE"
+        ph=" Exp.: (17) 9 9199-9898"
+        formControlName="phone"
+      />
+      <div class="case-btn">
+        <app-input-button-generic
+          class="btn-send"
+          [loading]="isLoad"
+          [isDisable]="!new_client.valid"
+        />
+        <button
+          class="btn-close"
+          type="button"
+          (click)="currentState = StateModel.REGISTER_ORDER"
+        >
+          Voltar
+        </button>
+      </div>
+    </form>
+  </div>
+  } @case ('REGISTER_ADDRESS') {
+  <div class="reg-address" [ngClass]="currentState">
+    <span>REGISTRO DE ENDEREÇO</span>
+    <form (ngSubmit)="registerAddress()" [formGroup]="new_address">
+      <app-input-generic
+        type="text"
+        label="CEP"
+        id="cep"
+        ph=" Exp.: 15044-692"
+        (blurEvent)="onBlurAddress()"
+        formControlName="cep"
+      />
+      <app-input-generic
+        type="text"
+        label="LOGADOURO"
+        id="place"
+        ph=" Exp.: Rua Auriflama"
+        formControlName="place"
+      />
+      <app-input-generic
+        type="number"
+        label="NÚMERO"
+        id="number"
+        ph=" Exp.: 762"
+        formControlName="number"
+      />
+      <app-input-generic
+        type="text"
+        label="BAIRRO"
+        id="neighborhood"
+        ph=" Exp.: Res. João Pedro"
+        formControlName="neighborhood"
+      />
+      <app-input-generic
+        type="text"
+        label="CIDADE"
+        id="city"
+        ph=" Exp.: SJRP"
+        formControlName="city"
+      />
+      <app-input-generic
+        type="text"
+        label="UF"
+        id="uf"
+        ph=" Exp.: SP"
+        formControlName="uf"
+      />
+      <div class="case-btn">
+        <app-input-button-generic
+          class="btn-send"
+          [loading]="isLoad"
+          [isDisable]="!new_address.valid"
+        />
+        <button
+          class="btn-close"
+          type="button"
+          (click)="currentState = StateModel.REGISTER_ORDER"
+        >
+          Voltar
+        </button>
+      </div>
+    </form>
+  </div>
+  } }
+</div>

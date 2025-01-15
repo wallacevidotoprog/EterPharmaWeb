@@ -1,0 +1,92 @@
+<div class="container">
+  <nav>
+    <div class="logo">
+      <img src="https://1t4um7.csb.app/assets/Logo64x64.png" alt="logo" />
+      <h1>LOGO</h1>
+    </div>
+<<<<<<< HEAD
+
+    <!-- Botão hambúrguer -->
+    <div class="hamburger" (click)="toggleMenu()">
+      <span class="line"></span>
+      <span class="line"></span>
+      <span class="line"></span>
+    </div>
+
+    <!-- Menu de navegação -->
+    <ul [class.active]="menuActive">
+      <li><a routerLink="/" routerLinkActive="active">Home</a></li>
+      <li class="dropdown">
+        <a>Entrega</a>
+        <ul class="dropdown-menu">
+          <li><a routerLink="launch-order">Lançar Pedido de Entrega</a></li>
+          <li><a routerLink="start-delivery">Iniciar Entrega</a></li>
+          <li><a routerLink="finish-delivery">Finalizar Entrega</a></li>
+        </ul>
+      </li>
+      <li>
+        <a routerLink="maintenance" routerLinkActive="active">Manutenção</a>
+      </li>
+      <li><a routerLink="report" routerLinkActive="active">Relatório</a></li>
+      <li class="logout">
+        <a (click)="logout()">Sair</a>
+      </li>
+    </ul>
+
+    <!-- Menu lateral -->
+    <ul class="sidebar" [class.active]="menuActive" (click)="closeMenu()">
+      <li><a routerLink="/" routerLinkActive="active">Home</a></li>
+       <li class="dropdown">
+        <a>Entrega</a>
+        <ul class="dropdown-menu">
+          <li><a routerLink="launch-order">Lançar Pedido de Entrega</a></li>
+          <li><a routerLink="start-delivery">Iniciar Entrega</a></li>
+          <li><a routerLink="finish-delivery">Finalizar Entrega</a></li>
+        </ul>
+      </li>
+      <li><a routerLink="maintenance" routerLinkActive="active">Manutenção</a></li>
+      <li><a routerLink="report" routerLinkActive="active">Relatório</a></li>
+      <li class="logout">
+        <a (click)="logout()">Sair</a>
+      </li>
+    </ul>
+    <!-- <ul>
+      <li>
+        <a routerLink="/">Home</a>
+      </li>
+=======
+    <ul>
+      <li>
+        <a routerLink="/">Home</a>
+      </li>
+      <!-- <li>
+        <a routerLink="services">Entrega</a>
+      </li> -->
+>>>>>>> f180803 (init)
+      <li class="dropdown">
+        <a>Entrega</a>
+        <ul class="dropdown-menu">
+          <li><a routerLink="launch-order">Lançar Pedido de Entrega</a></li>
+          <li><a routerLink="start-delivery">Iniciar Entrega</a></li>
+          <li><a routerLink="finish-delivery">Finalizar Entrega</a></li>
+        </ul>
+      </li>
+      <li>
+        <a routerLink="maintenance">Manutenção</a>
+      </li>
+      <li>
+        <a routerLink="report">Relatório</a>
+      </li>
+      <li class="logout">
+        <a routerLink="login" (click)="logout()">Sair</a>
+      </li>
+<<<<<<< HEAD
+    </ul> -->
+  </nav>
+</div>
+
+=======
+    </ul>    
+  </nav>  
+</div>
+>>>>>>> f180803 (init)

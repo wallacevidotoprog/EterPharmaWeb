@@ -1,0 +1,22 @@
+<<<<<<< HEAD
+<div class="container">
+  <label [attr.for]="id" class="text">{{ label }}</label>
+  <select
+    name="dropdown"
+    [id]="id"
+    (change)="onchange($event)"
+    [(ngModel)]="value"
+  >
+    @for (item of dataValues; track $index) {
+    <option [value]="item['id']">{{ item["view"] }}</option>
+    }
+=======
+<div class="container" >
+  <label [attr.for]="id" class="text">{{ label }}</label>
+  <select name="dropdown" [id]="id" (change)="onchange($event)" [(ngModel)]="value">
+  @for (item of datas; track $index) {
+  <option [value]="item['id']" >{{item['type']}}</option>
+  }
+>>>>>>> f180803 (init)
+  </select>
+</div>

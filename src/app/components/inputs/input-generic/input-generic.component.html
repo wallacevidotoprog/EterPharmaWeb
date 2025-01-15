@@ -1,0 +1,27 @@
+<div class="coolinput">
+  <label [attr.for]="id" class="text">{{ label }}</label>
+  <input
+    [type]="type"
+    [id]="id"
+<<<<<<< HEAD
+    [placeholder]="ph"
+    [(ngModel)]="value"
+    (blur)="onBlur()"
+    [readOnly]="isReadOnly"
+    
+  />
+  <button
+    class="button"
+    [ngStyle]="{ display: isBtnVisible ? 'block' : 'none' }"
+    type="button"
+    (click)="onButtonClicked()"
+  >
+    {{ btnString }}
+  </button>
+=======
+    placeholder="{{ ph }}"
+    [readOnly]="!!isReadOnly"
+    [(ngModel)]="value"
+  />
+>>>>>>> f180803 (init)
+</div>
