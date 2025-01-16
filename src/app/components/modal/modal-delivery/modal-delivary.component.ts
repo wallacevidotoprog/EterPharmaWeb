@@ -89,7 +89,7 @@ export class ModalDelivaryComponent implements OnInit {
       user_id: new FormControl(null, Validators.required),
       order_delivery_id: new FormArray([], Validators.required),
       motor_kilometers: new FormControl(null, Validators.required),
-      status_id: new FormControl(null, Validators.required),
+      //status_id: new FormControl(null, Validators.required),
     });
 
     await this.getViewOrder(this.valueDateSearch);
@@ -142,8 +142,6 @@ export class ModalDelivaryComponent implements OnInit {
           }
         }
       }
-      console.log('this.orderFilter', this.orderFilter);
-
       this.checkedOrderFilter = {
         open: true,
         collected: false,
@@ -187,11 +185,12 @@ export class ModalDelivaryComponent implements OnInit {
       const deliverySend: IDeliverySend = {
         ...this.new_delivery.value,
         motor_kilometers: Number(this.new_delivery.value.motor_kilometers),
+        status_id: this.returnIdStatus('COLETADO')
       };
       deliverySend.date = new Date(`${deliverySend.date}:00.000Z`);
 
       await this.deliveryService
-        .registerDeliveryAndStatus(deliverySend, 'full')
+        .registerDeliveryAndStatus(deliverySend, 'colleted-all')
         .subscribe({
           next: async (value) => {
             if (!value) {
@@ -220,8 +219,6 @@ export class ModalDelivaryComponent implements OnInit {
         });
     }
 
-    //});
-    //this.closeModal();
   }
 
   toggleAll(event: Event) {
@@ -310,7 +307,7 @@ export class ModalDelivaryComponent implements OnInit {
           console.error('Erro ao registrar status:', err);
           return of(null);
         })
-      ).subscribe();
+      ).subscribe(async ()=>await this.getViewOrder(this.valueDateSearch));
     }
   }
 }

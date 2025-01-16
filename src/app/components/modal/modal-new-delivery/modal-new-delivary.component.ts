@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   inject,
@@ -47,6 +48,7 @@ import {
 export class ModalNewDelivaryComponent implements OnInit {
   protected deliveryService = inject(DeliveryService);
   protected tAlert = inject(NgToastService);
+  private cdr = inject(ChangeDetectorRef);
 
   @Input() datasTypeOrder: IDatasInput[] = [];
   @Input() datasUser: IDatasInput[] = [];
@@ -111,7 +113,7 @@ export class ModalNewDelivaryComponent implements OnInit {
 
     this.new_client = new FormGroup({
       cpf: new FormControl(null, Validators.required),
-      rg: new FormControl(null, Validators.required),
+      rg: new FormControl(null),
       name: new FormControl(null, Validators.required),
       phone: new FormControl(null, Validators.required),
     });
@@ -132,6 +134,7 @@ export class ModalNewDelivaryComponent implements OnInit {
       this.new_address.get('neighborhood')?.setValue(data?.neighborhood);
       this.new_address.get('city')?.setValue(data?.city);
       this.new_address.get('uf')?.setValue(data?.state);
+      this.cdr.detectChanges();
     });
   }
   onBlurClientRg() {
@@ -162,8 +165,10 @@ export class ModalNewDelivaryComponent implements OnInit {
       this.new_client
         .get('phone')
         ?.setValue(convertToCpfToRgToPhoneToCep(data?.phone, 'phone'));
+        this.cdr.detectChanges();
     });
   }
+  
   checkingValid(): boolean {
     return (
       this.new_delivery.valid &&

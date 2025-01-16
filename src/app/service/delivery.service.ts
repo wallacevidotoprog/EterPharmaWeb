@@ -217,7 +217,7 @@ export class DeliveryService {
       );
   }
 
-  registerDeliveryAndStatus(obj : IDeliverySend, type: 'full' | 'simple'):Observable<number|null>{
+  registerDeliveryAndStatus(obj : IDeliverySend, type: 'colleted-all' | 'simple'):Observable<number|null>{
     const params = new URLSearchParams({ type: type }).toString();
     return this.api
       .post<IRespAPI<number | null>>(

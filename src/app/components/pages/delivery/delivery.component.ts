@@ -166,7 +166,7 @@ export class DeliveryComponent implements OnInit {
         canceled: false,
         finalized: false,
       };
-      this.updateViewOrder('open');
+      this.upateCheckedOrderFilter('open');
     } catch (error) {
       console.error('Erro ao carregar pedidos:', error);
     }
@@ -201,17 +201,18 @@ export class DeliveryComponent implements OnInit {
     this.isModalOrderVisible = false;
     if (event) {
       await this.getViewOrder(this.valueDateSearch);
-
     }
   }
   async closeDeliveryModal(event: boolean) {
     this.isModalDeliveryVisible = false;
     if (event) {
-      await this.getViewOrder(this.valueDateSearch);
 
     }
-    this.updateViewOrder('open')
 
+    await this.getViewOrder(this.valueDateSearch);
+
+    // const radio = document.querySelector('input[name="radio"][value="open"]') as HTMLInputElement;
+    // if (radio) radio.checked = true;
   }
   closeDeliveryViewModal(event: boolean) {
     this.isModalDeliveryViewVisible = false;
@@ -236,7 +237,7 @@ export class DeliveryComponent implements OnInit {
       canceled: status === 'canceled',
       finalized: status === 'finalized',
     };
-
+    this.cdr.detectChanges();
     this.updateViewOrder(status);
   }
 }

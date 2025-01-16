@@ -95,7 +95,7 @@
         </svg>
       </button>
     </div>
-    <div class="radio-inputs">
+    <div class="radio-inputs" [attr.data-key]="checkedOrderFilter.open">
       <label class="radio">
         <input type="radio" name="radio" [checked]="checkedOrderFilter.open" (change)="upateCheckedOrderFilter('open')" />
         <span class="name">ABERTOS</span>
