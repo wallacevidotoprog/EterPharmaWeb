@@ -92,7 +92,9 @@
           (change)="upateCheckedOrderFilter('open')"
         />
         <span class="name">ABERTOS</span>
-        <span class="badge" *ngIf="orderFilter.open?.length ?? 0 > 0">{{orderFilter.open?.length ?? 0}}</span>
+        <span class="badge" *ngIf="orderFilter.open?.length ?? 0 > 0">{{
+          orderFilter.open?.length ?? 0
+        }}</span>
       </label>
       <label class="radio">
         <input
@@ -102,7 +104,9 @@
           (change)="upateCheckedOrderFilter('collected')"
         />
         <span class="name">COLETADOS</span>
-        <span class="badge" *ngIf="orderFilter.collected?.length ?? 0 > 0">{{orderFilter.collected?.length ?? 0}}</span>
+        <span class="badge" *ngIf="orderFilter.collected?.length ?? 0 > 0">{{
+          orderFilter.collected?.length ?? 0
+        }}</span>
       </label>
 
       <label class="radio">
@@ -113,11 +117,17 @@
           (change)="upateCheckedOrderFilter('route')"
         />
         <span class="name">EM ROTAS</span>
-        <span class="badge" *ngIf="orderFilter.route?.length ?? 0 > 0">{{orderFilter.route?.length ?? 0}}</span>
+        <span class="badge" *ngIf="orderFilter.route?.length ?? 0 > 0">{{
+          orderFilter.route?.length ?? 0
+        }}</span>
       </label>
     </div>
 
-    <form [formGroup]="new_delivery" (ngSubmit)="onSubmit()" *ngIf="orderFilter.open">
+    <form
+      [formGroup]="new_delivery"
+      (ngSubmit)="onSubmit()"
+      *ngIf="checkedOrderFilter.open"
+    >
       <app-input-dropdown-generic
         label="ENTREGADOR(A)"
         [dataValues]="datasUser"
@@ -145,15 +155,18 @@
         [loading]="isLoad"
         [isDisable]="!new_delivery.valid"
         valueName="COLETAR SELECIONADOS"
-
       />
     </form>
-
 
     <section class="table__body" *ngIf="datasViewOrder.length > 0; else noData">
       <table>
         <thead>
-          <th><input type="checkbox" (change)="toggleAll($event)" *ngIf="orderFilter.open" />Todos</th>
+          <th *ngIf="checkedOrderFilter.open; else colRot">
+            <input type="checkbox" (change)="toggleAll($event)" />Todos
+          </th>
+          <ng-template #colRot>
+            <th>AÇÃO</th>
+          </ng-template>
           <th>STATUS</th>
           <th>CLIENTE</th>
           <th>ENDEREÇO</th>
@@ -163,15 +176,28 @@
         </thead>
         <tbody>
           <tr *ngFor="let dvo of datasViewOrder; let i = index">
-            <td>
+            <td *ngIf="checkedOrderFilter.open; else colRot">
               <input
                 type="checkbox"
                 [checked]="dvo.selected"
                 (change)="toggleItem(i, $event)"
                 name="check{{ i }}"
-                *ngIf="orderFilter.open"
               />
             </td>
+            <ng-template #colRot>
+              <td>
+                <input
+                  type="button"
+                  value="{{
+                    checkedOrderFilter.collected === true
+                      ? 'INICIAR ROTA'
+                      : 'FINALIZAR'
+                  }}"
+                  class="status btn-action"
+                  (click)="onAction(dvo)"
+                />
+              </td>
+            </ng-template>
             <td>
               <p
                 class="status"

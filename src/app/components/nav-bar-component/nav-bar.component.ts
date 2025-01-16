@@ -11,7 +11,6 @@ import { LoginService } from '../../service/login.service';
 })
 export class NavBarComponent {
   protected api = inject(LoginService);
-<<<<<<< HEAD
   menuActive: boolean = false;
 
   toggleMenu(): void {
@@ -24,13 +23,5 @@ export class NavBarComponent {
 
   logout() {
     this.api.eLogout().subscribe()
-=======
-  logout() {
-    this.api.eLogout().subscribe()
-<<<<<<< HEAD
-
->>>>>>> f180803 (init)
-=======
->>>>>>> 9088d33 (	modified:   src/app/components/login/login.component.ts)
   }
 }

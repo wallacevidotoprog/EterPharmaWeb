@@ -11,10 +11,7 @@ import {
   FormsModule,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
-<<<<<<< HEAD
 import { IDatasInput } from '../../../service/indexers.service';
-=======
->>>>>>> f180803 (init)
 
 const INPUT_FIELD_VALUE_ACESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -33,7 +30,6 @@ export class InputDropdownGenericComponent
   implements ControlValueAccessor, OnInit
 {
   ngOnInit(): void {
-<<<<<<< HEAD
     // if (this.dataValues && this.dataValues.length > 0) {
     //   this.value = this.dataValues[0].id;
     //   console.log(this.dataValues[0].id);
@@ -46,17 +42,6 @@ export class InputDropdownGenericComponent
   @Output() idDP = new EventEmitter<number>();
   @Input() isReadOnly = false;
   @Input() isValue: any;
-=======
-    this.value = 1;
-  }
-  @Input() id!: number;
-  @Input() label: string = 'TIPO';
-  @Input() datas!: never[];
-  @Output() idDP = new EventEmitter<number>();
-  @Input() isReadOnly = false;
-  @Input() isValue: any;
-
->>>>>>> f180803 (init)
   protected innerValue: any;
 
   onchange(e: Event) {
@@ -71,10 +56,7 @@ export class InputDropdownGenericComponent
     if (v !== this.innerValue) {
       this.innerValue = v;
       this.OnChangeCb(v);
-<<<<<<< HEAD
       this.idDP.emit(v);
-=======
->>>>>>> f180803 (init)
     }
   }
 
@@ -95,10 +77,3 @@ export class InputDropdownGenericComponent
   }
 }
 
-<<<<<<< HEAD
-=======
-export interface IDatasInput {
-  id: number;
-  view: string;
-}
->>>>>>> f180803 (init)

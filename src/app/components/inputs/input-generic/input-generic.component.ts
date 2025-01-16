@@ -1,16 +1,9 @@
-<<<<<<< HEAD
 import { CommonModule } from '@angular/common';
-=======
->>>>>>> f180803 (init)
 import {
   Component,
   EventEmitter,
   forwardRef,
   Input,
-<<<<<<< HEAD
-=======
-  OnInit,
->>>>>>> f180803 (init)
   Output,
 } from '@angular/core';
 import {
@@ -28,7 +21,6 @@ const INPUT_FIELD_VALUE_ACESSOR: any = {
 @Component({
   selector: 'app-input-generic',
   standalone: true,
-<<<<<<< HEAD
   imports: [FormsModule, CommonModule],
   template: `
     <div class="coolinput">
@@ -53,10 +45,6 @@ const INPUT_FIELD_VALUE_ACESSOR: any = {
       </button>
     </div>
   `,
-=======
-  imports: [FormsModule],
-  templateUrl: './input-generic.component.html',
->>>>>>> f180803 (init)
   styleUrl: './input-generic.component.css',
   providers: [INPUT_FIELD_VALUE_ACESSOR],
 })
@@ -65,7 +53,6 @@ export class InputGenericComponent implements ControlValueAccessor {
   @Input() label!: string;
   @Input() type: string = 'text';
   @Input() ph!: string;
-<<<<<<< HEAD
   @Input() isReadOnly: boolean = false;
   @Input() isValue: any;
   @Input() isBtnVisible: boolean = false;
@@ -125,12 +112,6 @@ export class InputGenericComponent implements ControlValueAccessor {
     }
     return value;
   }
-=======
-  @Input() isReadOnly = false;
-  @Input() isValue:any;
-  
-  private innerValue: any;
->>>>>>> f180803 (init)
 
   public get value() {
     return this.innerValue;
@@ -155,27 +136,7 @@ export class InputGenericComponent implements ControlValueAccessor {
   registerOnTouched(fn: any): void {
     this.OnTouchedCb = fn;
   }
-<<<<<<< HEAD
   setDisabledState?(isReadOnly: boolean): void {
     this.isReadOnly = isReadOnly;
-=======
-  setDisabledState?(isDisabled: boolean): void {
-    this.isReadOnly = isDisabled;
-  }
-
-  getDateNow() {
-    let today = new Date();
-    let date =
-      today.getFullYear() +
-      '-' +
-      (today.getMonth() + 1).toString().padStart(2, '0') +
-      '-' +
-      today.getDate().toString().padStart(2, '0');
-    let time =
-      today.getHours().toString().padStart(2, '0') +
-      ':' +
-      today.getMinutes().toString().padStart(2, '0');
-    return date + 'T' + time;
->>>>>>> f180803 (init)
   }
 }

@@ -27,8 +27,6 @@ export interface IMaintenanceData {
   type: string | any;
   obs: string | any;
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
 export interface IRespAPI<T> {
   message?: string;
   actionResult: boolean;
@@ -39,26 +37,6 @@ export interface IVerifyAuth {
 }
 export interface IUserLogin {
   email: string;
-=======
-export interface IRespAPI {
-  err: boolean | any;
-  menssage: string | any;
-  data: any;
-}
-
-export interface IUserLogin {
-  user: string;
->>>>>>> f180803 (init)
-=======
-export interface IRespAPI <T>{
-  message?: string;
-  actionResult: boolean;
-  data?: T;
-}
-
-export interface IUserLogin {
-  email: string;
->>>>>>> 9088d33 (	modified:   src/app/components/login/login.component.ts)
   pass: string;
 }
 export interface IDeliveryData {
@@ -81,9 +59,8 @@ export interface IDeliveryDataRes {
   isIfood: boolean;
   isManipulation: boolean;
 }
-<<<<<<< HEAD
 export interface IDatasInput {
-  id: number;
+  id: string;
   view: string;
 }
 export interface IOrderFilter {
@@ -95,7 +72,7 @@ export interface IOrderFilter {
 }
 // API
 export interface IBaseDataBase {
-  id?: number;
+  id?: string;
   createAt?: Date;
   updateAt?: Date;
 }
@@ -199,5 +176,3 @@ export interface ICEP {
   street: string;
   service: string;
 }
-=======
->>>>>>> f180803 (init)

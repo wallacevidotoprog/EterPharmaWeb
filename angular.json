@@ -5,15 +5,11 @@
   "projects": {
     "ANGULAR-Monitoramento-MotoEntregado": {
       "projectType": "application",
-<<<<<<< HEAD
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
         }
       },
-=======
-      "schematics": {},
->>>>>>> f180803 (init)
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -33,13 +29,9 @@
               "src/assets"
             ],
             "styles": [
-<<<<<<< HEAD
               "src/custom-theme.scss",
               "src/styles.css",
               "src/app/components/modal/styles/shared-styles-modal-default.scss"
-=======
-              "src/styles.css"
->>>>>>> f180803 (init)
             ],
             "scripts": []
           },

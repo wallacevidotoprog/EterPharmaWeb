@@ -17,7 +17,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgToastService } from 'ng-angular-popup';
-import { lastValueFrom } from 'rxjs';
+import { catchError, lastValueFrom, of, tap } from 'rxjs';
 import { DeliveryService } from '../../../service/delivery.service';
 import {
   IDatasInput,
@@ -275,7 +275,42 @@ export class ModalDelivaryComponent implements OnInit {
       collected: status === 'collected',
       route: status === 'route',
     };
-
     this.updateViewOrder(status);
+  }
+
+  returnIdStatus(value: string): string {
+    return this.datasState.filter((item) => item.view === value)[0]?.id || '';
+  }
+  onAction(dvo: IViewOrder) {
+    const idStatus =
+      this.checkedOrderFilter.collected
+        ? this.returnIdStatus('EM ROTA')
+        : this.checkedOrderFilter.route
+        ? this.returnIdStatus('FINALIZADO')
+        : '';
+
+    if (dvo.order?.delivery?.id && idStatus) {
+      this.deliveryService.registerDeliveryStatus({
+        delivery_id: dvo.order?.delivery?.id,
+        status_id:idStatus
+      }).pipe(
+        tap((response) =>
+          this.tAlert.success({
+            detail: 'Entrega atualizada com sucesso',
+            summary: `Entrega do/a ${dvo.order?.client?.name} atualizada`,
+            duration: 5000,
+          })
+        ),
+        catchError((err) => {
+          this.tAlert.error({
+            detail: 'Falhar ao atualizar Entrega',
+            summary: err?.toString(),
+            duration: 5000,
+          });
+          console.error('Erro ao registrar status:', err);
+          return of(null);
+        })
+      ).subscribe();
+    }
   }
 }

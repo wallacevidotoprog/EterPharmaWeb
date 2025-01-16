@@ -11,9 +11,6 @@ import { Component, Input } from '@angular/core';
 export class InputButtonGenericComponent {
   @Input() loading: boolean = false;
   @Input() isDisable: boolean = false;
-<<<<<<< HEAD
   @Input() valueName: string = 'Enviar';
-=======
->>>>>>> f180803 (init)
 
 }

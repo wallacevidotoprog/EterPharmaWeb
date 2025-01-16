@@ -11,10 +11,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^17.3.0",
-<<<<<<< HEAD
     "@angular/cdk": "^17.3.2",
-=======
->>>>>>> f180803 (init)
     "@angular/common": "^17.3.0",
     "@angular/compiler": "^17.3.0",
     "@angular/core": "^17.3.0",
@@ -24,10 +21,7 @@
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
     "angular-monitoramento-moto-entregado": "file:",
-<<<<<<< HEAD
     "date-fns": "^4.1.0",
-=======
->>>>>>> f180803 (init)
     "ng-angular-popup": "^0.5.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -44,14 +38,8 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-<<<<<<< HEAD
     "sass": "^1.81.0",
     "typescript": "~5.4.2",
     "vite": "^5.1.5"
   }
 }
-=======
-    "typescript": "~5.4.2"
-  }
-}
->>>>>>> f180803 (init)
