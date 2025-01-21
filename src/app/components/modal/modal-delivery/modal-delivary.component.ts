@@ -99,17 +99,10 @@ export class ModalDelivaryComponent implements OnInit {
     this.close.emit(false);
   }
 
-  async getViewOrder(date: string | Date) {
-    let searchDate: Date = new Date();
-
-    if (typeof date === 'string') {
-      searchDate = new Date(date);
-    } else {
-      searchDate = date;
-    }
+  async getViewOrder(date: string) {
     try {
       const response = await lastValueFrom(
-        this.deliveryService.getViewOrder(searchDate)
+        this.deliveryService.getViewOrder(date)
       );
       this.orderFilter.open = [];
       this.orderFilter.collected = [];

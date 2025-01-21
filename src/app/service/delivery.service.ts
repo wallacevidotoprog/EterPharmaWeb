@@ -118,8 +118,8 @@ export class DeliveryService {
         })
       );
   }
-  getViewOrder(date:Date): Observable<IViewOrder[] | null> {
-    const params = new URLSearchParams({ ['date']: format(date, 'yyyy-MM-dd HH:mm:ss') }).toString();
+  getViewOrder(date:string): Observable<IViewOrder[] | null> {
+    const params = new URLSearchParams({ ['date']: date }).toString();
     return this.api
       .get<IRespAPI<IViewOrder[]>>(
         `${environment.API}api/order_view?${params}`,
@@ -264,6 +264,38 @@ export class DeliveryService {
             return respBody;
           }
           return null;
+        })
+      );
+  }
+
+
+
+
+  teste() {
+    return this.api
+      .post<IRespAPI<IStatus>>(`${environment.API}api/status`,
+        {
+        "name":"teste"
+        },
+        {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+        observe: 'response',
+      })
+      .pipe(
+        map((resp) => {
+          const status: HttpStatus = resp.status as HttpStatus;
+          if (status === HttpStatus.OK) {
+            const responseBody = resp.body as unknown as IRespAPI<IStatus>;
+
+            if (responseBody?.actionResult) {
+              return responseBody.data ?? '';
+            }
+          }
+          return '';
         })
       );
   }

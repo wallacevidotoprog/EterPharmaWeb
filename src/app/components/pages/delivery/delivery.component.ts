@@ -24,8 +24,10 @@ import { DeliveryService } from './../../../service/delivery.service';
 import {
   getFormattedCurrency,
   getFormattedDate,
+  returnDataTodayFormGroup,
   returnOrdernationStatusDelivery,
 } from './../../../utils/global.utils';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-delivery',
@@ -43,12 +45,53 @@ import {
   styleUrl: './delivery.component.scss',
 })
 export class DeliveryComponent implements OnInit {
+  async TesteData() {
+    let nadata: string | IStatus | undefined;
+    await this.deliveryService.teste().subscribe({
+      next: (data) => {
+        console.log('data',data);
+
+        this.tAlert.info({
+          detail: 'INFO',
+          summary: data?.toString(),
+          duration: 5000,
+        });
+        nadata = data;
+        return;
+      },
+      error: (err) => {
+        this.tAlert.error({
+          detail: 'Falhar ao criar novo Entrega',
+          summary: err?.toString(),
+          duration: 5000,
+        });
+      },
+    });
+    await this.deliveryService.getStatus().subscribe({
+      next: (data) => {
+        const n_data = data.filter(x => x.id === nadata)
+        console.log('n_data',n_data);
+
+        this.tAlert.info({
+          detail: 'INFO',
+          summary: n_data?.toString(),
+          duration: 5000,
+        });
+        return;
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
   getFormattedDate = getFormattedDate;
   getFormattedCurrency = getFormattedCurrency;
   returnOrdernationStatusDelivery = returnOrdernationStatusDelivery;
+  returnDataTodayFormGroup = returnDataTodayFormGroup;
 
   protected deliveryService = inject(DeliveryService);
   protected usersService = inject(UserServiceService);
+  protected tAlert = inject(NgToastService);
   private cdr = inject(ChangeDetectorRef);
 
   protected isModalOrderVisible = false;
@@ -72,9 +115,7 @@ export class DeliveryComponent implements OnInit {
   protected selectViewOrder!: IViewOrder | null;
 
   async ngOnInit(): Promise<void> {
-    const today = new Date();
-    today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
-    this.valueDateSearch = today.toISOString().split('T')[0];
+    this.valueDateSearch = returnDataTodayFormGroup().split('T')[0];
 
     await this.deliveryService.getTypeOrder().subscribe({
       next: (data) => {
@@ -118,23 +159,16 @@ export class DeliveryComponent implements OnInit {
         console.log(err);
       },
     });
-    await this.getViewOrder(this.valueDateSearch);
+    await this.getViewOrder(this.valueDateSearch, true);
   }
   onRowClick(dvo: IViewOrder, index: number): void {
     this.selectViewOrder = dvo;
     this.openModalViewDelivery();
   }
-  async getViewOrder(date: string | Date) {
-    let searchDate: Date = new Date();
-
-    if (typeof date === 'string') {
-      searchDate = new Date(date);
-    } else {
-      searchDate = date;
-    }
+  async getViewOrder(date: string, init: boolean = false) {
     try {
       const response = await lastValueFrom(
-        this.deliveryService.getViewOrder(searchDate)
+        this.deliveryService.getViewOrder(date)
       );
       this.orderFilter.open = [];
       this.orderFilter.canceled = [];
@@ -161,12 +195,15 @@ export class DeliveryComponent implements OnInit {
           }
         }
       }
-      this.checkedOrderFilter = {
-        open: true,
-        canceled: false,
-        finalized: false,
-      };
-      this.upateCheckedOrderFilter('open');
+      if (init) {
+        this.checkedOrderFilter = {
+          open: true,
+          canceled: false,
+          finalized: false,
+        };
+        this.upateCheckedOrderFilter('open');
+      }
+      this.cdr.detectChanges();
     } catch (error) {
       console.error('Erro ao carregar pedidos:', error);
     }
@@ -206,7 +243,6 @@ export class DeliveryComponent implements OnInit {
   async closeDeliveryModal(event: boolean) {
     this.isModalDeliveryVisible = false;
     if (event) {
-
     }
 
     await this.getViewOrder(this.valueDateSearch);
