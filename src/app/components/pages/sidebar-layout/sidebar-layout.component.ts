@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { LoginService } from '../../../service/login.service';
 
@@ -10,10 +10,12 @@ import { LoginService } from '../../../service/login.service';
   templateUrl: './sidebar-layout.component.html',
   styleUrl: './sidebar-layout.component.scss',
 })
-export class SidebarLayoutComponent {
-  btnExpanded() {
+export class SidebarLayoutComponent implements OnInit {
+  
+  ngOnInit(): void {
     throw new Error('Method not implemented.');
   }
+
   protected api = inject(LoginService);
   protected router = inject(Router);
   protected isSubmenuOpen: boolean = false;
