@@ -165,7 +165,7 @@ export class DeliveryComponent implements OnInit {
     this.selectViewOrder = dvo;
     this.openModalViewDelivery();
   }
-  async getViewOrder(date: string, init: boolean = false) {
+  async getViewOrder(date: string, init: boolean = true) {
     try {
       const response = await lastValueFrom(
         this.deliveryService.getViewOrder(date)

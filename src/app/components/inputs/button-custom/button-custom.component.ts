@@ -20,11 +20,12 @@ import { Component, Input } from '@angular/core';
     gap: 1.2rem;
     flex-shrink: 0;
     border-radius: 1.2rem;
-    background: #fafafa;
+    background: #ecebeb;;
+    box-shadow: inset 3px -1px 8px 0px #d6c5c5;
     text-align: center;
     &:hover {
       cursor: pointer;
-      background: #ecebeb;;
+      //background: #ecebeb;;
       box-shadow: 0 0.2rem 0.2rem 0 hsl(0deg 0% 0%)
     }
     img{
