@@ -1,18 +1,19 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { DelivaryComponent as ModalNewDeliveryComponent } from './delivery.component';
 
-import { DeliveryComponent } from './delivery.component';
+describe('ModalNewDelivaryComponent', () => {
+  let component: ModalNewDeliveryComponent;
+  let fixture: ComponentFixture<ModalNewDeliveryComponent>;
 
-describe('DeliveryComponent', () => {
-  let component: DeliveryComponent;
-  let fixture: ComponentFixture<DeliveryComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [DeliveryComponent]
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ ModalNewDeliveryComponent ]
     })
     .compileComponents();
-    
-    fixture = TestBed.createComponent(DeliveryComponent);
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ModalNewDeliveryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

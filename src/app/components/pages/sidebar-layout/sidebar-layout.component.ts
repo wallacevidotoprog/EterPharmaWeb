@@ -24,7 +24,7 @@ import { LoginService } from '../../../service/login.service';
   styleUrl: './sidebar-layout.component.scss',
 })
 export class SidebarLayoutComponent implements OnInit {
-  isMenuOpened = true;
+  isMenuOpened = false;
   ngOnInit(): void {
     throw new Error('Method not implemented.');
   }

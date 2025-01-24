@@ -1,214 +1,200 @@
 import { CommonModule } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   inject,
+  Input,
   OnInit,
+  Output,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { lastValueFrom } from 'rxjs';
+import {
+  FormArray,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { NgToastService } from 'ng-angular-popup';
+import { catchError, lastValueFrom, of, tap } from 'rxjs';
+import { DeliveryService } from '../../../service/delivery.service';
 import {
   IDatasInput,
+  IDeliverySend,
   IOrderFilter,
   IStatus,
   ITypeOrder,
+  IUsers,
   IViewOrder,
 } from '../../../service/indexers.service';
-import { UserServiceService } from '../../../service/user.service.service';
-import { ButtonCustomComponent } from '../../inputs/button-custom/button-custom.component';
-import { ModalDelivaryComponent } from '../../modal/modal-delivery/modal-delivary.component';
-import { ModalNewDelivaryComponent } from '../../modal/modal-new-delivery/modal-new-delivary.component';
-import { ModalViewDeliveryComponent } from '../../modal/modal-view-delivery/modal-view-delivery/modal-view-delivery.component';
-import { DeliveryService } from './../../../service/delivery.service';
 import {
   getFormattedCurrency,
   getFormattedDate,
   returnDataTodayFormGroup,
   returnOrdernationStatusDelivery,
-} from './../../../utils/global.utils';
-import { NgToastService } from 'ng-angular-popup';
-
+} from '../../../utils/global.utils';
+import { InputButtonGenericComponent } from '../../inputs/input-button-generic/input-button-generic.component';
+import { InputDropdownGenericComponent } from '../../inputs/input-dropdown-generic/input-dropdown-generic.component';
+import { InputGenericComponent } from '../../inputs/input-generic/input-generic.component';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table';
+import { UserServiceService } from '../../../service/user.service.service';
 @Component({
-  selector: 'app-delivery',
+  selector: 'app-delivary',
   standalone: true,
   imports: [
-    ButtonCustomComponent,
-    ModalNewDelivaryComponent,
-    CommonModule,
     FormsModule,
-    ModalDelivaryComponent,
-    ModalViewDeliveryComponent,
+    ReactiveFormsModule,
+    CommonModule,
+    InputGenericComponent,
+    InputButtonGenericComponent,
+    InputDropdownGenericComponent,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule, MatTableModule
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './delivery.component.html',
   styleUrl: './delivery.component.scss',
 })
 export class DeliveryComponent implements OnInit {
-  async TesteData() {
-    let nadata: string | IStatus | undefined;
-    await this.deliveryService.teste().subscribe({
-      next: (data) => {
-        console.log('data',data);
-
-        this.tAlert.info({
-          detail: 'INFO',
-          summary: data?.toString(),
-          duration: 5000,
-        });
-        nadata = data;
-        return;
-      },
-      error: (err) => {
-        this.tAlert.error({
-          detail: 'Falhar ao criar novo Entrega',
-          summary: err?.toString(),
-          duration: 5000,
-        });
-      },
-    });
-    await this.deliveryService.getStatus().subscribe({
-      next: (data) => {
-        const n_data = data.filter(x => x.id === nadata)
-        console.log('n_data',n_data);
-
-        this.tAlert.info({
-          detail: 'INFO',
-          summary: n_data?.toString(),
-          duration: 5000,
-        });
-        return;
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
-  }
-  getFormattedDate = getFormattedDate;
-  getFormattedCurrency = getFormattedCurrency;
-  returnOrdernationStatusDelivery = returnOrdernationStatusDelivery;
-  returnDataTodayFormGroup = returnDataTodayFormGroup;
-
   protected deliveryService = inject(DeliveryService);
   protected usersService = inject(UserServiceService);
   protected tAlert = inject(NgToastService);
   private cdr = inject(ChangeDetectorRef);
 
-  protected isModalOrderVisible = false;
-  protected isModalDeliveryVisible = false;
-  protected isModalDeliveryViewVisible = false;
-  protected datasTypeOrder: IDatasInput[] = [];
-  protected datasUsers: IDatasInput[] = [];
-  protected datasStatus: IDatasInput[] = [];
+  getFormattedDate = getFormattedDate;
+  getFormattedCurrency = getFormattedCurrency;
+  returnOrdernationStatusDelivery = returnOrdernationStatusDelivery;
+  returnDataTodayFormGroup = returnDataTodayFormGroup;
+
+  protected datasViewOrder: IViewOrder[] = [];
+  protected listIdOrder: any = [];
+  protected valueDateSearch!: string;
+  protected isLoad: boolean = false;
+  protected new_delivery!: FormGroup;
   protected orderFilter: IOrderFilter = {
     open: [],
-    canceled: [],
-    finalized: [],
+    collected: [],
+    route: [],
   };
   protected checkedOrderFilter = {
     open: true,
-    canceled: false,
-    finalized: false,
+    collected: false,
+    route: false,
   };
-  protected datasViewOrder: IViewOrder[] = [];
-  protected valueDateSearch!: string;
-  protected selectViewOrder!: IViewOrder | null;
 
-  async ngOnInit(): Promise<void> {
-    this.valueDateSearch = returnDataTodayFormGroup().split('T')[0];
+  protected datasState: IDatasInput[] = [];
+  protected datasUser: IDatasInput[] = [];
+  //@Output() close = new EventEmitter<boolean>();
 
-    await this.deliveryService.getTypeOrder().subscribe({
-      next: (data) => {
-        const typeOrders = data as ITypeOrder[] | any;
-        for (let index = 0; index < typeOrders.length; index++) {
-          this.datasTypeOrder.push({
-            id: typeOrders[index].id,
-            view: typeOrders[index].name,
-          });
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
+  async ngOnInit() {
+    const today = new Date();
+    today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+    this.valueDateSearch = today.toISOString().split('T')[0];
+
+    this.new_delivery = new FormGroup({
+      date: new FormControl(returnDataTodayFormGroup(), Validators.required),
+      user_id: new FormControl(null, Validators.required),
+      order_delivery_id: new FormArray([], Validators.required),
+      motor_kilometers: new FormControl(null, Validators.required),
+      //status_id: new FormControl(null, Validators.required),
     });
+
     await this.usersService.getUsersAll().subscribe({
-      next: (data) => {
-        const users = data as ITypeOrder[] | any;
-        for (let index = 0; index < users.length; index++) {
-          this.datasUsers.push({
-            id: users[index].id,
-            view: users[index].name,
-          });
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
-    await this.deliveryService.getStatus().subscribe({
-      next: (data) => {
-        const typeOrders = data as IStatus[] | any;
-        for (let index = 0; index < typeOrders.length; index++) {
-          this.datasStatus.push({
-            id: typeOrders[index].id,
-            view: typeOrders[index].name,
-          });
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
-    await this.getViewOrder(this.valueDateSearch, true);
+          next: (data) => {
+            const users = data as ITypeOrder[] | any;
+            for (let index = 0; index < users.length; index++) {
+              this.datasUser.push({
+                id: users[index].id,
+                view: users[index].name,
+              });
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
+        await this.deliveryService.getStatus().subscribe({
+          next: (data) => {
+            const typeOrders = data as IStatus[] | any;
+            for (let index = 0; index < typeOrders.length; index++) {
+              this.datasState.push({
+                id: typeOrders[index].id,
+                view: typeOrders[index].name,
+              });
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
+    await this.getViewOrder(this.valueDateSearch);
   }
-  onRowClick(dvo: IViewOrder, index: number): void {
-    this.selectViewOrder = dvo;
-    this.openModalViewDelivery();
+
+  closeModal() {
+    //this.close.emit(false);
   }
-  async getViewOrder(date: string, init: boolean = true) {
+
+  async getViewOrder(date: string) {
     try {
       const response = await lastValueFrom(
         this.deliveryService.getViewOrder(date)
       );
       this.orderFilter.open = [];
-      this.orderFilter.canceled = [];
-      this.orderFilter.finalized = [];
+      this.orderFilter.collected = [];
+      this.orderFilter.route = [];
+
       if (response) {
-        for (let index = 0; index < response.length; index++) {
-          const element = response[index];
-          if (
-            element.order?.delivery?.delivery_status &&
-            element.order?.delivery?.delivery_status?.some(
-              (item) => item.status?.name == 'FINALIZADO'
+        const xresult = response?.filter(
+          (item) =>
+            !item.order?.delivery?.delivery_status?.some(
+              (s) => s.status?.name === 'CANCELADO'
+            ) &&
+            !item.order?.delivery?.delivery_status?.some(
+              (s) => s.status?.name === 'FINALIZADO'
             )
-          ) {
-            this.orderFilter.finalized?.push(element);
-          } else if (
-            element.order?.delivery?.delivery_status &&
-            element.order?.delivery?.delivery_status.some(
-              (item) => item.status?.name == 'CANCELADO'
-            )
-          ) {
-            this.orderFilter.canceled?.push(element);
+        );
+
+        for (let index = 0; index < xresult.length; index++) {
+          const element = xresult[index];
+          const status = returnOrdernationStatusDelivery(element);
+
+          if (status?.name === 'COLETADO') {
+            this.orderFilter.collected?.push(element);
+          } else if (status?.name === 'EM ROTA') {
+            this.orderFilter.route?.push(element);
           } else {
-            this.orderFilter.open?.push(element);
+            this.orderFilter.open?.push({
+              ...element,
+              selected: element.selected ?? false,
+            });
           }
         }
       }
-      if (init) {
-        this.checkedOrderFilter = {
-          open: true,
-          canceled: false,
-          finalized: false,
-        };
-        this.upateCheckedOrderFilter('open');
-      }
-      this.cdr.detectChanges();
+      this.checkedOrderFilter = {
+        open: true,
+        collected: false,
+        route: false,
+      };
+      this.updateViewOrder('open');
+
     } catch (error) {
       console.error('Erro ao carregar pedidos:', error);
     }
   }
-
   getStatusClass(status: string | null | undefined): string {
     if (!status) {
       return 'status unknown';
@@ -224,56 +210,213 @@ export class DeliveryComponent implements OnInit {
     return statusClassMap[status] || 'status unknown';
   }
 
-  openModalNewOrder() {
-    this.isModalOrderVisible = true;
-  }
-  openModalDelivery() {
-    this.isModalDeliveryVisible = true;
-  }
-  openModalViewDelivery() {
-    this.isModalDeliveryViewVisible = true;
-  }
+  async onSubmit() {
+    if (this.new_delivery.valid) {
+      const deliverySend: IDeliverySend = {
+        ...this.new_delivery.value,
+        motor_kilometers: Number(this.new_delivery.value.motor_kilometers),
+        status_id: this.returnIdStatus('COLETADO')
+      };
+      deliverySend.date = new Date(`${deliverySend.date}:00.000Z`);
 
-  async closeOrderModal(event: boolean) {
-    this.isModalOrderVisible = false;
-    if (event) {
-      await this.getViewOrder(this.valueDateSearch);
+      await this.deliveryService
+        .registerDeliveryAndStatus(deliverySend, 'colleted-all')
+        .subscribe({
+          next: async (value) => {
+            if (!value) {
+              this.tAlert.error({
+                detail: 'Falhar ao criar novo Entrega',
+                summary: value?.toString(),
+                duration: 5000,
+              });
+              return;
+            }
+            this.tAlert.success({
+              detail: 'Entrega inserido com sucesso',
+              summary: `Entrega do/a ${deliverySend.order_delivery_id} inserida`,
+              duration: 5000,
+            });
+            await this.getViewOrder(this.valueDateSearch);
+          },
+          error: (err) => {
+            this.tAlert.error({
+              detail: 'Falhar ao criar novo Entrega',
+              summary: err?.toString(),
+              duration: 5000,
+            });
+            console.error('Erro ao registrar Entrega:', err);
+          },
+        });
     }
-  }
-  async closeDeliveryModal(event: boolean) {
-    this.isModalDeliveryVisible = false;
-    if (event) {
-    }
 
-    await this.getViewOrder(this.valueDateSearch);
-
-    // const radio = document.querySelector('input[name="radio"][value="open"]') as HTMLInputElement;
-    // if (radio) radio.checked = true;
-  }
-  closeDeliveryViewModal(event: boolean) {
-    this.isModalDeliveryViewVisible = false;
-    if (event) {
-      this.selectViewOrder = null;
-    }
   }
 
-  updateViewOrder(status: 'open' | 'canceled' | 'finalized') {
+  toggleAll(event: Event) {
+    //const isChecked = (event.target as HTMLInputElement).checked;
+
+    this.datasViewOrder = this.datasViewOrder.map((item) => ({
+      ...item,
+      selected: true,
+    }));
+
+    this.listIdOrder = this.datasViewOrder
+      .filter((item) => item.selected)
+      .map((item) => item.order?.id);
+
+    this.updateSelectedIds();
+  }
+  toggleItem(index: number, event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+
+    this.datasViewOrder[index].selected = isChecked;
+
+    this.listIdOrder = this.datasViewOrder
+      .filter((item) => item.selected)
+      .map((item) => item.order?.id);
+
+    this.updateSelectedIds();
+  }
+
+  updateSelectedIds() {
+    const formArray = this.new_delivery.get('order_delivery_id') as FormArray;
+    formArray.clear(); // Limpa IDs anteriores
+
+    this.listIdOrder.forEach((id: string) => {
+      formArray.push(new FormControl(id));
+    });
+  }
+
+  updateViewOrder(status: 'open' | 'collected' | 'route') {
     this.datasViewOrder = [];
-    const statusMap: Record<'open' | 'canceled' | 'finalized', IViewOrder[]> = {
+    const statusMap: Record<'open' | 'collected' | 'route', IViewOrder[]> = {
       open: this.orderFilter.open || [],
-      canceled: this.orderFilter.canceled || [],
-      finalized: this.orderFilter.finalized || [],
+      collected: this.orderFilter.collected || [],
+      route: this.orderFilter.route || [],
     };
     this.datasViewOrder.push(...statusMap[status]);
     this.cdr.detectChanges();
   }
-  upateCheckedOrderFilter(status: 'open' | 'canceled' | 'finalized'): void {
+  upateCheckedOrderFilter(status: 'open' | 'collected' | 'route'): void {
     this.checkedOrderFilter = {
       open: status === 'open',
-      canceled: status === 'canceled',
-      finalized: status === 'finalized',
+      collected: status === 'collected',
+      route: status === 'route',
     };
-    this.cdr.detectChanges();
     this.updateViewOrder(status);
+  }
+
+  returnIdStatus(value: string): string {
+    return this.datasState.filter((item) => item.view === value)[0]?.id || '';
+  }
+  onAction(dvo: IViewOrder) {
+    const idStatus =
+      this.checkedOrderFilter.collected
+        ? this.returnIdStatus('EM ROTA')
+        : this.checkedOrderFilter.route
+        ? this.returnIdStatus('FINALIZADO')
+        : '';
+
+    if (dvo.order?.delivery?.id && idStatus) {
+      this.deliveryService.registerDeliveryStatus({
+        delivery_id: dvo.order?.delivery?.id,
+        status_id:idStatus
+      }).pipe(
+        tap((response) =>
+          this.tAlert.success({
+            detail: 'Entrega atualizada com sucesso',
+            summary: `Entrega do/a ${dvo.order?.client?.name} atualizada`,
+            duration: 5000,
+          })
+        ),
+        catchError((err) => {
+          this.tAlert.error({
+            detail: 'Falhar ao atualizar Entrega',
+            summary: err?.toString(),
+            duration: 5000,
+          });
+          console.error('Erro ao registrar status:', err);
+          return of(null);
+        })
+      ).subscribe(async ()=>await this.getViewOrder(this.valueDateSearch));
+    }
+  }
+
+
+
+  //--------------------------------------------------------- NOVO
+  searchDate: string = '';
+  formData = {
+    dropdown: '',
+    datetime: '',
+    value: 0
+  };
+  dropdownOptions = [
+    { label: 'Option 1', value: '1' },
+    { label: 'Option 2', value: '2' }
+  ];
+  tableData: any[] = [
+    {
+      id: 1,
+      cliente: 'João Silva',
+      endereco: 'Rua A, 123',
+      data: '2025-01-23',
+      valor: 100.00,
+      tipo: 'Entrega',
+      status: 'Em Rota',
+      selected: false
+    },
+    {
+      id: 2,
+      cliente: 'Maria Oliveira',
+      endereco: 'Avenida B, 456',
+      data: '2025-01-22',
+      valor: 150.00,
+      tipo: 'Pedido',
+      status: 'Cancelado',
+      selected: false
+    },
+    {
+      id: 3,
+      cliente: 'Carlos Souza',
+      endereco: 'Praça C, 789',
+      data: '2025-01-21',
+      valor: 200.00,
+      tipo: 'Entrega',
+      status: 'Finalizado',
+      selected: false
+    }
+  ];
+  selectAll: boolean = false;
+  displayedColumns: string[] = ['select', 'id', 'cliente', 'endereco', 'data', 'valor', 'tipo', 'status'];
+
+
+  // Método de pesquisa (simulado)
+  searchData() {
+    // if (this.searchDate) {
+    //   console.log(`Pesquisando dados para a data: ${this.searchDate}`);
+    // }
+  }
+
+  // Envio do formulário (simulado)
+  submitForm() {
+    const payload = {
+      dropdown: this.formData.dropdown,
+      datetime: this.formData.datetime,
+      value: this.formData.value
+    };
+
+    console.log('Formulário enviado', payload);
+    this.searchData();  // Atualiza os dados da tabela após envio
+  }
+
+  // Seleção de todas as linhas
+  selectAllRows() {
+    this.tableData.forEach(row => row.selected = this.selectAll);
+  }
+
+  // Método para capturar o estado de seleção de uma linha específica
+  onRowSelect(row: any) {
+    const selectedRows = this.tableData.filter(r => r.selected);
+    console.log('Linhas selecionadas:', selectedRows);
   }
 }
