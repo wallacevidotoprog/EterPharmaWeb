@@ -142,6 +142,7 @@ export interface IOrder extends IBaseDataBase {
   address_id?: string;
   type_order_id?: string;
   value: number;
+  obs:string
 
   delivery?: IDelivery;
   client?: IClients;

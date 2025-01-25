@@ -7,14 +7,14 @@
         (click)="openModalNewOrder()"
       />
     </li>
-    <li>
+    <!-- <li>
       <app-button-custom
         label="Entregador"
         ico="/assets/img_page/delivery_man.png"
         (click)="openModalDelivery()"
       />
-    </li>
-   
+    </li> -->
+
   </ul>
 </nav>
 
@@ -131,12 +131,12 @@
       </thead>
       <tbody>
         <tr *ngFor="let dvo of datasViewOrder ; let i = index" (click)="onRowClick(dvo, i)" >
-          <td>{{ dvo?.order?.id }}</td>
+          <td>{{ dvo?.order?.id?.toString()?.substring(0, 6) }}</td>
           <td>{{ dvo?.order?.client?.name }}</td>
           <td>
             {{ dvo?.order?.address?.place }} - {{ dvo?.order?.address?.number }} -
             {{ dvo?.order?.address?.neighborhood }} - {{ dvo?.order?.address?.city }} -
-            {{ dvo?.order?.address?.uf }}
+            {{ dvo?.order?.address?.uf }}  (obs) {{dvo?.order?.obs}}
           </td>
           <td>{{ getFormattedDate(dvo?.order?.date) }}</td>
           <td>{{ getFormattedCurrency(dvo?.order?.value) }}</td>

@@ -189,6 +189,11 @@ export class DeliveryComponent implements OnInit {
         collected: false,
         route: false,
       };
+
+      this.orderFilter.open.sort((a, b) => new Date(b.order?.date||'').getTime() - new Date(a.order?.date||'').getTime());
+      this.orderFilter.collected.sort((a, b) => new Date(b.order?.date||'').getTime() - new Date(a.order?.date||'').getTime());
+      this.orderFilter.route.sort((a, b) => new Date(b.order?.date||'').getTime() - new Date(a.order?.date||'').getTime());
+
       this.updateViewOrder('open');
 
     } catch (error) {

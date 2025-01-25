@@ -203,6 +203,9 @@ export class DeliveryStoreComponent implements OnInit {
         };
         this.upateCheckedOrderFilter('open');
       }
+      this.orderFilter.open.sort((a, b) => new Date(b.order?.date||'').getTime() - new Date(a.order?.date||'').getTime());
+      this.orderFilter.canceled.sort((a, b) => new Date(b.order?.date||'').getTime() - new Date(a.order?.date||'').getTime());
+      this.orderFilter.finalized.sort((a, b) => new Date(b.order?.date||'').getTime() - new Date(a.order?.date||'').getTime());
       this.cdr.detectChanges();
     } catch (error) {
       console.error('Erro ao carregar pedidos:', error);

@@ -168,7 +168,7 @@ export class ModalNewDelivaryComponent implements OnInit {
         this.cdr.detectChanges();
     });
   }
-  
+
   checkingValid(): boolean {
     return (
       this.new_delivery.valid &&
@@ -178,43 +178,52 @@ export class ModalNewDelivaryComponent implements OnInit {
   }
 
   async registerOrder() {
-    if (this.checkingValid()) {
-      const order: IOrderDelivery = {
-        ...this.new_delivery.getRawValue(),
-      } as IOrderDelivery;
-      order.date = new Date(`${order.date}:00.000Z`)
-      this.orderRegisterAPI.order = order;
+    try {
+      this.isLoad = true;
+      if (this.checkingValid()) {
+        const order: IOrderDelivery = {
+          ...this.new_delivery.getRawValue(),
+        } as IOrderDelivery;
+        order.date = new Date(`${order.date}:00.000Z`)
+        this.orderRegisterAPI.order = order;
 
-      await this.deliveryService
-        .registerOrder(this.orderRegisterAPI, 'full')
-        .subscribe({
-          next: (value) => {
-            if (!value) {
-              this.tAlert.error({
-                detail: 'Falhar ao criar novo Entrega',
-                summary: value?.toString(),
+        await this.deliveryService
+          .registerOrder(this.orderRegisterAPI, 'full')
+          .subscribe({
+            next: (value) => {
+              if (!value) {
+                this.tAlert.error({
+                  detail: 'Falhar ao criar novo Entrega',
+                  summary: value?.toString(),
+                  duration: 5000,
+                });
+                return;
+              }
+              this.tAlert.success({
+                detail: 'Entrega inserido com sucesso',
+                summary: `Entrega do/a ${this.clientView.name} inserida`,
                 duration: 5000,
               });
-              return;
-            }
-            this.tAlert.success({
-              detail: 'Entrega inserido com sucesso',
-              summary: `Entrega do/a ${this.clientView.name} inserida`,
-              duration: 5000,
-            });
-          },
-          error: (err) => {
-            this.tAlert.error({
-              detail: 'Falhar ao criar novo Entrega',
-              summary: err?.toString(),
-              duration: 5000,
-            });
-            console.error('Erro ao registrar Entrega:', err);
-          },
-        });
+              this.close.emit(true);
+            },
+            error: (err) => {
+              this.tAlert.error({
+                detail: 'Falhar ao criar novo Entrega',
+                summary: err?.toString(),
+                duration: 5000,
+              });
+              console.error('Erro ao registrar Entrega:', err);
+            },
+          });
 
-      this.close.emit(true);
+
+      }
+      this.isLoad = false;
+    } catch (error) {
+      this.isLoad = false;
+      console.error('registerOrder',error)
     }
+
   }
 
   async registerAddress() {

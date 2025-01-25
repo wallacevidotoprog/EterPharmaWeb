@@ -14,16 +14,34 @@
             CLIENTE: <strong>{{ datasViewOrder?.order?.client?.name }}</strong>
           </p>
           <p>
-            CPF: <strong>{{ convertToCpfToRgToPhoneToCep(datasViewOrder?.order?.client?.cpf,'cpf') }}</strong>
+            CPF:
+            <strong>{{
+              convertToCpfToRgToPhoneToCep(
+                datasViewOrder?.order?.client?.cpf,
+                "cpf"
+              )
+            }}</strong>
           </p>
           <p>
             TELEFONE:
-            <strong>{{ convertToCpfToRgToPhoneToCep(datasViewOrder?.order?.client?.phone,'phone') }}</strong>
-            <a *ngIf="datasViewOrder?.order?.client?.phone"
-            [href]="'https://wa.me/' + datasViewOrder?.order?.client?.phone"
-            target="_blank"
-            title="Enviar mensagem no WhatsApp">
-            <img src="assets/images/whatsapp-icon.png" alt="WhatsApp" style="width: 20px; margin-left: 5px;"></a>
+            <strong>{{
+              convertToCpfToRgToPhoneToCep(
+                datasViewOrder?.order?.client?.phone,
+                "phone"
+              )
+            }}</strong>
+            <a
+              *ngIf="datasViewOrder?.order?.client?.phone"
+              [href]="'https://wa.me/' + datasViewOrder?.order?.client?.phone"
+              target="_blank"
+              title="Enviar mensagem no WhatsApp"
+            >
+              <img
+                src="assets/images/whatsapp-icon.png"
+                alt="WhatsApp"
+                style="width: 30px; margin-left: 5px"
+              />
+            </a>
           </p>
           <p>
             ENDEREÇO:
@@ -32,8 +50,37 @@
               {{ datasViewOrder?.order?.address?.number }},
               {{ datasViewOrder?.order?.address?.neighborhood }} -
               {{ datasViewOrder?.order?.address?.city }} -
-              {{ datasViewOrder?.order?.address?.uf }}</strong
+              {{ datasViewOrder?.order?.address?.uf }}
+            </strong>
+            <a
+              *ngIf="datasViewOrder?.order?.address"
+              [href]="
+                'https://www.google.com/maps?q=' +
+                datasViewOrder?.order?.address?.place +
+                ', ' +
+                datasViewOrder?.order?.address?.number +
+                ', ' +
+                datasViewOrder?.order?.address?.neighborhood +
+                ' - ' +
+                datasViewOrder?.order?.address?.city +
+                ' - ' +
+                datasViewOrder?.order?.address?.uf
+              "
+              target="_blank"
+              title="Abrir no Google Maps"
             >
+            <img
+            src="../../../../../assets/images/maps-icon.png"
+            alt="WhatsApp"
+            style="width: 30px; "
+          />
+            </a>
+          </p>
+          <p>
+            OBSERVAÇÕES:
+            <strong>{{
+              datasViewOrder?.order?.obs
+            }}</strong>
           </p>
           <p>
             VALOR:

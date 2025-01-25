@@ -26,7 +26,7 @@ import { LoginService } from '../../../service/login.service';
 export class SidebarLayoutComponent implements OnInit {
   isMenuOpened = false;
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    //throw new Error('Method not implemented.');
   }
 
   protected api = inject(LoginService);

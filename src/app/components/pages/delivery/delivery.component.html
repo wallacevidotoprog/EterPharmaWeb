@@ -437,7 +437,8 @@
           {{ row?.order?.address?.number }} -
           {{ row?.order?.address?.neighborhood }} -
           {{ row?.order?.address?.city }} -
-          {{ row?.order?.address?.uf }}</td>
+          {{ row?.order?.address?.uf }}
+          (obs) {{row?.order?.obs}}</td>
           <td>{{ getFormattedDate(row.order?.date) }}</td>
           <td>{{ getFormattedCurrency(row.order?.value) }}</td>
           <td>{{ row?.order?.type_order?.name }}</td>
