@@ -88,7 +88,7 @@ export class DeliveryService {
       );
   }
 
-  getClient(cod: string, type: 'rg' | 'cpf') {
+  getClient(cod: string, type: 'c_interno' | 'cpf') {
     const params = new URLSearchParams({ [type]: cod }).toString();
     return this.api
       .get<IRespAPI<IClients>>(`${environment.API}api/client?${params}`, {

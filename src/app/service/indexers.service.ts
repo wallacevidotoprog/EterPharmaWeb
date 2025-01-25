@@ -96,6 +96,11 @@ export interface IUsers extends IBaseDataBase {
   position_id?: number | null;
   permissions_id?: number | null;
   stats: boolean;
+
+  position?: IPosition
+}
+export interface IPosition extends IBaseDataBase {
+  name: string;
 }
 export interface IClientAddress extends IBaseDataBase {
   client_id?: string;
@@ -113,7 +118,7 @@ export interface IAddress extends IBaseDataBase {
 }
 export interface IClients extends IBaseDataBase {
   cpf?: string;
-  rg?: string;
+  c_interno?: string;
   name: string;
   phone: string;
 

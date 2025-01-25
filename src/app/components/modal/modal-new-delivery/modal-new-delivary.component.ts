@@ -9,6 +9,7 @@ import {
   Output,
 } from '@angular/core';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   FormsModule,
@@ -21,6 +22,7 @@ import { IDatasInput } from '../../../service/indexers.service';
 import {
   convertToCpfToRgToPhoneToCep,
   refineStringToNumber,
+  removeIfNull,
 } from '../../../utils/converts.utils';
 import { InputButtonGenericComponent } from '../../inputs/input-button-generic/input-button-generic.component';
 import { InputDropdownGenericComponent } from '../../inputs/input-dropdown-generic/input-dropdown-generic.component';
@@ -46,6 +48,9 @@ import {
   styleUrl: './modal-new-delivary.component.scss',
 })
 export class ModalNewDelivaryComponent implements OnInit {
+
+  removeIfNull = removeIfNull;
+
   protected deliveryService = inject(DeliveryService);
   protected tAlert = inject(NgToastService);
   private cdr = inject(ChangeDetectorRef);
@@ -112,11 +117,11 @@ export class ModalNewDelivaryComponent implements OnInit {
     });
 
     this.new_client = new FormGroup({
-      cpf: new FormControl(null, Validators.required),
-      rg: new FormControl(null),
+      cpf: new FormControl(null),
+      c_interno: new FormControl(null),
       name: new FormControl(null, Validators.required),
       phone: new FormControl(null, Validators.required),
-    });
+    },{validators: this.atLeastOneRequiredValidator(['cpf','c_interno'])});
     this.new_address = new FormGroup({
       cep: new FormControl(null, Validators.required),
       place: new FormControl(null, Validators.required),
@@ -126,6 +131,15 @@ export class ModalNewDelivaryComponent implements OnInit {
       uf: new FormControl(null, Validators.required),
     });
   }
+  atLeastOneRequiredValidator(fields: string[]) {
+    return (formGroup: AbstractControl) => {
+      const isValid = fields.some(
+        (fiels) => !!formGroup.get(fiels)?.value?.trim()
+      );
+      return isValid ? null : { atLeastOneRequired: true };
+    };
+  }
+
   async onBlurAddress() {
     const cep = parseInt(refineStringToNumber(this.new_address.value.cep));
 
@@ -137,10 +151,10 @@ export class ModalNewDelivaryComponent implements OnInit {
       this.cdr.detectChanges();
     });
   }
-  onBlurClientRg() {
+  onBlurClientcInterno() {
     this.setValuesGetCliente(
       refineStringToNumber(this.new_client.value.rg),
-      'rg'
+      'c_interno'
     );
   }
   onBlurClientCpf() {
@@ -150,7 +164,7 @@ export class ModalNewDelivaryComponent implements OnInit {
     );
   }
 
-  async setValuesGetCliente(cod: string, type: 'rg' | 'cpf') {
+  async setValuesGetCliente(cod: string, type: 'c_interno' | 'cpf') {
     if (!cod) {
       return;
     }
@@ -159,13 +173,13 @@ export class ModalNewDelivaryComponent implements OnInit {
         .get('cpf')
         ?.setValue(convertToCpfToRgToPhoneToCep(data?.cpf, 'cpf'));
       this.new_client
-        .get('rg')
-        ?.setValue(convertToCpfToRgToPhoneToCep(data?.rg, 'rg'));
+        .get('c_interno')
+        ?.setValue(convertToCpfToRgToPhoneToCep(data?.c_interno, 'c_interno'));
       this.new_client.get('name')?.setValue(data?.name);
       this.new_client
         .get('phone')
         ?.setValue(convertToCpfToRgToPhoneToCep(data?.phone, 'phone'));
-        this.cdr.detectChanges();
+      this.cdr.detectChanges();
     });
   }
 
@@ -184,8 +198,9 @@ export class ModalNewDelivaryComponent implements OnInit {
         const order: IOrderDelivery = {
           ...this.new_delivery.getRawValue(),
         } as IOrderDelivery;
-        order.date = new Date(`${order.date}:00.000Z`)
+        order.date = new Date(`${order.date}:00.000Z`);
         this.orderRegisterAPI.order = order;
+        this.orderRegisterAPI.client = removeIfNull(this.orderRegisterAPI.client);
 
         await this.deliveryService
           .registerOrder(this.orderRegisterAPI, 'full')
@@ -215,15 +230,12 @@ export class ModalNewDelivaryComponent implements OnInit {
               console.error('Erro ao registrar Entrega:', err);
             },
           });
-
-
       }
       this.isLoad = false;
     } catch (error) {
       this.isLoad = false;
-      console.error('registerOrder',error)
+      console.error('registerOrder', error);
     }
-
   }
 
   async registerAddress() {
@@ -289,9 +301,7 @@ export class ModalNewDelivaryComponent implements OnInit {
       if (client.cpf) {
         client.cpf = await refineStringToNumber(client.cpf.toString());
       }
-      if (client.rg) {
-        client.rg = await refineStringToNumber(client.rg.toString());
-      }
+
       this.isLoad = true;
 
       // await this.deliveryService.registerClient(client).subscribe({

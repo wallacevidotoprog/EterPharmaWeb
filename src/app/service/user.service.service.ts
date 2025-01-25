@@ -12,7 +12,7 @@ export class UserServiceService {
 
   getUsersAll(): Observable<IUsers[]> {
     return this.api
-      .get<IRespAPI<IUsers[]>>(`${environment.API}api/users`, {
+      .get<IRespAPI<IUsers[]>>(`${environment.API}api/users-default`, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
