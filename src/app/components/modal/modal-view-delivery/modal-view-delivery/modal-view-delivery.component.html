@@ -11,17 +11,24 @@
       <section class="data-order">
         <div class="data-order-details">
           <p>
-            CLIENTE: <strong>{{ datasViewOrder?.order?.client?.name }}</strong>
+            CLIENTE:<strong>{{ datasViewOrder?.order?.client?.name }}</strong>
           </p>
-          <p>
-            CPF:
-            <strong>{{
+          <p *ngIf="datasViewOrder?.order?.client?.cpf" ; else #ci>
+            CPF:<strong>{{
               convertToCpfToRgToPhoneToCep(
                 datasViewOrder?.order?.client?.cpf,
                 "cpf"
               )
             }}</strong>
           </p>
+          <ng-template #ci>
+            <p>
+              CÓDIGO INTERNO:<strong>{{
+                datasViewOrder?.order?.client?.c_interno
+              }}</strong>
+            </p>
+          </ng-template>
+
           <p>
             TELEFONE:
             <strong>{{
@@ -69,18 +76,16 @@
               target="_blank"
               title="Abrir no Google Maps"
             >
-            <img
-            src="../../../../../assets/images/maps-icon.png"
-            alt="WhatsApp"
-            style="width: 30px; "
-          />
+              <img
+                src="../../../../../assets/images/maps-icon.png"
+                alt="WhatsApp"
+                style="width: 30px"
+              />
             </a>
           </p>
           <p>
             OBSERVAÇÕES:
-            <strong>{{
-              datasViewOrder?.order?.obs
-            }}</strong>
+            <strong>{{ datasViewOrder?.order?.obs }}</strong>
           </p>
           <p>
             VALOR:

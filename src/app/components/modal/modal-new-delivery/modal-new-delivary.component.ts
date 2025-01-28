@@ -169,7 +169,8 @@ export class ModalNewDelivaryComponent implements OnInit {
       return;
     }
     await this.deliveryService.getClient(cod, type).subscribe((data) => {
-      this.new_client
+      if (data) {
+        this.new_client
         .get('cpf')
         ?.setValue(convertToCpfToRgToPhoneToCep(data?.cpf, 'cpf'));
       this.new_client
@@ -180,6 +181,8 @@ export class ModalNewDelivaryComponent implements OnInit {
         .get('phone')
         ?.setValue(convertToCpfToRgToPhoneToCep(data?.phone, 'phone'));
       this.cdr.detectChanges();
+      }
+
     });
   }
 

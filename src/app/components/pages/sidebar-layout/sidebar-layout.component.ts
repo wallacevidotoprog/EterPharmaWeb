@@ -29,6 +29,10 @@ export class SidebarLayoutComponent implements OnInit {
     //throw new Error('Method not implemented.');
   }
 
+  closeMenu(){
+    this.isMenuOpened =false;
+  }
+
   protected api = inject(LoginService);
   protected router = inject(Router);
   protected isSubmenuOpen: boolean = false;

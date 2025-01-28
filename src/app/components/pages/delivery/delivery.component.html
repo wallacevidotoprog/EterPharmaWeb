@@ -1,235 +1,3 @@
-<div  style="display: none;">
-  <div class="modal-content opem-animation">
-    <span class="close" (click)="closeModal()">&times;</span>
-    <h2>Formulário e Tabela</h2>
-    <div class="data-query">
-      <div class="searchBox">
-        <input
-          class="searchInput"
-          type="date"
-          name="searchDate"
-          [(ngModel)]="valueDateSearch"
-          placeholder="Search something"
-        />
-        <button class="searchButton" (click)="getViewOrder(valueDateSearch)">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="29"
-            height="29"
-            viewBox="0 0 29 29"
-            fill="none"
-          >
-            <g clip-path="url(#clip0_2_17)">
-              <g filter="url(#filter0_d_2_17)">
-                <path
-                  d="M23.7953 23.9182L19.0585 19.1814M19.0585 19.1814C19.8188 18.4211 20.4219 17.5185 20.8333 16.5251C21.2448 15.5318 21.4566 14.4671 21.4566 13.3919C21.4566 12.3167 21.2448 11.252 20.8333 10.2587C20.4219 9.2653 19.8188 8.36271 19.0585 7.60242C18.2982 6.84214 17.3956 6.23905 16.4022 5.82759C15.4089 5.41612 14.3442 5.20435 13.269 5.20435C12.1938 5.20435 11.1291 5.41612 10.1358 5.82759C9.1424 6.23905 8.23981 6.84214 7.47953 7.60242C5.94407 9.13789 5.08145 11.2204 5.08145 13.3919C5.08145 15.5634 5.94407 17.6459 7.47953 19.1814C9.01499 20.7168 11.0975 21.5794 13.269 21.5794C15.4405 21.5794 17.523 20.7168 19.0585 19.1814Z"
-                  stroke="white"
-                  stroke-width="3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  shape-rendering="crispEdges"
-                ></path>
-              </g>
-            </g>
-            <defs>
-              <filter
-                id="filter0_d_2_17"
-                x="-0.418549"
-                y="3.70435"
-                width="29.7139"
-                height="29.7139"
-                filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
-              >
-                <feFlood
-                  flood-opacity="0"
-                  result="BackgroundImageFix"
-                ></feFlood>
-                <feColorMatrix
-                  in="SourceAlpha"
-                  type="matrix"
-                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                  result="hardAlpha"
-                ></feColorMatrix>
-                <feOffset dy="4"></feOffset>
-                <feGaussianBlur stdDeviation="2"></feGaussianBlur>
-                <feComposite in2="hardAlpha" operator="out"></feComposite>
-                <feColorMatrix
-                  type="matrix"
-                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
-                ></feColorMatrix>
-                <feBlend
-                  mode="normal"
-                  in2="BackgroundImageFix"
-                  result="effect1_dropShadow_2_17"
-                ></feBlend>
-                <feBlend
-                  mode="normal"
-                  in="SourceGraphic"
-                  in2="effect1_dropShadow_2_17"
-                  result="shape"
-                ></feBlend>
-              </filter>
-              <clipPath id="clip0_2_17">
-                <rect
-                  width="28.0702"
-                  height="28.0702"
-                  fill="white"
-                  transform="translate(0.403503 0.526367)"
-                ></rect>
-              </clipPath>
-            </defs>
-          </svg>
-        </button>
-      </div>
-    </div>
-    <div class="radio-inputs">
-      <label class="radio">
-        <input
-          type="radio"
-          name="radio"
-          [checked]="checkedOrderFilter.open"
-          (change)="upateCheckedOrderFilter('open')"
-        />
-        <span class="name">ABERTOS</span>
-        <span class="badge" *ngIf="orderFilter.open?.length ?? 0 > 0">{{
-          orderFilter.open?.length ?? 0
-        }}</span>
-      </label>
-      <label class="radio">
-        <input
-          type="radio"
-          name="radio"
-          [checked]="checkedOrderFilter.collected"
-          (change)="upateCheckedOrderFilter('collected')"
-        />
-        <span class="name">COLETADOS</span>
-        <span class="badge" *ngIf="orderFilter.collected?.length ?? 0 > 0">{{
-          orderFilter.collected?.length ?? 0
-        }}</span>
-      </label>
-
-      <label class="radio">
-        <input
-          type="radio"
-          name="radio"
-          [checked]="checkedOrderFilter.route"
-          (change)="upateCheckedOrderFilter('route')"
-        />
-        <span class="name">EM ROTAS</span>
-        <span class="badge" *ngIf="orderFilter.route?.length ?? 0 > 0">{{
-          orderFilter.route?.length ?? 0
-        }}</span>
-      </label>
-    </div>
-
-    <form
-      [formGroup]="new_delivery"
-      (ngSubmit)="onSubmit()"
-      *ngIf="checkedOrderFilter.open"
-    >
-      <app-input-dropdown-generic
-        label="ENTREGADOR(A)"
-        [dataValues]="datasUser"
-        formControlName="user_id"
-      />
-      <app-input-generic
-        type="datetime-local"
-        label="DATE"
-        id="date"
-        formControlName="date"
-      />
-      <app-input-generic
-        type="number"
-        label="KM DA MOTO"
-        id="motor_kilometers"
-        formControlName="motor_kilometers"
-      />
-      <!-- <app-input-dropdown-generic
-        label="AÇÃO"
-        [dataValues]="datasState"
-        formControlName="status_id"
-      /> -->
-      <app-input-button-generic
-        class="btn-send"
-        [loading]="isLoad"
-        [isDisable]="!new_delivery.valid"
-        valueName="COLETAR SELECIONADOS"
-      />
-    </form>
-
-    <section class="table__body" *ngIf="datasViewOrder.length > 0; else noData">
-      <table>
-        <thead>
-          <th *ngIf="checkedOrderFilter.open; else colRot">
-            <input type="checkbox" (change)="toggleAll($event)" />Todos
-          </th>
-          <ng-template #colRot>
-            <th>AÇÃO</th>
-          </ng-template>
-          <th>STATUS</th>
-          <th>CLIENTE</th>
-          <th>ENDEREÇO</th>
-          <th>DATA</th>
-          <th>VALOR</th>
-          <th>TIPO</th>
-        </thead>
-        <tbody>
-          <tr *ngFor="let dvo of datasViewOrder; let i = index">
-            <td *ngIf="checkedOrderFilter.open; else colRot">
-              <input
-                type="checkbox"
-                [checked]="dvo.selected"
-                (change)="toggleItem(i, $event)"
-                name="check{{ i }}"
-              />
-            </td>
-            <ng-template #colRot>
-              <td>
-                <input
-                  type="button"
-                  value="{{
-                    checkedOrderFilter.collected === true
-                      ? 'INICIAR ROTA'
-                      : 'FINALIZAR'
-                  }}"
-                  class="status btn-action"
-                  (click)="onAction(dvo)"
-                />
-              </td>
-            </ng-template>
-            <td>
-              <p
-                class="status"
-                [ngClass]="
-                  getStatusClass(returnOrdernationStatusDelivery(dvo)?.name)
-                "
-              >
-                {{ returnOrdernationStatusDelivery(dvo)?.name || "SEM STATUS" }}
-              </p>
-            </td>
-            <td>{{ dvo?.order?.client?.name }}</td>
-            <td>
-              {{ dvo?.order?.address?.place }} -
-              {{ dvo?.order?.address?.number }} -
-              {{ dvo?.order?.address?.neighborhood }} -
-              {{ dvo?.order?.address?.city }} -
-              {{ dvo?.order?.address?.uf }}
-            </td>
-            <td>{{ getFormattedDate(dvo.order?.date) }}</td>
-            <td>{{ getFormattedCurrency(dvo.order?.value) }}</td>
-            <td>{{ dvo?.order?.type_order?.name }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-    <ng-template #noData>
-      <p>Nenhum pedido encontrado para esta data.</p>
-    </ng-template>
-  </div>
-</div>
-
-
 <!-- novo -->
 <div>
   <div class="data-query">
@@ -271,10 +39,7 @@
               filterUnits="userSpaceOnUse"
               color-interpolation-filters="sRGB"
             >
-              <feFlood
-                flood-opacity="0"
-                result="BackgroundImageFix"
-              ></feFlood>
+              <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
               <feColorMatrix
                 in="SourceAlpha"
                 type="matrix"
@@ -353,39 +118,39 @@
     </label>
   </div>
   <form
-      [formGroup]="new_delivery"
-      (ngSubmit)="onSubmit()"
-      *ngIf="checkedOrderFilter.open"
-    >
-      <app-input-dropdown-generic
-        label="ENTREGADOR(A)"
-        [dataValues]="datasUser"
-        formControlName="user_id"
-      />
-      <app-input-generic
-        type="datetime-local"
-        label="DATE"
-        id="date"
-        formControlName="date"
-      />
-      <app-input-generic
-        type="number"
-        label="KM DA MOTO"
-        id="motor_kilometers"
-        formControlName="motor_kilometers"
-      />
-      <!-- <app-input-dropdown-generic
+    [formGroup]="new_delivery"
+    (ngSubmit)="onSubmit()"
+    *ngIf="checkedOrderFilter.open"
+  >
+    <app-input-dropdown-generic
+      label="ENTREGADOR(A)"
+      [dataValues]="datasUser"
+      formControlName="user_id"
+    />
+    <app-input-generic
+      type="datetime-local"
+      label="DATE"
+      id="date"
+      formControlName="date"
+    />
+    <app-input-generic
+      type="number"
+      label="KM DA MOTO"
+      id="motor_kilometers"
+      formControlName="motor_kilometers"
+    />
+    <!-- <app-input-dropdown-generic
         label="AÇÃO"
         [dataValues]="datasState"
         formControlName="status_id"
       /> -->
-      <app-input-button-generic
-        class="btn-send"
-        [loading]="isLoad"
-        [isDisable]="!new_delivery.valid"
-        valueName="COLETAR SELECIONADOS"
-      />
-    </form>
+    <app-input-button-generic
+      class="btn-send"
+      [loading]="isLoad"
+      [isDisable]="!new_delivery.valid"
+      valueName="COLETAR SELECIONADOS"
+    />
+  </form>
 
   <table>
     <thead>
@@ -407,7 +172,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let row of datasViewOrder;let i = index">
+      <tr
+        *ngFor="let row of datasViewOrder; let i = index"
+
+      >
         <td *ngIf="checkedOrderFilter.open; else colRot">
           <input
             type="checkbox"
@@ -428,31 +196,43 @@
               class="status btn-action"
               (click)="onAction(row)"
             />
+            <input
+              type="button"
+              value="CANCELAR"
+              class="status btn-action"
+              (click)="onAction(row,true)"
+            />
           </td>
         </ng-template>
         <!-- <td><input type="checkbox" [(ngModel)]="row.selected" (change)="onRowSelect(row)"></td> Checkbox para selecionar linha -->
-        <td>{{ row.order?.id?.toString()?.substring(0, 6) }}</td>
+        <td (click)="onRowClick(row, i)" style="cursor: pointer;">{{ row.order?.id?.toString()?.substring(0, 6) }}</td>
         <td>{{ row?.order?.client?.name }}</td>
-        <td> {{ row?.order?.address?.place }} -
-          {{ row?.order?.address?.number }} -
+        <td>
+          {{ row?.order?.address?.place }} - {{ row?.order?.address?.number }} -
           {{ row?.order?.address?.neighborhood }} -
           {{ row?.order?.address?.city }} -
           {{ row?.order?.address?.uf }}
-          (obs) {{row?.order?.obs}}</td>
-          <td>{{ getFormattedDate(row.order?.date) }}</td>
-          <td>{{ getFormattedCurrency(row.order?.value) }}</td>
-          <td>{{ row?.order?.type_order?.name }}</td>
-          <td>
-            <p
-              class="status"
-              [ngClass]="
-                getStatusClass(returnOrdernationStatusDelivery(row)?.name)
-              "
-            >
-              {{ returnOrdernationStatusDelivery(row)?.name || "SEM STATUS" }}
-            </p>
-          </td>
+          (obs) {{ row?.order?.obs }}
+        </td>
+        <td>{{ getFormattedDate(row.order?.date) }}</td>
+        <td>{{ getFormattedCurrency(row.order?.value) }}</td>
+        <td>{{ row?.order?.type_order?.name }}</td>
+        <td>
+          <p
+            class="status"
+            [ngClass]="
+              getStatusClass(returnOrdernationStatusDelivery(row)?.name)
+            "
+          >
+            {{ returnOrdernationStatusDelivery(row)?.name || "SEM STATUS" }}
+          </p>
+        </td>
       </tr>
     </tbody>
   </table>
 </div>
+<app-modal-view-delivery
+  [datasViewOrder]="selectViewOrder"
+  *ngIf="isModalDeliveryViewVisible"
+  (close)="closeDeliveryViewModal()"
+/>

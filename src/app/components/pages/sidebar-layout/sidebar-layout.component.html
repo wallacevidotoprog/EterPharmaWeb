@@ -77,8 +77,8 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>
-            <a mat-list-item routerLink="/delivery-store">Loja</a>
-            <a mat-list-item routerLink="/delivery">Entregador</a>
+            <a mat-list-item routerLink="/delivery-store" (click)="closeMenu()">Loja</a>
+            <a mat-list-item routerLink="/delivery" (click)="closeMenu()">Entregador</a>
           </mat-nav-list>
         </mat-expansion-panel>
         <mat-expansion-panel *ngIf="isMenuOpened">
@@ -88,8 +88,8 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>
-            <a mat-list-item routerLink="/maintenance">Manutenção</a>
-            <a mat-list-item routerLink="/delivery">Entregador</a>
+            <a mat-list-item routerLink="/maintenance" (click)="closeMenu()">Manutenção</a>
+            <a mat-list-item routerLink="/delivery" (click)="closeMenu()">Entregador</a>
           </mat-nav-list>
         </mat-expansion-panel>
       </mat-nav-list>

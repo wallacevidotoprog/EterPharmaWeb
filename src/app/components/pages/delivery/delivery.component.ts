@@ -24,7 +24,6 @@ import {
   IDeliverySend,
   IOrderFilter,
   IStatus,
-  ITypeOrder,
   IUsers,
   IViewOrder,
 } from '../../../service/indexers.service';
@@ -38,6 +37,8 @@ import {
 import { InputButtonGenericComponent } from '../../inputs/input-button-generic/input-button-generic.component';
 import { InputDropdownGenericComponent } from '../../inputs/input-dropdown-generic/input-dropdown-generic.component';
 import { InputGenericComponent } from '../../inputs/input-generic/input-generic.component';
+import { ModalNewDelivaryComponent } from '../../modal/modal-new-delivery/modal-new-delivary.component';
+import { ModalViewDeliveryComponent } from '../../modal/modal-view-delivery/modal-view-delivery/modal-view-delivery.component';
 @Component({
   selector: 'app-delivary',
   standalone: true,
@@ -56,11 +57,17 @@ import { InputGenericComponent } from '../../inputs/input-generic/input-generic.
     MatDatepickerModule,
     MatNativeDateModule,
     MatTableModule,
+    ModalNewDelivaryComponent,
+    ModalViewDeliveryComponent,
   ],
   templateUrl: './delivery.component.html',
   styleUrl: './delivery.component.scss',
 })
 export class DeliveryComponent implements OnInit {
+  onRowClick(dvo: IViewOrder, index: number): void {
+    this.selectViewOrder = dvo;
+    this.isModalDeliveryViewVisible = true;
+  }
   protected deliveryService = inject(DeliveryService);
   protected usersService = inject(UserServiceService);
   protected tAlert = inject(NgToastService);
@@ -71,6 +78,7 @@ export class DeliveryComponent implements OnInit {
   returnOrdernationStatusDelivery = returnOrdernationStatusDelivery;
   returnDataTodayFormGroup = returnDataTodayFormGroup;
 
+  protected selectViewOrder!: IViewOrder | null;
   protected datasViewOrder: IViewOrder[] = [];
   protected listIdOrder: any = [];
   protected valueDateSearch!: string;
@@ -89,6 +97,8 @@ export class DeliveryComponent implements OnInit {
 
   protected datasState: IDatasInput[] = [];
   protected datasUser: IDatasInput[] = [];
+  protected datasTypeOrder: IDatasInput[] = [];
+  isModalDeliveryViewVisible: boolean = false;
   //@Output() close = new EventEmitter<boolean>();
 
   async ngOnInit() {
@@ -109,15 +119,13 @@ export class DeliveryComponent implements OnInit {
         let users = data as IUsers[];
 
         for (let index = 0; index < users.length; index++) {
-
-          if (users[index].position?.name.includes("ENTREGADOR")) {
+          if (users[index].position?.name.includes('ENTREGADOR')) {
             this.datasUser.push({
               //@ts-ignore
               id: users[index].id,
               view: users[index].name,
             });
           }
-
         }
       },
       error: (err) => {
@@ -141,7 +149,8 @@ export class DeliveryComponent implements OnInit {
     await this.getViewOrder(this.valueDateSearch);
   }
 
-  closeModal() {
+  closeDeliveryViewModal() {
+    this.isModalDeliveryViewVisible = false;
     //this.close.emit(false);
   }
 
@@ -320,12 +329,17 @@ export class DeliveryComponent implements OnInit {
   returnIdStatus(value: string): string {
     return this.datasState.filter((item) => item.view === value)[0]?.id || '';
   }
-  onAction(dvo: IViewOrder) {
-    const idStatus = this.checkedOrderFilter.collected
-      ? this.returnIdStatus('EM ROTA')
-      : this.checkedOrderFilter.route
-      ? this.returnIdStatus('FINALIZADO')
-      : '';
+  onAction(dvo: IViewOrder, drop: boolean = false) {
+    let idStatus: string;
+    if (drop) {
+      idStatus = this.returnIdStatus('CANCELADO');
+    } else {
+      idStatus = this.checkedOrderFilter.collected
+        ? this.returnIdStatus('EM ROTA')
+        : this.checkedOrderFilter.route
+        ? this.returnIdStatus('FINALIZADO')
+        : '';
+    }
 
     if (dvo.order?.delivery?.id && idStatus) {
       this.deliveryService
