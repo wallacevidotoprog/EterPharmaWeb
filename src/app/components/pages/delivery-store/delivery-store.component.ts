@@ -209,6 +209,7 @@ export class DeliveryStoreComponent implements OnInit {
       this.cdr.detectChanges();
     } catch (error) {
       console.error('Erro ao carregar pedidos:', error);
+     
     }
   }
 

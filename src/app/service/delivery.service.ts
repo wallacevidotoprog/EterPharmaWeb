@@ -118,8 +118,8 @@ export class DeliveryService {
         })
       );
   }
-  getViewOrder(date:string): Observable<IViewOrder[] | null> {
-    const params = new URLSearchParams({ ['date']: date }).toString();
+  getViewOrder(date:string,between:boolean=false): Observable<IViewOrder[] | null> {
+    const params = !between ? new URLSearchParams({ ['date']: date }).toString() : date;
     return this.api
       .get<IRespAPI<IViewOrder[]>>(
         `${environment.API}api/order_view?${params}`,

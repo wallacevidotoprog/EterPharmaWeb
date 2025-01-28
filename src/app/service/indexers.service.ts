@@ -133,6 +133,8 @@ export interface IDelivery extends IBaseDataBase {
   date: Date;
   motor_kilometers: number;
   delivery_status: IDeliveryStatus[];
+
+  user?: IUsers
 }
 export interface IDeliveryStatus extends IBaseDataBase {
   delivery_id?: string;
@@ -153,6 +155,7 @@ export interface IOrder extends IBaseDataBase {
   client?: IClients;
   address?: IAddress;
   type_order?:ITypeOrder
+  user?: IUsers
 }
 
 //API REQ/RES

@@ -10,9 +10,10 @@ import { ReportComponent } from './components/report/report.component';
 import { ServicesComponent } from './components/services/services.component';
 import { AuthGuard } from './guards/auth-guard';
 import { DeliveryComponent } from './components/pages/delivery/delivery.component';
+import { DeliveryReportComponent } from './components/pages/delivery-report/delivery-report.component';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent, title: 'login' },
+  { path: 'login', component: LoginComponent, title: 'LOGIN' },
   {
     path: '',
     component: SidebarLayoutComponent,
@@ -32,9 +33,9 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
-        path: 'services',
-        component: ServicesComponent,
-        title: 'Entraga',
+        path: 'delivery-report',
+        component: DeliveryReportComponent,
+        title: 'RELATÓRIO DE ENTREGA',
         canActivate: [AuthGuard],
       },
       {
