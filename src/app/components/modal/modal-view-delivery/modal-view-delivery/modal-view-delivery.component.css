@@ -132,8 +132,36 @@ input[type="button"] {
   margin-top: 10px 0;
 }
 
-
 /* novo */
 
+.td-table {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #000000;
+  border-radius: 5px;
+}
+.title-client {
+  width: 120px;
+}
+.title-client-info {
+  text-align: start;
+  text-transform: capitalize;
+  font-weight: bold;
+}
+.row-table{
+  display: table-cell;
+  padding: 1px;
+  width: 100%
+}
 
+@media (max-width: 468px) {
+  .td-table {
+    display: block;
+    width: 100%;
+  }
 
+  tbody {
+    display: flex;
+    flex-direction: column-reverse; /* Inverte a ordem dos elementos */
+  }
+}

@@ -1,4 +1,4 @@
-<div class="container modal-container">
+<div class="container modal-container" style="display: none">
   <input type="button" value="X" (click)="closeModal()" />
 
   <div class="status-container opem-animation">
@@ -117,3 +117,141 @@
     </div>
   </div>
 </div>
+
+<section div class="container modal-container">
+  <input type="button" value="X" (click)="closeModal()" />
+  <main class="status-container opem-animation">
+    <tbody>
+      <tr>
+        <td class="client_info td-table" style="width: 70%">
+          <table>
+            <tbody class="row-table">
+              <tr>
+                <td class="title-client">CLIENTE:</td>
+                <td class="title-client-info">
+                  {{ datasViewOrder?.order?.client?.name }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table>
+            <tbody class="row-table">
+              <tr>
+                <td class="title-client">
+                  {{
+                    datasViewOrder?.order?.client?.cpf
+                      ? "CPF"
+                      : "CÓDIGO INTERNO"
+                  }}:
+                </td>
+                <td class="title-client-info">
+                  {{
+                    datasViewOrder?.order?.client?.cpf
+                      ? datasViewOrder?.order?.client?.cpf
+                      : datasViewOrder?.order?.client?.c_interno
+                  }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table>
+            <tbody class="row-table">
+              <tr>
+                <td class="title-client">TELEFONE:</td>
+                <td class="title-client-info">
+                  {{
+                    convertToCpfToRgToPhoneToCep(
+                      datasViewOrder?.order?.client?.phone,
+                      "phone"
+                    )
+                  }}
+                </td>
+                <a
+                  *ngIf="datasViewOrder?.order?.client?.phone"
+                  [href]="
+                    'https://wa.me/' + datasViewOrder?.order?.client?.phone
+                  "
+                  target="_blank"
+                  title="Enviar mensagem no WhatsApp"
+                >
+                  <img
+                    src="assets/images/whatsapp-icon.png"
+                    alt="WhatsApp"
+                    style="width: 30px; margin-left: 5px"
+                  />
+                </a>
+              </tr>
+            </tbody>
+          </table>
+          <table>
+            <tbody class="row-table">
+              <tr>
+                <td class="title-client">ENDEREÇO:</td>
+                <td class="title-client-info">
+                  {{ datasViewOrder?.order?.address?.place }},
+                  {{ datasViewOrder?.order?.address?.number }},
+                  {{ datasViewOrder?.order?.address?.neighborhood }} -
+                  {{ datasViewOrder?.order?.address?.city }} -
+                  {{ datasViewOrder?.order?.address?.uf }}
+                </td>
+                <a
+                  *ngIf="datasViewOrder?.order?.address"
+                  [href]="
+                    'https://www.google.com/maps?q=' +
+                    datasViewOrder?.order?.address?.place +
+                    ', ' +
+                    datasViewOrder?.order?.address?.number +
+                    ', ' +
+                    datasViewOrder?.order?.address?.neighborhood +
+                    ' - ' +
+                    datasViewOrder?.order?.address?.city +
+                    ' - ' +
+                    datasViewOrder?.order?.address?.uf
+                  "
+                  target="_blank"
+                  title="Abrir no Google Maps"
+                >
+                  <img
+                    src="../../../../../assets/images/maps-icon.png"
+                    alt="WhatsApp"
+                    style="width: 30px"
+                  />
+                </a>
+              </tr>
+            </tbody>
+          </table>
+          <table>
+            @if (datasViewOrder?.order?.obs) {
+            <tbody class="row-table">
+              <tr>
+                <td class="title-client">OBSERVAÇÕES:</td>
+                <td class="title-client-info">
+                  {{ datasViewOrder?.order?.obs }}
+                </td>
+              </tr>
+            </tbody>
+            }
+          </table>
+          <table>
+            <tbody class="row-table">
+              <tr>
+                <td class="title-client">VALOR:</td>
+                <td class="title-client-info">
+                  {{ getFormattedCurrency(datasViewOrder?.order?.value) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+        <td class="order_info td-table" style="width: 30%">
+          <h1>Status da Entrega</h1>
+          <h1>{{ getFormattedDate(datasViewOrder?.order?.date) }}</h1>
+          <p>
+            Pedido: <strong>{{ datasViewOrder?.order?.id }}</strong>
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </main>
+</section>

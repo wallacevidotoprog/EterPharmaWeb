@@ -11,6 +11,7 @@ import { ServicesComponent } from './components/services/services.component';
 import { AuthGuard } from './guards/auth-guard';
 import { DeliveryComponent } from './components/pages/delivery/delivery.component';
 import { DeliveryReportComponent } from './components/pages/delivery-report/delivery-report.component';
+import { ModalViewDeliveryComponent } from './components/modal/modal-view-delivery/modal-view-delivery/modal-view-delivery.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, title: 'LOGIN' },
@@ -52,7 +53,7 @@ export const routes: Routes = [
       },
       {
         path: 'testes',
-        component: ModalDelivaryComponent,
+        component: ModalViewDeliveryComponent,
         title: 'testes',
         canActivate: [AuthGuard],
       },

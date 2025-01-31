@@ -1,114 +1,63 @@
-  <!-- <nav>
-    <div class="wrapper">
-      <div class="logo"><a href="#">Logo</a></div>
-      <input type="radio" name="slider" id="menu-btn">
-      <input type="radio" name="slider" id="close-btn">
-      <ul class="nav-links">
-        <label for="close-btn" class="btn close-btn"><i class="fas fa-times"></i></label>
-        <li><a href="#">Home</a></li>
-        <li><a routerLink="delivery">Entrega</a></li>
-        <li>
-          <a href="#" class="desktop-item">Dropdown Menu</a>
-          <input type="checkbox" id="showDrop">
-          <label for="showDrop" class="mobile-item">Dropdown Menu</label>
-          <ul class="drop-menu">
-            <li><a href="#">Drop menu 1</a></li>
-            <li><a href="#">Drop menu 2</a></li>
-            <li><a href="#">Drop menu 3</a></li>
-            <li><a href="#">Drop menu 4</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="#" class="desktop-item">Mega Menu</a>
-          <input type="checkbox" id="showMega">
-          <label for="showMega" class="mobile-item">Mega Menu</label>
-          <div class="mega-box">
-            <div class="content">
-              <div class="row">
-                <img src="https://fadzrinmadu.github.io/hosted-assets/responsive-mega-menu-and-dropdown-menu-using-only-html-and-css/img.jpg" alt="">
-              </div>
-              <div class="row">
-                <header>Design Services</header>
-                <ul class="mega-links">
-                  <li><a href="#">Graphics</a></li>
-                  <li><a href="#">Vectors</a></li>
-                  <li><a href="#">Business cards</a></li>
-                  <li><a href="#">Custom logo</a></li>
-                </ul>
-              </div>
-              <div class="row">
-                <header>Email Services</header>
-                <ul class="mega-links">
-                  <li><a href="#">Personal Email</a></li>
-                  <li><a href="#">Business Email</a></li>
-                  <li><a href="#">Mobile Email</a></li>
-                  <li><a href="#">Web Marketing</a></li>
-                </ul>
-              </div>
-              <div class="row">
-                <header>Security services</header>
-                <ul class="mega-links">
-                  <li><a href="#">Site Seal</a></li>
-                  <li><a href="#">VPS Hosting</a></li>
-                  <li><a href="#">Privacy Seal</a></li>
-                  <li><a href="#">Website design</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li class="logout" (click)="logout()">SAIR</li>
-      </ul>
-      <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
+<!-- novo -->
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="side" [(opened)]="isMenuOpened" class="sidenav">
+    <div class="user-profile">
+      <img
+        src="../../../../assets/images/user_default.jpg"
+        alt="User Image"
+        class="user-image"
+      />
     </div>
-  </nav> -->
-  <!-- novo -->
-  <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #sidenav mode="side" [(opened)]="isMenuOpened" class="sidenav">
-      <div class="user-profile">
-        <img src="../../../../assets/images/user_default.jpg" alt="User Image" class="user-image"/>
-      </div>
-      <mat-nav-list >
-        <a  mat-list-item routerLink="/" *ngIf="isMenuOpened" >Home</a>
-        <mat-expansion-panel *ngIf="isMenuOpened">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Entrega
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-nav-list>
-            <a mat-list-item routerLink="/delivery-store" (click)="closeMenu()">Loja</a>
-            <a mat-list-item routerLink="/delivery" (click)="closeMenu()">Entregador</a>
-            <a mat-list-item routerLink="/delivery-report" (click)="closeMenu()">Relatório</a>
-          </mat-nav-list>
-        </mat-expansion-panel>
-        <mat-expansion-panel *ngIf="isMenuOpened">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Motocicleta
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-nav-list>
-            <a mat-list-item routerLink="/maintenance" (click)="closeMenu()">Manutenção</a>
-            <a mat-list-item routerLink="/delivery" (click)="closeMenu()">Entregador</a>
-          </mat-nav-list>
-        </mat-expansion-panel>
-      </mat-nav-list>
-      <div class="menu-footer">
-        <a routerLink="/config">Configurações</a>
-        <a (click)="logout()" style="cursor: pointer;"> Logout</a>
-      </div>
-    </mat-sidenav>
-    <mat-sidenav-content>
-      <button mat-button (click)="sidenav.toggle()"
-      [ngClass]="{'btn-expanded': isMenuOpened, 'btn-collapsed': !isMenuOpened}">
-        <mat-icon>{{ isMenuOpened ? 'close' : 'menu' }}</mat-icon>
-      </button>
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+    <mat-nav-list>
+      <mat-expansion-panel *ngIf="isMenuOpened">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Entrega </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a mat-list-item routerLink="/delivery-store" (click)="closeMenu()"
+            >Loja</a
+          >
+          <a mat-list-item routerLink="/delivery" (click)="closeMenu()"
+            >Entregador</a
+          >
+          <a mat-list-item routerLink="/delivery-report" (click)="closeMenu()"
+            >Relatório</a
+          >
+        </mat-nav-list>
+      </mat-expansion-panel>
+      <mat-expansion-panel *ngIf="isMenuOpened">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Motocicleta </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a mat-list-item routerLink="/maintenance" (click)="closeMenu()"
+            >Manutenção</a
+          >
+          <a mat-list-item routerLink="/delivery" (click)="closeMenu()"
+            >Entregador</a
+          >
+        </mat-nav-list>
+      </mat-expansion-panel>
+    </mat-nav-list>
+    <div class="menu-footer">
+      <a routerLink="/config">Configurações</a>
+      <a (click)="logout()" style="cursor: pointer"> Logout</a>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <button
+      mat-mini-fab
+      (click)="sidenav.toggle()"
+      [ngClass]="{
+        'btn-expanded': isMenuOpened,
+        'btn-collapsed': !isMenuOpened
+      }"
+    >
+      <mat-icon>{{ isMenuOpened ? "close" : "menu" }}</mat-icon>
+    </button>
 
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
 
-   <!-- novo -->
-
-
+<!-- novo -->

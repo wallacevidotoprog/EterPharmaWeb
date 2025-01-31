@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -34,7 +34,7 @@ export class ModalViewDeliveryComponent implements OnInit {
   getFormattedCurrency = getFormattedCurrency;
   convertToCpfToRgToPhoneToCep = convertToCpfToRgToPhoneToCep;
 
-  constructor() {}
+  private cdr = inject(ChangeDetectorRef);
 
   protected statusViewOrder: IDeliveryStatus[] = [];
   protected statusPorcentagem: number = 0;
@@ -50,6 +50,7 @@ export class ModalViewDeliveryComponent implements OnInit {
       );
       this.updateProgressBar();
     }
+    this.cdr.detectChanges();
   }
   updateProgressBar() {
     this.stateBar.cancelled = this.statusViewOrder.some(
