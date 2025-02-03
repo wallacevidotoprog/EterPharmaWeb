@@ -1,4 +1,4 @@
-<div class="container modal-container" style="display: none">
+<!-- <div class="container modal-container" style="display: none">
   <input type="button" value="X" (click)="closeModal()" />
 
   <div class="status-container opem-animation">
@@ -46,7 +46,7 @@
               <img
                 src="assets/images/whatsapp-icon.png"
                 alt="WhatsApp"
-                style="width: 30px; margin-left: 5px"
+                class="img-tag"
               />
             </a>
           </p>
@@ -79,7 +79,7 @@
               <img
                 src="../../../../../assets/images/maps-icon.png"
                 alt="WhatsApp"
-                style="width: 30px"
+                class="img-tag"
               />
             </a>
           </p>
@@ -116,14 +116,14 @@
       }
     </div>
   </div>
-</div>
-
+</div> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <section div class="container modal-container">
   <input type="button" value="X" (click)="closeModal()" />
   <main class="status-container opem-animation">
-    <tbody>
-      <tr>
-        <td class="client_info td-table" style="width: 70%">
+    <tbody class="detals-order">
+      <tr class="detals">
+        <td class="client_info td-table">
           <table>
             <tbody class="row-table">
               <tr>
@@ -178,7 +178,7 @@
                   <img
                     src="assets/images/whatsapp-icon.png"
                     alt="WhatsApp"
-                    style="width: 30px; margin-left: 5px"
+                    class="img-tag"
                   />
                 </a>
               </tr>
@@ -215,7 +215,7 @@
                   <img
                     src="../../../../../assets/images/maps-icon.png"
                     alt="WhatsApp"
-                    style="width: 30px"
+                    class="img-tag"
                   />
                 </a>
               </tr>
@@ -244,14 +244,75 @@
             </tbody>
           </table>
         </td>
-        <td class="order_info td-table" style="width: 30%">
-          <h1>Status da Entrega</h1>
-          <h1>{{ getFormattedDate(datasViewOrder?.order?.date) }}</h1>
-          <p>
-            Pedido: <strong>{{ datasViewOrder?.order?.id }}</strong>
-          </p>
+        <td class="order_info td-table">
+          <tbody>
+            <table>
+              <tbody>
+                <tr>
+                  <td style="font-weight: bold; font-size: large; ">Status da Entrega</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table>
+              <tbody>
+                <tr class="n-order">
+                  <td>{{ date_hours.date }}</td>
+                  <td>
+                    {{ date_hours.hours }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table>
+              <tbody>
+                <tr class="n-order">
+                  <td style="font-weight: bold; font-size: large;">Pedido</td>
+                  <td>
+                    {{ datasViewOrder?.order?.id }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table>
+              <tbody>
+                <tr style="font-weight: bold; font-size: large; ">
+                  <td>Vendedor(a): </td>
+                  <td>
+                    {{ datasViewOrder?.order?.user?.name }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </tbody>
         </td>
       </tr>
     </tbody>
+
   </main>
+  <br>
+  <main class="status-container opem-animation" style="flex-direction: column">
+    <div class="progress-container">
+      <div
+        class="progress-bar"
+        id="progress-bar"
+        [style.width]="statusPorcentagem + '%'"
+        [ngClass]="setProgressBarClass()"
+      ></div>
+    </div>
+
+    <div class="view-status">
+      @for (item of statusViewOrder; track $index) {
+      <div class="status in-progress">
+        <div>
+          <p class="status-text">PEDIDO {{ item.status?.name }}</p>
+          <p class="status-time">{{ getFormattedDate(item.createAt) }}</p>
+        </div>
+      </div>
+      }
+    </div>
+  </main>
+
 </section>

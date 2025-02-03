@@ -1,3 +1,5 @@
+import { getFormattedDate } from './global.utils';
+
 export function refineStringToNumber(value: string): string {
   if (!value) {
     return value;
@@ -42,4 +44,12 @@ export function removeIfNull(obj: any): any {
     }
   });
   return obj;
+}
+
+export function retuneDateAndHours(date: Date) {
+  const dt = getFormattedDate(date);
+  return {
+    date: dt.split(' ')[0],
+    hours: dt.split(' ')[1],
+  };
 }

@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,7 +16,10 @@ import {
   IDeliveryStatus,
   IViewOrder,
 } from '../../../../service/indexers.service';
-import { convertToCpfToRgToPhoneToCep } from '../../../../utils/converts.utils';
+import {
+  convertToCpfToRgToPhoneToCep,
+  retuneDateAndHours,
+} from '../../../../utils/converts.utils';
 import {
   getFormattedCurrency,
   getFormattedDate,
@@ -33,12 +44,14 @@ export class ModalViewDeliveryComponent implements OnInit {
   getFormattedDate = getFormattedDate;
   getFormattedCurrency = getFormattedCurrency;
   convertToCpfToRgToPhoneToCep = convertToCpfToRgToPhoneToCep;
+  retuneDateAndHours = retuneDateAndHours;
 
   private cdr = inject(ChangeDetectorRef);
 
   protected statusViewOrder: IDeliveryStatus[] = [];
   protected statusPorcentagem: number = 0;
   protected stateBar = { cancelled: false, finalized: false, inprocess: false };
+  protected date_hours = { date: '', hours: '' };
 
   @Input() datasViewOrder!: IViewOrder | null;
   @Output() close = new EventEmitter<boolean>();
@@ -48,6 +61,7 @@ export class ModalViewDeliveryComponent implements OnInit {
       this.statusViewOrder = ordernationStatusDelivery(
         this.datasViewOrder?.order?.delivery
       );
+      this.date_hours = retuneDateAndHours(this.datasViewOrder?.order.date);
       this.updateProgressBar();
     }
     this.cdr.detectChanges();
@@ -84,5 +98,4 @@ export class ModalViewDeliveryComponent implements OnInit {
     }
     return 'undefined';
   }
-
 }
