@@ -48,7 +48,6 @@ import {
   styleUrl: './modal-new-delivary.component.scss',
 })
 export class ModalNewDelivaryComponent implements OnInit {
-
   removeIfNull = removeIfNull;
 
   protected deliveryService = inject(DeliveryService);
@@ -59,6 +58,7 @@ export class ModalNewDelivaryComponent implements OnInit {
   @Input() datasUser: IDatasInput[] = [];
   @Output() close = new EventEmitter<boolean>();
 
+  protected addressExistCliente: IAddress[] = [];
   protected clientView: any = { id: null, name: '' };
   protected addressView: any = { id: null, name: '' };
   protected isImputDisable: boolean = true;
@@ -116,12 +116,15 @@ export class ModalNewDelivaryComponent implements OnInit {
       obs: new FormControl(null),
     });
 
-    this.new_client = new FormGroup({
-      cpf: new FormControl(null),
-      c_interno: new FormControl(null),
-      name: new FormControl(null, Validators.required),
-      phone: new FormControl(null, Validators.required),
-    },{validators: this.atLeastOneRequiredValidator(['cpf','c_interno'])});
+    this.new_client = new FormGroup(
+      {
+        cpf: new FormControl(null),
+        c_interno: new FormControl(null),
+        name: new FormControl(null, Validators.required),
+        phone: new FormControl(null, Validators.required),
+      },
+      { validators: this.atLeastOneRequiredValidator(['cpf', 'c_interno']) }
+    );
     this.new_address = new FormGroup({
       cep: new FormControl(null, Validators.required),
       place: new FormControl(null, Validators.required),
@@ -153,7 +156,7 @@ export class ModalNewDelivaryComponent implements OnInit {
   }
   onBlurClientcInterno() {
     this.setValuesGetCliente(
-      refineStringToNumber(this.new_client.value.rg),
+      refineStringToNumber(this.new_client.value.c_interno),
       'c_interno'
     );
   }
@@ -165,24 +168,41 @@ export class ModalNewDelivaryComponent implements OnInit {
   }
 
   async setValuesGetCliente(cod: string, type: 'c_interno' | 'cpf') {
+    this.addressExistCliente=[]
     if (!cod) {
       return;
     }
     await this.deliveryService.getClient(cod, type).subscribe((data) => {
       if (data) {
-        this.new_client
-        .get('cpf')
-        ?.setValue(convertToCpfToRgToPhoneToCep(data?.cpf, 'cpf'));
-      this.new_client
-        .get('c_interno')
-        ?.setValue(convertToCpfToRgToPhoneToCep(data?.c_interno, 'c_interno'));
-      this.new_client.get('name')?.setValue(data?.name);
-      this.new_client
-        .get('phone')
-        ?.setValue(convertToCpfToRgToPhoneToCep(data?.phone, 'phone'));
-      this.cdr.detectChanges();
-      }
+        this.new_client.get('cpf')?.setValue(convertToCpfToRgToPhoneToCep(data?.cpf, 'cpf'));
+        this.new_client.get('c_interno')?.setValue(convertToCpfToRgToPhoneToCep(data?.c_interno, 'c_interno'));
+        this.new_client.get('name')?.setValue(data?.name);
+        this.new_client.get('phone')?.setValue(convertToCpfToRgToPhoneToCep(data?.phone, 'phone'));
 
+
+          console.log('data.client_address',data.client_address);
+
+          if (data.client_address && data.client_address.length >0) {
+            this.addressExistCliente = data.client_address.map(item=> item?.address) .filter((i): i is IAddress => i !== undefined);
+
+            if (this.addressExistCliente && this.addressExistCliente.length == 1) {
+              this.new_address.get('cep')?.setValue(this.addressExistCliente[0].cep);
+              this.new_address.get('place')?.setValue(this.addressExistCliente[0].place);
+              this.new_address.get('number')?.setValue(this.addressExistCliente[0].number);
+              this.new_address.get('neighborhood')?.setValue(this.addressExistCliente[0]?.neighborhood);
+              this.new_address.get('city')?.setValue(this.addressExistCliente[0]?.city);
+              this.new_address.get('uf')?.setValue(this.addressExistCliente[0]?.uf);
+              this.registerAddress(false);
+            }
+          }
+
+
+
+
+
+
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -203,7 +223,9 @@ export class ModalNewDelivaryComponent implements OnInit {
         } as IOrderDelivery;
         order.date = new Date(`${order.date}:00.000Z`);
         this.orderRegisterAPI.order = order;
-        this.orderRegisterAPI.client = removeIfNull(this.orderRegisterAPI.client);
+        this.orderRegisterAPI.client = removeIfNull(
+          this.orderRegisterAPI.client
+        );
 
         await this.deliveryService
           .registerOrder(this.orderRegisterAPI, 'full')
@@ -241,7 +263,7 @@ export class ModalNewDelivaryComponent implements OnInit {
     }
   }
 
-  async registerAddress() {
+  async registerAddress(notsend:boolean=true) {
     if (this.new_address.valid) {
       const address: IAddress = {
         ...this.new_address.getRawValue(),
@@ -286,7 +308,10 @@ export class ModalNewDelivaryComponent implements OnInit {
       // });
 
       this.addressIdIsEnabled = true;
-      this.currentState = StateModel.REGISTER_ORDER;
+
+      if (notsend) {
+        this.currentState = StateModel.REGISTER_ORDER;
+      }
       this.isLoad = false;
       this.addressView = {
         id: 0,

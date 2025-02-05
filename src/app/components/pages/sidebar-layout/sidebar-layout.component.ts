@@ -7,6 +7,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { LoginService } from '../../../service/login.service';
+import { LoadingModalComponent } from '../../modal/loading-modal/loading-modal.component';
+import { GlobalLoaderService } from '../../../service/loading.service';
 @Component({
   selector: 'app-sidebar-layout',
   standalone: true,
@@ -24,13 +26,26 @@ import { LoginService } from '../../../service/login.service';
   styleUrl: './sidebar-layout.component.scss',
 })
 export class SidebarLayoutComponent implements OnInit {
+  protected loaderService!: GlobalLoaderService;
+  constructor() {
+    this.loaderService = inject(GlobalLoaderService); // Usando 'inject' no construtor
+  }
+  carregar() {
+    console.log('carregar');
+
+    this.loaderService.show();
+
+    setTimeout(() => {
+      this.loaderService.hide();
+    }, 3000);
+  }
   isMenuOpened = false;
   ngOnInit(): void {
     //throw new Error('Method not implemented.');
   }
 
-  closeMenu(){
-    this.isMenuOpened =false;
+  closeMenu() {
+    this.isMenuOpened = false;
   }
 
   protected api = inject(LoginService);

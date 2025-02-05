@@ -122,7 +122,7 @@ export interface IClients extends IBaseDataBase {
   name: string;
   phone: string;
 
-  client_address?: IClientAddress;
+  client_address?: IClientAddress[];
 }
 export interface IStatus extends IBaseDataBase {
   name?: string;
