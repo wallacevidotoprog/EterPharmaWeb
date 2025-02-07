@@ -7,6 +7,8 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app/app.routes';
 import { authInterceptor } from './app/auth.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideServiceWorker } from '@angular/service-worker';
+import { isDevMode } from '@angular/core';
 
 // bootstrapApplication(AppComponent, appConfig)
 //   .catch((err) => console.error(err));
@@ -14,6 +16,10 @@ bootstrapApplication(AppComponent, {
   ...appConfig,
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor])), provideAnimationsAsync(), // Registra o interceptor
-  ],
+    provideHttpClient(withInterceptors([authInterceptor])), provideAnimationsAsync(),
+    // provideServiceWorker('ngsw-worker.js', {
+    //     enabled: !isDevMode(),
+    //     registrationStrategy: 'registerWhenStable:30000'
+    // })
+],
 }).catch(err => console.error(err));

@@ -14,7 +14,6 @@
         (click)="openModalDelivery()"
       />
     </li> -->
-
   </ul>
 </nav>
 
@@ -98,25 +97,46 @@
     </div>
     <div class="radio-inputs" [attr.data-key]="checkedOrderFilter.open">
       <label class="radio">
-        <input type="radio" name="radio" [checked]="checkedOrderFilter.open" (change)="upateCheckedOrderFilter('open')" />
+        <input
+          type="radio"
+          name="radio"
+          [checked]="checkedOrderFilter.open"
+          (change)="upateCheckedOrderFilter('open')"
+        />
         <span class="name">ABERTOS</span>
-        <span class="badge" *ngIf="orderFilter.open?.length ?? 0 > 0">{{orderFilter.open?.length ?? 0}}</span>
+        <span class="badge" *ngIf="orderFilter.open?.length ?? 0 > 0">{{
+          orderFilter.open?.length ?? 0
+        }}</span>
       </label>
       <label class="radio">
-        <input type="radio" name="radio"[checked]="checkedOrderFilter.canceled" (change)="upateCheckedOrderFilter('canceled')" />
+        <input
+          type="radio"
+          name="radio"
+          [checked]="checkedOrderFilter.canceled"
+          (change)="upateCheckedOrderFilter('canceled')"
+        />
         <span class="name">CANCELADOS</span>
-        <span class="badge" *ngIf="orderFilter.canceled?.length ?? 0 > 0">{{orderFilter.canceled?.length ?? 0}}</span>
+        <span class="badge" *ngIf="orderFilter.canceled?.length ?? 0 > 0">{{
+          orderFilter.canceled?.length ?? 0
+        }}</span>
       </label>
 
       <label class="radio">
-        <input type="radio" name="radio" [checked]="checkedOrderFilter.finalized" (change)="upateCheckedOrderFilter('finalized')" />
+        <input
+          type="radio"
+          name="radio"
+          [checked]="checkedOrderFilter.finalized"
+          (change)="upateCheckedOrderFilter('finalized')"
+        />
         <span class="name">FINALIZADOS</span>
-        <span class="badge" *ngIf="orderFilter.finalized?.length ?? 0 > 0">{{orderFilter.finalized?.length ?? 0}}</span>
+        <span class="badge" *ngIf="orderFilter.finalized?.length ?? 0 > 0">{{
+          orderFilter.finalized?.length ?? 0
+        }}</span>
       </label>
     </div>
   </div>
 
-  <section class="table__body" *ngIf="datasViewOrder.length >0;else noData">
+  <section class="table__body" *ngIf="datasViewOrder.length > 0; else noData">
     <table>
       <thead>
         <tr>
@@ -130,19 +150,40 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let dvo of datasViewOrder ; let i = index" (click)="onRowClick(dvo, i)" >
-          <td>{{ dvo?.order?.id?.toString()?.substring(0, 6) }}</td>
-          <td>{{ dvo?.order?.client?.name }}</td>
+        <tr
+          *ngFor="let dvo of datasViewOrder; let i = index"
+          (click)="onRowClick(dvo, i)"
+        >
           <td>
-            {{ dvo?.order?.address?.place }} - {{ dvo?.order?.address?.number }} -
-            {{ dvo?.order?.address?.neighborhood }} - {{ dvo?.order?.address?.city }} -
-            {{ dvo?.order?.address?.uf }}  (obs) {{dvo?.order?.obs}}
+            <label for="ID" class="label-fields">ID: </label>
+              {{ dvo?.order?.id?.toString()?.substring(0, 6) }}
           </td>
-          <td>{{ getFormattedDate(dvo?.order?.date) }}</td>
-          <td>{{ getFormattedCurrency(dvo?.order?.value) }}</td>
-          <td>{{ dvo?.order?.type_order?.name }}</td>
           <td>
-            <p class="status" [ngClass]="getStatusClass(returnOrdernationStatusDelivery(dvo)?.name)">
+            <label for="CLIENTE" class="label-fields">CLIENTE: </label>
+            {{ dvo?.order?.client?.name }}</td>
+          <td>
+            <label for="ENDEREÇO" class="label-fields">ENDEREÇO: </label>
+            {{ dvo?.order?.address?.place }} -
+            {{ dvo?.order?.address?.number }} -
+            {{ dvo?.order?.address?.neighborhood }} -
+            {{ dvo?.order?.address?.city }} - {{ dvo?.order?.address?.uf }} |
+            {{ dvo?.order?.obs }}
+          </td>
+          <td><label for="DATA" class="label-fields">DATA:</label>
+            {{ getFormattedDate(dvo?.order?.date) }}</td>
+          <td>
+            <label for="VALOR" class="label-fields">VALOR: </label>
+            {{ getFormattedCurrency(dvo?.order?.value) }}</td>
+          <td>
+            <label for="TIPO" class="label-fields">TIPO: </label>
+            {{ dvo?.order?.type_order?.name }}</td>
+          <td>
+            <p
+              class="status"
+              [ngClass]="
+                getStatusClass(returnOrdernationStatusDelivery(dvo)?.name)
+              "
+            >
               {{ returnOrdernationStatusDelivery(dvo)?.name || "SEM STATUS" }}
             </p>
           </td>
@@ -168,7 +209,7 @@
   (close)="closeDeliveryModal($event)"
 />
 <app-modal-view-delivery
-[datasViewOrder]="selectViewOrder"
-*ngIf="isModalDeliveryViewVisible"
+  [datasViewOrder]="selectViewOrder"
+  *ngIf="isModalDeliveryViewVisible"
   (close)="closeDeliveryViewModal($event)"
-  />
+/>

@@ -161,21 +161,17 @@
         <ng-template #colRot>
           <th>AÇÃO</th>
         </ng-template>
-        <!-- <th><input type="checkbox" [(ngModel)]="selectAll" (change)="selectAllRows()"></th> Checkbox para selecionar tudo -->
-        <th>ID</th>
         <th>CLIENTE</th>
         <th>ENDEREÇO</th>
         <th>DATA</th>
         <th>VALOR</th>
         <th>TIPO</th>
         <th>STATUS</th>
+        <th  *ngIf="checkedOrderFilter.open;"></th>
       </tr>
     </thead>
     <tbody>
-      <tr
-        *ngFor="let row of datasViewOrder; let i = index"
-
-      >
+      <tr *ngFor="let row of datasViewOrder; let i = index">
         <td *ngIf="checkedOrderFilter.open; else colRot">
           <input
             type="checkbox"
@@ -193,30 +189,42 @@
                   ? 'INICIAR ROTA'
                   : 'FINALIZAR'
               }}"
-              class="status btn-action"
+              class="status btn-action "
               (click)="onAction(row)"
             />
             <input
               type="button"
               value="CANCELAR"
-              class="status btn-action"
-              (click)="onAction(row,true)"
+              class="status btn-action act-cancel"
+
+              (click)="showConfirmModal(row)"
             />
           </td>
         </ng-template>
-        <!-- <td><input type="checkbox" [(ngModel)]="row.selected" (change)="onRowSelect(row)"></td> Checkbox para selecionar linha -->
-        <td (click)="onRowClick(row, i)" style="cursor: pointer;">{{ row.order?.id?.toString()?.substring(0, 6) }}</td>
-        <td>{{ row?.order?.client?.name }}</td>
         <td>
+          <label for="CLIENTE" class="label-fields">CLIENTE: </label
+          >{{ row?.order?.client?.name }}
+        </td>
+        <td>
+          <label for="ENDEREÇO" class="label-fields">ENDEREÇO: </label>
           {{ row?.order?.address?.place }} - {{ row?.order?.address?.number }} -
           {{ row?.order?.address?.neighborhood }} -
           {{ row?.order?.address?.city }} -
           {{ row?.order?.address?.uf }}
           (obs) {{ row?.order?.obs }}
         </td>
-        <td>{{ getFormattedDate(row.order?.date) }}</td>
-        <td>{{ getFormattedCurrency(row.order?.value) }}</td>
-        <td>{{ row?.order?.type_order?.name }}</td>
+        <td>
+          <label for="DATA" class="label-fields">DATA:</label
+          >{{ getFormattedDate(row.order?.date) }}
+        </td>
+        <td>
+          <label for="VALOR" class="label-fields">VALOR: </label
+          >{{ getFormattedCurrency(row.order?.value) }}
+        </td>
+        <td>
+          <label for="TIPO" class="label-fields">TIPO: </label
+          >{{ row?.order?.type_order?.name }}
+        </td>
         <td>
           <p
             class="status"
@@ -227,6 +235,12 @@
             {{ returnOrdernationStatusDelivery(row)?.name || "SEM STATUS" }}
           </p>
         </td>
+        <input 
+              type="button"
+              value="DETALHES"
+              class="status btn-action bt-detals"
+              (click)="onRowClick(row, i)"
+            />
       </tr>
     </tbody>
   </table>
@@ -236,3 +250,8 @@
   *ngIf="isModalDeliveryViewVisible"
   (close)="closeDeliveryViewModal()"
 />
+<app-modal-confirm
+      [isOpen]="showModal"
+      [message]="'Deseja confirmar esta ação?'"
+      (close)="onConfirm($event)">
+    </app-modal-confirm>

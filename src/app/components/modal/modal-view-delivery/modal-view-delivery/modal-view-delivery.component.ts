@@ -79,7 +79,7 @@ export class ModalViewDeliveryComponent implements OnInit {
     //const contein_FoC:boolean  = this.statusViewOrder.some((s)=>s.status?.name ==='CANCELADO') ===this.statusViewOrder.some((s)=>s.status?.name ==='FINALIZADO')
     const progressIncrement =
       this.statusViewOrder.length < 4
-        ? 100 / 4
+        ? 100 / 5
         : 100 / this.statusViewOrder.length;
 
     this.statusPorcentagem = !this.stateBar.inprocess

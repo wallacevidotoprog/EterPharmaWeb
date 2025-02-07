@@ -53,7 +53,7 @@ form {
   justify-content: center;
 }
 @media (max-width: 620px) {
-  form{
+  form {
     flex-direction: column;
     align-items: unset;
   }
@@ -413,90 +413,85 @@ button:active {
   top: -15px;
   text-align: center;
 }
-.btn-action{
+.btn-action {
   cursor: pointer;
+  min-width: 150px;
+  margin: 2px;
+  font-weight: bolder;
+  border-style: double;
+  background-color: rgb(81, 226, 81);
+  &:hover {
+    background-color: rgb(5, 92, 5);
+    color: white;
+  }
+
+}
+.bt-detals{
+  background-color: rgb(81, 115, 226);
+  &:hover {
+    background-color: rgb(29, 8, 223);
+    color: white;
+  }
 }
 
-
-
+.label-fields {
+  display: none;
+}
+.act-cancel {
+  background-color: rgb(247, 60, 60);
+  &:hover {
+    background-color: rgb(238, 18, 18);
+    color: white;
+  }
+}
 // --------------------------------------------------------------NOVO
-/* Estilos gerais */
-// div {
-//   margin: 20px;
-// }
+@media screen and (max-width: 600px) {
+  .status {
+    width: 100%;
+  }
+  .btn-action {
+    min-width: 100px;
+    font-size: 10px;
+    cursor: pointer;
+  }
+  table {
+    width: 100%;
+    font-size: small;
+  }
+  .label-fields {
+    font-weight: bold;
+    display: block;
+  }
+  table thead {
+    display: none;
+  }
+  table tbody tr {
+    box-shadow: 0 0 0.5em #666666;
+    border: none;
 
-// /* Estilo do formulário */
-// form {
-//   margin-bottom: 20px;
-//   padding: 20px;
-//   border: 1px solid #ddd;
-//   border-radius: 5px;
-//   background-color: #f9f9f9;
-//   max-width: 600px;
-//   margin: 0 auto;
-// }
+    display: block;
 
-// label {
-//   display: block;
-//   margin-bottom: 8px;
-//   font-weight: bold;
-// }
+    margin: 1em;
+  }
 
-// input, select {
-//   width: 100%;
-//   padding: 8px;
-//   margin-bottom: 12px;
-//   border: 1px solid #ddd;
-//   border-radius: 4px;
-//   font-size: 16px;
-// }
+  table tbody tr td {
+    padding: 0.4em 1em;
+    text-align: justify;
+    display: flex;
+  }
 
-// button {
-//   width: 100%;
-//   padding: 10px;
-//   background-color: #4CAF50;
-//   color: white;
-//   border: none;
-//   border-radius: 4px;
-//   font-size: 16px;
-//   cursor: pointer;
-// }
+  table tbody tr td[data-label="#"] {
+    display: none;
+  }
 
-// button:hover {
-//   background-color: #45a049;
-// }
+  table tbody tr td[data-label]:before {
+    content: attr(data-label);
+    float: left;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
 
-// /* Estilos da tabela */
-// table {
-//   width: 100%;
-//   border-collapse: collapse;
-//   margin-top: 20px;
-// }
-
-// th, td {
-//   padding: 12px;
-//   text-align: left;
-//   border: 1px solid #ddd;
-// }
-
-// th {
-//   background-color: #f2f2f2;
-//   font-weight: bold;
-// }
-
-// td {
-//   background-color: #fff;
-// }
-
-// tr:hover td {
-//   background-color: #f1f1f1;
-// }
-
-// /* Estilo do input de pesquisa */
-// input[type="date"] {
-//   width: 200px;
-//   margin-bottom: 20px;
-//   padding: 8px;
-//   border-radius: 4px;
-//   border: 1px solid #ddd;
-// }
+  table tbody tr td.numeric {
+    text-align: left;
+  }
+}

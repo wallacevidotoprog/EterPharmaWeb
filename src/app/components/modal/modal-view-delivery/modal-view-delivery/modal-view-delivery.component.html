@@ -303,7 +303,11 @@
       ></div>
     </div>
 
-    <div class="view-status">
+    <div class="view-status" >
+      <div>
+        <p class="status-text">PEDIDO INICIADO</p>
+        <p class="status-time">{{ getFormattedDate(datasViewOrder?.order?.date) }}</p>
+      </div>
       @for (item of statusViewOrder; track $index) {
       <div class="status in-progress">
         <div>

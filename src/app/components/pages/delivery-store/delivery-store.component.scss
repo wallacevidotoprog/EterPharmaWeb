@@ -184,7 +184,6 @@ tbody tr.hide td img {
   padding: 1rem 1rem;
   border-radius: 2rem;
   text-align: center;
-
 }
 
 .status.finished {
@@ -223,16 +222,13 @@ tbody tr.hide td img {
   border: 1px solid #545b62;
 }
 
-
-
-
 @media (max-width: 1000px) {
   td:not(:first-of-type) {
     min-width: 12.1rem;
   }
 }
 
-tbody tr{
+tbody tr {
   cursor: pointer;
 }
 thead th span.icon-arrow {
@@ -386,4 +382,54 @@ button:active {
   position: absolute;
   top: -15px;
   text-align: center;
+}
+.label-fields{
+  display: none;
+}
+
+// responsive
+@media screen and (max-width: 600px) {
+  .status{
+    width: 100%;
+  }
+  table {
+    width: 100%;
+    font-size: small;
+  }
+  .label-fields{
+    font-weight: b;
+  display: block;
+}
+  table thead {
+    display: none;
+  }
+  table tbody tr {
+    box-shadow: 0 0 0.5em #666666;
+    border: none;
+
+    display: block;
+
+    margin: 1em;
+  }
+
+  table tbody tr td {
+    padding: 0.4em 1em;
+    text-align: justify;
+    display: flex;
+  }
+
+  table tbody tr td[data-label="#"] {
+    display: none;
+  }
+
+  table tbody tr td[data-label]:before {
+    content: attr(data-label);
+    float: left;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  table tbody tr td.numeric {
+    text-align: left;
+  }
 }

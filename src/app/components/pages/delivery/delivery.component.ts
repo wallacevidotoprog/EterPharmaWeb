@@ -37,7 +37,7 @@ import {
 import { InputButtonGenericComponent } from '../../inputs/input-button-generic/input-button-generic.component';
 import { InputDropdownGenericComponent } from '../../inputs/input-dropdown-generic/input-dropdown-generic.component';
 import { InputGenericComponent } from '../../inputs/input-generic/input-generic.component';
-import { ModalNewDelivaryComponent } from '../../modal/modal-new-delivery/modal-new-delivary.component';
+import { ModalConfirmComponent } from '../../modal/modal-confirm/modal-confirm.component';
 import { ModalViewDeliveryComponent } from '../../modal/modal-view-delivery/modal-view-delivery/modal-view-delivery.component';
 @Component({
   selector: 'app-delivary',
@@ -57,7 +57,7 @@ import { ModalViewDeliveryComponent } from '../../modal/modal-view-delivery/moda
     MatDatepickerModule,
     MatNativeDateModule,
     MatTableModule,
-    ModalNewDelivaryComponent,
+    ModalConfirmComponent,
     ModalViewDeliveryComponent,
   ],
   templateUrl: './delivery.component.html',
@@ -79,6 +79,7 @@ export class DeliveryComponent implements OnInit {
   returnDataTodayFormGroup = returnDataTodayFormGroup;
 
   protected selectViewOrder!: IViewOrder | null;
+  protected showModal = false;
   protected datasViewOrder: IViewOrder[] = [];
   protected listIdOrder: any = [];
   protected valueDateSearch!: string;
@@ -98,7 +99,8 @@ export class DeliveryComponent implements OnInit {
   protected datasState: IDatasInput[] = [];
   protected datasUser: IDatasInput[] = [];
   protected datasTypeOrder: IDatasInput[] = [];
-  isModalDeliveryViewVisible: boolean = false;
+  protected isModalDeliveryViewVisible: boolean = false;
+  protected selectedRow: IViewOrder | null = null;
   //@Output() close = new EventEmitter<boolean>();
 
   async ngOnInit() {
@@ -329,10 +331,16 @@ export class DeliveryComponent implements OnInit {
   returnIdStatus(value: string): string {
     return this.datasState.filter((item) => item.view === value)[0]?.id || '';
   }
+  showConfirmModal(row: IViewOrder) {
+    this.selectedRow = row;
+    this.showModal = true;
+  }
   onAction(dvo: IViewOrder, drop: boolean = false) {
     let idStatus: string;
+    //(click)="onAction(row, true)"
     if (drop) {
       idStatus = this.returnIdStatus('CANCELADO');
+      this.showModal = false;
     } else {
       idStatus = this.checkedOrderFilter.collected
         ? this.returnIdStatus('EM ROTA')
@@ -366,91 +374,14 @@ export class DeliveryComponent implements OnInit {
           })
         )
         .subscribe(async () => await this.getViewOrder(this.valueDateSearch));
+      this.selectedRow = null;
     }
   }
-
-  //--------------------------------------------------------- NOVO
-  searchDate: string = '';
-  formData = {
-    dropdown: '',
-    datetime: '',
-    value: 0,
-  };
-  dropdownOptions = [
-    { label: 'Option 1', value: '1' },
-    { label: 'Option 2', value: '2' },
-  ];
-  tableData: any[] = [
-    {
-      id: 1,
-      cliente: 'João Silva',
-      endereco: 'Rua A, 123',
-      data: '2025-01-23',
-      valor: 100.0,
-      tipo: 'Entrega',
-      status: 'Em Rota',
-      selected: false,
-    },
-    {
-      id: 2,
-      cliente: 'Maria Oliveira',
-      endereco: 'Avenida B, 456',
-      data: '2025-01-22',
-      valor: 150.0,
-      tipo: 'Pedido',
-      status: 'Cancelado',
-      selected: false,
-    },
-    {
-      id: 3,
-      cliente: 'Carlos Souza',
-      endereco: 'Praça C, 789',
-      data: '2025-01-21',
-      valor: 200.0,
-      tipo: 'Entrega',
-      status: 'Finalizado',
-      selected: false,
-    },
-  ];
-  selectAll: boolean = false;
-  displayedColumns: string[] = [
-    'select',
-    'id',
-    'cliente',
-    'endereco',
-    'data',
-    'valor',
-    'tipo',
-    'status',
-  ];
-
-  // Método de pesquisa (simulado)
-  searchData() {
-    // if (this.searchDate) {
-    //   console.log(`Pesquisando dados para a data: ${this.searchDate}`);
-    // }
-  }
-
-  // Envio do formulário (simulado)
-  submitForm() {
-    const payload = {
-      dropdown: this.formData.dropdown,
-      datetime: this.formData.datetime,
-      value: this.formData.value,
-    };
-
-    console.log('Formulário enviado', payload);
-    this.searchData(); // Atualiza os dados da tabela após envio
-  }
-
-  // Seleção de todas as linhas
-  selectAllRows() {
-    this.tableData.forEach((row) => (row.selected = this.selectAll));
-  }
-
-  // Método para capturar o estado de seleção de uma linha específica
-  onRowSelect(row: any) {
-    const selectedRows = this.tableData.filter((r) => r.selected);
-    console.log('Linhas selecionadas:', selectedRows);
+  onConfirm(ev: boolean) {
+    if (this.selectedRow && ev) {
+      this.onAction(this.selectedRow, ev);
+      return;
+    }
+    this.showModal = false
   }
 }

@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(
         (res) => {
+          // @ts-ignore
           if (!res.data.Authentication) {
             this.canLoadin = true;
             return;
