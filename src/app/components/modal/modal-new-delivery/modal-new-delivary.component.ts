@@ -18,12 +18,13 @@ import {
 } from '@angular/forms';
 import { NgToastService } from 'ng-angular-popup';
 import { DeliveryService } from '../../../service/delivery.service';
-import { IDatasInput } from '../../../service/indexers.service';
+import { IDatasInput, IViewOrder } from '../../../service/indexers.service';
 import {
   convertToCpfToRgToPhoneToCep,
   refineStringToNumber,
   removeIfNull,
 } from '../../../utils/converts.utils';
+import { returnDataTodayFormGroup } from '../../../utils/global.utils';
 import { InputButtonGenericComponent } from '../../inputs/input-button-generic/input-button-generic.component';
 import { InputDropdownGenericComponent } from '../../inputs/input-dropdown-generic/input-dropdown-generic.component';
 import { InputGenericComponent } from '../../inputs/input-generic/input-generic.component';
@@ -56,6 +57,8 @@ export class ModalNewDelivaryComponent implements OnInit {
 
   @Input() datasTypeOrder: IDatasInput[] = [];
   @Input() datasUser: IDatasInput[] = [];
+  @Input() selectViewOrder!: IViewOrder | null;
+  @Input() edit: boolean = false;
   @Output() close = new EventEmitter<boolean>();
 
   protected addressExistCliente: IAddress[] = [];
@@ -70,6 +73,7 @@ export class ModalNewDelivaryComponent implements OnInit {
   protected StateModel = StateModel;
   protected clientIdIsEnabled = false;
   protected addressIdIsEnabled = false;
+
   protected orderRegisterAPI!: {
     order: IOrderDelivery;
     client: IClients;
@@ -95,13 +99,9 @@ export class ModalNewDelivaryComponent implements OnInit {
         uf: '',
       },
     };
-    const currentDate = new Date();
-    const localOffset = currentDate.getTimezoneOffset();
-    currentDate.setMinutes(currentDate.getMinutes() - localOffset);
-    const isoString = currentDate.toISOString().slice(0, 16);
 
     this.new_delivery = new FormGroup({
-      date: new FormControl(isoString, Validators.required),
+      date: new FormControl(returnDataTodayFormGroup(), Validators.required),
       user_id: new FormControl(null, Validators.required),
       client_id: new FormControl(
         { value: null, disabled: true },
@@ -133,7 +133,88 @@ export class ModalNewDelivaryComponent implements OnInit {
       city: new FormControl(null, Validators.required),
       uf: new FormControl(null, Validators.required),
     });
+
+    if (this.edit && this.selectViewOrder) {
+      this.editOrder();
+    }
   }
+  editOrder() {
+    let dateEdit: string = '';
+    if (this.selectViewOrder?.order?.date) {
+      const localDate = new Date(this.selectViewOrder?.order?.date);
+      dateEdit = localDate.toISOString().slice(0, 16);
+    }
+
+    this.new_delivery.get('date')?.setValue(dateEdit);
+    this.new_delivery
+      .get('user_id')
+      ?.setValue(this.selectViewOrder?.order?.user_id);
+    this.new_delivery
+      .get('client_id')
+      ?.setValue(this.selectViewOrder?.order?.client_id);
+    this.new_delivery
+      .get('address_id')
+      ?.setValue(this.selectViewOrder?.order?.address_id);
+    this.new_delivery
+      .get('type_order_id')
+      ?.setValue(this.selectViewOrder?.order?.type_order_id);
+    this.new_delivery
+      .get('value')
+      ?.setValue(this.selectViewOrder?.order?.value);
+    this.new_delivery.get('obs')?.setValue(this.selectViewOrder?.order?.obs);
+
+    this.new_client
+      .get('cpf')
+      ?.setValue(
+        convertToCpfToRgToPhoneToCep(
+          this.selectViewOrder?.order?.client?.cpf,
+          'cpf'
+        )
+      );
+    this.new_client
+      .get('c_interno')
+      ?.setValue(
+        convertToCpfToRgToPhoneToCep(
+          this.selectViewOrder?.order?.client?.c_interno,
+          'c_interno'
+        )
+      );
+    this.new_client
+      .get('name')
+      ?.setValue(this.selectViewOrder?.order?.client?.name);
+    this.new_client
+      .get('phone')
+      ?.setValue(
+        convertToCpfToRgToPhoneToCep(
+          this.selectViewOrder?.order?.client?.phone,
+          'phone'
+        )
+      );
+    this.registerCliente(false);
+
+    this.new_address
+      .get('cep')
+      ?.setValue(this.selectViewOrder?.order?.address?.cep);
+    this.new_address
+      .get('place')
+      ?.setValue(this.selectViewOrder?.order?.address?.place);
+    this.new_address
+      .get('number')
+      ?.setValue(this.selectViewOrder?.order?.address?.number);
+    this.new_address
+      .get('neighborhood')
+      ?.setValue(this.selectViewOrder?.order?.address?.neighborhood);
+    this.new_address
+      .get('city')
+      ?.setValue(this.selectViewOrder?.order?.address?.city);
+    this.new_address
+      .get('uf')
+      ?.setValue(this.selectViewOrder?.order?.address?.uf);
+    this.registerAddress(false);
+
+    this.cdr.detectChanges();
+  }
+
   atLeastOneRequiredValidator(fields: string[]) {
     return (formGroup: AbstractControl) => {
       const isValid = fields.some(
@@ -168,38 +249,55 @@ export class ModalNewDelivaryComponent implements OnInit {
   }
 
   async setValuesGetCliente(cod: string, type: 'c_interno' | 'cpf') {
-    this.addressExistCliente=[]
+    this.addressExistCliente = [];
     if (!cod) {
       return;
     }
     await this.deliveryService.getClient(cod, type).subscribe((data) => {
       if (data) {
-        this.new_client.get('cpf')?.setValue(convertToCpfToRgToPhoneToCep(data?.cpf, 'cpf'));
-        this.new_client.get('c_interno')?.setValue(convertToCpfToRgToPhoneToCep(data?.c_interno, 'c_interno'));
+        this.new_client
+          .get('cpf')
+          ?.setValue(convertToCpfToRgToPhoneToCep(data?.cpf, 'cpf'));
+        this.new_client
+          .get('c_interno')
+          ?.setValue(
+            convertToCpfToRgToPhoneToCep(data?.c_interno, 'c_interno')
+          );
         this.new_client.get('name')?.setValue(data?.name);
-        this.new_client.get('phone')?.setValue(convertToCpfToRgToPhoneToCep(data?.phone, 'phone'));
+        this.new_client
+          .get('phone')
+          ?.setValue(convertToCpfToRgToPhoneToCep(data?.phone, 'phone'));
 
+        if (data.client_address && data.client_address.length > 0) {
+          this.addressExistCliente = data.client_address
+            .map((item) => item?.address)
+            .filter((i): i is IAddress => i !== undefined);
 
-          console.log('data.client_address',data.client_address);
-
-          if (data.client_address && data.client_address.length >0) {
-            this.addressExistCliente = data.client_address.map(item=> item?.address) .filter((i): i is IAddress => i !== undefined);
-
-            if (this.addressExistCliente && this.addressExistCliente.length == 1) {
-              this.new_address.get('cep')?.setValue(this.addressExistCliente[0].cep);
-              this.new_address.get('place')?.setValue(this.addressExistCliente[0].place);
-              this.new_address.get('number')?.setValue(this.addressExistCliente[0].number);
-              this.new_address.get('neighborhood')?.setValue(this.addressExistCliente[0]?.neighborhood);
-              this.new_address.get('city')?.setValue(this.addressExistCliente[0]?.city);
-              this.new_address.get('uf')?.setValue(this.addressExistCliente[0]?.uf);
-              this.registerAddress(false);
-            }
+          if (
+            this.addressExistCliente &&
+            this.addressExistCliente.length == 1
+          ) {
+            this.new_address
+              .get('cep')
+              ?.setValue(this.addressExistCliente[0].cep);
+            this.new_address
+              .get('place')
+              ?.setValue(this.addressExistCliente[0].place);
+            this.new_address
+              .get('number')
+              ?.setValue(this.addressExistCliente[0].number);
+            this.new_address
+              .get('neighborhood')
+              ?.setValue(this.addressExistCliente[0]?.neighborhood);
+            this.new_address
+              .get('city')
+              ?.setValue(this.addressExistCliente[0]?.city);
+            this.new_address
+              .get('uf')
+              ?.setValue(this.addressExistCliente[0]?.uf);
+            this.registerAddress(false);
           }
-
-
-
-
-
+        }
 
         this.cdr.detectChanges();
       }
@@ -221,6 +319,9 @@ export class ModalNewDelivaryComponent implements OnInit {
         const order: IOrderDelivery = {
           ...this.new_delivery.getRawValue(),
         } as IOrderDelivery;
+        if (this.edit) {
+          order.id = this.selectViewOrder?.order?.id
+        }
         order.date = new Date(`${order.date}:00.000Z`);
         this.orderRegisterAPI.order = order;
         this.orderRegisterAPI.client = removeIfNull(
@@ -263,7 +364,7 @@ export class ModalNewDelivaryComponent implements OnInit {
     }
   }
 
-  async registerAddress(notsend:boolean=true) {
+  async registerAddress(notsend: boolean = true) {
     if (this.new_address.valid) {
       const address: IAddress = {
         ...this.new_address.getRawValue(),
@@ -272,40 +373,6 @@ export class ModalNewDelivaryComponent implements OnInit {
         address.cep = await refineStringToNumber(address.cep.toString());
       }
       this.isLoad = true;
-      // await this.deliveryService.registerAddress(address).subscribe({
-      //   next: (value) => {
-      //     if (!value) {
-      //       this.tAlert.error({
-      //         detail: 'Falhar ao criar novo endereço',
-      //         summary: value?.toString(),
-      //         duration: 5000,
-      //       });
-      //       return;
-      //     }
-      //     this.addressView = {
-      //       id: value,
-      //       name: `${address.place}, ${address.number} - ${address.neighborhood}`,
-      //     };
-      //     this.addressIdIsEnabled = true;
-      //     this.new_delivery.controls['address_id'].setValue(value);
-      //     this.currentState = StateModel.REGISTER_ORDER;
-      //     this.isLoad = false;
-      //     this.tAlert.success({
-      //       detail: 'Endereço inserido com sucesso',
-      //       summary: this.addressView.name,
-      //       duration: 5000,
-      //     });
-      //   },
-      //   error: (err) => {
-      //     this.isLoad = false;
-      //     this.tAlert.error({
-      //       detail: 'Falhar ao criar novo endereço',
-      //       summary: err?.toString(),
-      //       duration: 5000,
-      //     });
-      //     console.error('Erro ao registrar endereço:', err);
-      //   },
-      // });
 
       this.addressIdIsEnabled = true;
 
@@ -321,7 +388,7 @@ export class ModalNewDelivaryComponent implements OnInit {
     }
   }
 
-  async registerCliente() {
+  async registerCliente(notsend: boolean = true) {
     if (this.new_client.valid) {
       const client: IClients = {
         ...this.new_client.getRawValue(),
@@ -332,43 +399,11 @@ export class ModalNewDelivaryComponent implements OnInit {
 
       this.isLoad = true;
 
-      // await this.deliveryService.registerClient(client).subscribe({
-      //   next: (value) => {
-
-      //     if (!value) {
-      //       this.tAlert.error({
-      //         detail: 'Falhar ao criar novo cliente',
-      //         summary: value?.toString(),
-      //         duration: 5000,
-      //       });
-      //       return;
-      //     }
-      //     this.clientView = {
-      //       id: value,
-      //       name: client.name,
-      //     };
-      //     this.clientIdIsEnabled = true;
-      //     this.new_delivery.controls['client_id'].setValue(value);
-      //     this.currentState = StateModel.REGISTER_ORDER;
-      //     this.tAlert.success({
-      //       detail: 'Cliente inserido com sucesso',
-      //       summary: this.clientView.name,
-      //       duration: 5000,
-      //     });
-      //   },
-      //   error: (err) => {
-
-      //     this.tAlert.error({
-      //       detail: 'Falhar ao criar novo cliente',
-      //       summary: err?.toString(),
-      //       duration: 5000,
-      //     });
-      //     console.error('Erro ao registrar cliente:', err);
-      //   },
-      // });
-
       this.clientIdIsEnabled = true;
-      this.currentState = StateModel.REGISTER_ORDER;
+      if (notsend) {
+        this.currentState = StateModel.REGISTER_ORDER;
+      }
+      //this.currentState = StateModel.REGISTER_ORDER;
       this.isLoad = false;
 
       this.clientView = {

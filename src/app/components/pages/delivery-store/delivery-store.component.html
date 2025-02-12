@@ -140,7 +140,7 @@
     <table>
       <thead>
         <tr>
-          <th>ID</th>
+          <th> {{checkedOrderFilter.open ? 'EDITAR':"ID"}}</th>
           <th>CLIENTE</th>
           <th>ENDEREÇO</th>
           <th>DATA</th>
@@ -154,10 +154,17 @@
           *ngFor="let dvo of datasViewOrder; let i = index"
           (click)="onRowClick(dvo, i)"
         >
-          <td>
-            <label for="ID" class="label-fields">ID: </label>
-              {{ dvo?.order?.id?.toString()?.substring(0, 6) }}
+          <td *ngIf="checkedOrderFilter.open; else notEdit">
+            <label class="status edit-btn" for="EDIT" (click)="onEditClick(dvo);$event.stopPropagation()" style="cursor: pointer;">EDITAR</label>
+
           </td>
+          <ng-template #notEdit>
+            <td>
+              <label  for="ID" class="label-fields">ID: </label>
+                {{ dvo?.order?.id?.toString()?.substring(0, 6) }}
+            </td>
+          </ng-template>
+
           <td>
             <label for="CLIENTE" class="label-fields">CLIENTE: </label>
             {{ dvo?.order?.client?.name }}</td>
@@ -199,6 +206,8 @@
 <app-modal-new-delivary
   [datasUser]="datasUsers"
   [datasTypeOrder]="datasTypeOrder"
+  [selectViewOrder]="selectViewOrder"
+  [edit]="editOrder"
   *ngIf="isModalOrderVisible"
   (close)="closeOrderModal($event)"
 />

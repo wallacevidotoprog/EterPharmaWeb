@@ -11,7 +11,6 @@ export class LoginService {
   private api = inject(HttpClient);
 
   eLogin(dataUser: IUserLogin) {
-    console.log('API URL:', environment.API);
     return this.api.post<IRespAPI<any>>(`${environment.API}api/login`, dataUser, {
       headers: {
         Accept: 'application/json',
@@ -22,7 +21,7 @@ export class LoginService {
   }
 
   eVerifyToken(): Observable<IRespAPI<IVerifyAuth>> {
-    console.log('API URL:', environment.API);
+
     return this.api.get<IRespAPI<any>>(`${environment.API}api/verifyAuth`, {
       headers: {
         Accept: 'application/json',
@@ -32,7 +31,6 @@ export class LoginService {
     });
   }
   eLogout(): Observable<IRespAPI<any>> {
-    console.log('API URL:', environment.API);
     return this.api.post<IRespAPI<any>>(
       `${environment.API}api/logout`,
       {},

@@ -2,6 +2,8 @@
   @switch (currentState) { @case ('REGISTER_ORDER') {
   <div class="modal-content" [ngClass]="currentState">
     <span>REGISTRO DE ENTREGA</span>
+    <span *ngIf="edit" style="background-color: red;">MODO EDIÇÂO</span>
+    <span *ngIf="edit" style="background-color: red;">{{selectViewOrder?.order?.id}}</span>
     <form (ngSubmit)="registerOrder()" [formGroup]="new_delivery">
       <app-input-generic
         type="datetime-local"
@@ -77,7 +79,7 @@
         type="text"
         label="CPF"
         id="cpf"
-        ph=" Exp.: 123.123.123-20" 
+        ph=" Exp.: 123.123.123-20"
         formControlName="cpf"
         (blurEvent)="onBlurClientCpf()"
       />

@@ -100,6 +100,7 @@ export class DeliveryStoreComponent implements OnInit {
   protected datasTypeOrder: IDatasInput[] = [];
   protected datasUsers: IDatasInput[] = [];
   protected datasStatus: IDatasInput[] = [];
+  protected editOrder: boolean = false;
   protected orderFilter: IOrderFilter = {
     open: [],
     canceled: [],
@@ -203,13 +204,24 @@ export class DeliveryStoreComponent implements OnInit {
         };
         this.upateCheckedOrderFilter('open');
       }
-      this.orderFilter.open.sort((a, b) => new Date(b.order?.date||'').getTime() - new Date(a.order?.date||'').getTime());
-      this.orderFilter.canceled.sort((a, b) => new Date(b.order?.date||'').getTime() - new Date(a.order?.date||'').getTime());
-      this.orderFilter.finalized.sort((a, b) => new Date(b.order?.date||'').getTime() - new Date(a.order?.date||'').getTime());
+      this.orderFilter.open.sort(
+        (a, b) =>
+          new Date(b.order?.date || '').getTime() -
+          new Date(a.order?.date || '').getTime()
+      );
+      this.orderFilter.canceled.sort(
+        (a, b) =>
+          new Date(b.order?.date || '').getTime() -
+          new Date(a.order?.date || '').getTime()
+      );
+      this.orderFilter.finalized.sort(
+        (a, b) =>
+          new Date(b.order?.date || '').getTime() -
+          new Date(a.order?.date || '').getTime()
+      );
       this.cdr.detectChanges();
     } catch (error) {
       console.error('Erro ao carregar pedidos:', error);
-     
     }
   }
 
@@ -243,6 +255,8 @@ export class DeliveryStoreComponent implements OnInit {
     if (event) {
       await this.getViewOrder(this.valueDateSearch);
     }
+    this.editOrder = false;
+    this.selectViewOrder = null;
   }
   async closeDeliveryModal(event: boolean) {
     this.isModalDeliveryVisible = false;
@@ -279,5 +293,12 @@ export class DeliveryStoreComponent implements OnInit {
     };
     this.cdr.detectChanges();
     this.updateViewOrder(status);
+  }
+  onEditClick(dvo: IViewOrder) {
+
+    this.editOrder = true;
+    this.selectViewOrder = dvo;
+    this.openModalNewOrder();
+
   }
 }

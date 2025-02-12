@@ -78,13 +78,13 @@ export function ordernationStatusDelivery(dvo: IDelivery): IStatus[] {
     });
 
     return result;
-    
+
   }
   return [];
 }
 
-export function returnDataTodayFormGroup(): string {
-  const currentDate = new Date();
+export function returnDataTodayFormGroup(date:Date = new Date()): string {
+  const currentDate = date;
   const localOffset = currentDate.getTimezoneOffset();
   currentDate.setMinutes(currentDate.getMinutes() - localOffset);
   return currentDate.toISOString().slice(0, 16);

@@ -386,7 +386,15 @@ button:active {
 .label-fields{
   display: none;
 }
-
+.edit-btn{
+  background-color: #17a2b8;
+  color: #ffffff;
+  border: 1px solid #117a8b;
+  &:hover{
+    background-color: #0ac1dd;
+    color: #000000;
+  }
+}
 // responsive
 @media screen and (max-width: 600px) {
   .status{

@@ -22,7 +22,7 @@ import { NgToastModule, NgToastService } from 'ng-angular-popup';
 })
 export class AppComponent {
   protected tAlert = inject(NgToastService);
-  title = 'ANGULAR-Monitoramento-MotoEntregado';
+  title = 'Moto Entregada';
 
   private socket!: WebSocket;
 
