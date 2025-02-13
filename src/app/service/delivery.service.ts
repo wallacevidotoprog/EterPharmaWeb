@@ -4,6 +4,8 @@ import { format } from 'date-fns';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpStatus } from '../utils/HttpStatus';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 import {
   IAddress,
   ICEP,
@@ -11,6 +13,7 @@ import {
   IDeliveryDataRes,
   IDeliverySend,
   IDeliveryStatus,
+  IEndereco,
   IOrder,
   IRespAPI,
   IStatus,
@@ -67,8 +70,41 @@ export class DeliveryService {
         //map((resp: IRespAPI<ITypeOrder[]>) => resp.data ?? [])
       );
   }
-  getCep(cep: number): Observable<ICEP | null> {
+  async getCep(cep: number): Promise<Observable<ICEP | null>> {
+
     return this.api
+    .get(`https://viacep.com.br/ws/${cep}/json/`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      observe: 'response',
+    })
+    .pipe(
+      map((resp) => {
+        const status: HttpStatus = resp.status as HttpStatus;
+        if (status === HttpStatus.OK) {
+          if (resp.body !== null) {
+            const respBody: IEndereco = resp.body as IEndereco;
+            const reticep:ICEP ={
+              cep:respBody.cep,
+              street:respBody.logradouro,
+              city:respBody.localidade,
+              neighborhood:respBody.bairro,
+              state:respBody.uf,
+              service:respBody.regiao
+            }
+            return reticep;
+          }
+          return null
+
+        }
+        return null;
+      })
+    );
+
+    if (true) {
+          return this.api
       .get(`https://brasilapi.com.br/api/cep/v1/${cep}`, {
         headers: {
           Accept: 'application/json',
@@ -86,6 +122,12 @@ export class DeliveryService {
           return null;
         })
       );
+    }
+    return new Observable<ICEP | null>((observer) => {
+      observer.next(null);
+      observer.complete();
+    });
+
   }
 
   getClient(cod: string, type: 'c_interno' | 'cpf') {
@@ -268,8 +310,49 @@ export class DeliveryService {
       );
   }
 
+  async buscaCPFOnline(cpf: string){
+    try {
+      // Realiza a primeira requisição
+      const respostaPrimeira = await this.fazerPrimeiraRequisicao(cpf).toPromise();
+
+      if (respostaPrimeira.sucesso) {
+        console.log('Primeira requisição bem-sucedida!');
+        // Realiza a segunda requisição usando o valor da primeira
+        await this.fazerSegundaRequisicao(respostaPrimeira.resposta).toPromise();
+        console.log('Segunda requisição bem-sucedida!');
+      } else {
+        console.error('Falha na primeira requisição');
+      }
+    } catch (error) {
+      console.error('Erro ao executar as requisições:', error);
+    }
+  }
 
 
+  private fazerPrimeiraRequisicao(cpf: string): Observable<any> {
+    const formData = new FormData();
+    formData.append('cpf', cpf);
+
+    return this.api.post('https://totalcpf.com/conteudo/apis/cpf.php', formData);
+  }
+
+  // Função para a segunda requisição
+  private fazerSegundaRequisicao(hash: string): Observable<any> {
+    const formData = new FormData();
+    formData.append('hash', hash);
+    formData.append('modulo', 'total-consulta');
+    formData.append('chave', 'BBaDSMrYQaJ8Ax6');
+    formData.append('quantidade', 'false');
+    formData.append('size', 'false');
+    formData.append('pagina', 'false');
+    formData.append('paginacao', '0');
+    formData.append(
+      'fingerprint',
+      'TW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzEzMS4wLjAuMCBTYWZhcmkvNTM3LjM2V2luMzJwdC1CUjE2MDA5MDAxODA='
+    );
+
+    return this.api.post('https://totalcpf.com/admin/api.php', formData);
+  }
 
   teste() {
     return this.api

@@ -11,6 +11,7 @@ import {
   FormsModule,
   NG_VALUE_ACCESSOR,
 } from '@angular/forms';
+import { FormatCpfDirective, FormatPhoneDirective } from '../../../directives/format-cpf-rg-phone.directive';
 
 const INPUT_FIELD_VALUE_ACESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -21,7 +22,7 @@ const INPUT_FIELD_VALUE_ACESSOR: any = {
 @Component({
   selector: 'app-input-generic',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule,FormatCpfDirective,FormatPhoneDirective],
   template: `
     <div class="coolinput">
       <label [attr.for]="id" class="text">{{ label }}</label>

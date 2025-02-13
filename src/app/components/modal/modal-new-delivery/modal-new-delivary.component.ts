@@ -227,7 +227,8 @@ export class ModalNewDelivaryComponent implements OnInit {
   async onBlurAddress() {
     const cep = parseInt(refineStringToNumber(this.new_address.value.cep));
 
-    await this.deliveryService.getCep(cep).subscribe((data) => {
+    const observable = await this.deliveryService.getCep(cep);
+    await observable.subscribe((data) => {
       this.new_address.get('place')?.setValue(data?.street);
       this.new_address.get('neighborhood')?.setValue(data?.neighborhood);
       this.new_address.get('city')?.setValue(data?.city);
@@ -246,6 +247,7 @@ export class ModalNewDelivaryComponent implements OnInit {
       refineStringToNumber(this.new_client.value.cpf),
       'cpf'
     );
+
   }
 
   async setValuesGetCliente(cod: string, type: 'c_interno' | 'cpf') {
@@ -254,6 +256,7 @@ export class ModalNewDelivaryComponent implements OnInit {
       return;
     }
     await this.deliveryService.getClient(cod, type).subscribe((data) => {
+      console.log('data',data);
       if (data) {
         this.new_client
           .get('cpf')
@@ -299,8 +302,13 @@ export class ModalNewDelivaryComponent implements OnInit {
           }
         }
 
+
         this.cdr.detectChanges();
       }
+      else{
+
+      }
+
     });
   }
 
@@ -320,7 +328,7 @@ export class ModalNewDelivaryComponent implements OnInit {
           ...this.new_delivery.getRawValue(),
         } as IOrderDelivery;
         if (this.edit) {
-          order.id = this.selectViewOrder?.order?.id
+          order.id = this.selectViewOrder?.order?.id;
         }
         order.date = new Date(`${order.date}:00.000Z`);
         this.orderRegisterAPI.order = order;
