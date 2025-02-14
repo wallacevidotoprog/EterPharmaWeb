@@ -15,7 +15,7 @@
 }
 .status-container {
   background-color: white;
-  padding: 20px;
+  padding: 15px;
   border-radius: 8px;
   width: 90%;
   max-height: 80%;
@@ -45,10 +45,10 @@
 /* Estilo da barra de progresso */
 .progress-container {
   width: 100%;
-  height: 10px;
+  height: 8px;
   background-color: #e0e0e0;
   border-radius: 5px;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 .progress-bar {
@@ -153,8 +153,8 @@ input[type="button"] {
 }
 .row-table {
   display: table-cell;
-  padding: 1px;
   width: 100%;
+  font-size: 95%;
 }
 .img-tag {
   width: 30px;

@@ -42,7 +42,6 @@ declare var google: any;
   styleUrls: ['./modal-view-delivery.component.css'],
 })
 export class ModalViewDeliveryComponent implements OnInit {
-
   ordernationStatusDelivery = ordernationStatusDelivery;
   getFormattedDate = getFormattedDate;
   getFormattedCurrency = getFormattedCurrency;
@@ -62,7 +61,6 @@ export class ModalViewDeliveryComponent implements OnInit {
   private directionsRenderer: any;
   private geocoder: any;
 
-
   @Input() datasViewOrder!: IViewOrder | null;
   @Output() close = new EventEmitter<boolean>();
 
@@ -73,15 +71,23 @@ export class ModalViewDeliveryComponent implements OnInit {
       );
       this.date_hours = retuneDateAndHours(this.datasViewOrder?.order.date);
       this.updateProgressBar();
+
+    } else {
+      this.date_hours =  this.datasViewOrder?.order?.date ?retuneDateAndHours(this.datasViewOrder?.order?.date):{date:'',hours:''};
+      this.statusPorcentagem = 20;
+      this.cdr.detectChanges();
+
     }
     this.cdr.detectChanges();
-    this.loadGoogleMaps().then(() => {
-      // Aqui, garantimos que o geocoder é inicializado apenas após a API ser carregada.
-      this.geocoder = new google.maps.Geocoder();
-      this.initMap();
-    }).catch(error => {
-      console.error('Erro ao carregar a API do Google Maps', error);
-    });
+    this.loadGoogleMaps()
+      .then(() => {
+        // Aqui, garantimos que o geocoder é inicializado apenas após a API ser carregada.
+        this.geocoder = new google.maps.Geocoder();
+        this.initMap();
+      })
+      .catch((error) => {
+        console.error('Erro ao carregar a API do Google Maps', error);
+      });
   }
   updateProgressBar() {
     this.stateBar.cancelled = this.statusViewOrder.some(
@@ -93,15 +99,14 @@ export class ModalViewDeliveryComponent implements OnInit {
     this.stateBar.inprocess =
       this.stateBar.cancelled === this.stateBar.finalized;
 
-    //const contein_FoC:boolean  = this.statusViewOrder.some((s)=>s.status?.name ==='CANCELADO') ===this.statusViewOrder.some((s)=>s.status?.name ==='FINALIZADO')
     const progressIncrement =
       this.statusViewOrder.length < 4
-        ? 100 / 5
+        ? 100 / 4
         : 100 / this.statusViewOrder.length;
 
     this.statusPorcentagem = !this.stateBar.inprocess
       ? 100
-      : progressIncrement * this.statusViewOrder.length - 10;
+      : progressIncrement * this.statusViewOrder.length;
   }
   closeModal() {
     this.close.emit(false);
@@ -116,82 +121,69 @@ export class ModalViewDeliveryComponent implements OnInit {
     return 'undefined';
   }
 
-
   // mapa
-// Função para carregar a API do Google Maps dinamicamente
-private loadGoogleMaps(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (typeof google === 'object' && typeof google.maps === 'object') {
-      resolve(); // Se já estiver carregado, resolve imediatamente
-      return;
-    }
+  // Função para carregar a API do Google Maps dinamicamente
+  private loadGoogleMaps(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (typeof google === 'object' && typeof google.maps === 'object') {
+        resolve(); // Se já estiver carregado, resolve imediatamente
+        return;
+      }
 
-    const script = document.createElement('script');
+      const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=&libraries=directions`;
-    script.onload = () => resolve();
-    script.onerror = (error) => reject(error);
-    document.head.appendChild(script);
-  });
-}
+      script.onload = () => resolve();
+      script.onerror = (error) => reject(error);
+      document.head.appendChild(script);
+    });
+  }
   private initMap() {
     const latLng = { lat: -20.7985185, lng: -49.4105718 }; // Ponto A (Av. Fortunato Ernesto Vetorasso, 550)
 
     this.map = new google.maps.Map(this.mapContainer.nativeElement, {
       center: latLng,
       zoom: 14,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
     });
 
     this.directionsService = new google.maps.DirectionsService();
     this.directionsRenderer = new google.maps.DirectionsRenderer();
     this.directionsRenderer.setMap(this.map);
 
-    this.calculateRoute(latLng, this.datasViewOrder?.order?.address?.place +
-      ', ' +
-      this.datasViewOrder?.order?.address?.number + ', ' +
-      ', ' +this.datasViewOrder?.order?.address?.neighborhood +', ' +this.datasViewOrder?.order?.address?.uf );
+    const dataRegion = `${this.datasViewOrder?.order?.address?.place},${this.datasViewOrder?.order?.address?.number},${this.datasViewOrder?.order?.address?.neighborhood},${this.datasViewOrder?.order?.address?.city},${this.datasViewOrder?.order?.address?.uf},`;
+    this.calculateRoute(latLng, dataRegion);
   }
 
   // Função para calcular a rota entre os pontos A e B
-  // private calculateRoute(origin: any, destination: any) {
-  //   const request = {
-  //     origin: origin,
-  //     destination: destination,
-  //     travelMode: google.maps.TravelMode.DRIVING
-  //   };
 
-  //   this.directionsService.route(request, (result: any, status: any) => {
-  //     if (status === google.maps.DirectionsStatus.OK) {
-  //       this.directionsRenderer.setDirections(result);
-  //     } else {
-  //       alert('Erro ao calcular a rota: ' + status);
-  //     }
-  //   });
-  // }
- // Função para calcular a rota entre os pontos A e B
- private calculateRoute(origin: any, destination: string) {
-  // Geocodificar o endereço do ponto B
-  this.geocoder.geocode({ address: destination }, (results: any, status: any) => {
-    if (status === google.maps.GeocoderStatus.OK) {
-      const destinationLatLng = results[0].geometry.location;
+  // Função para calcular a rota entre os pontos A e B
+  private calculateRoute(origin: any, destination: string) {
+    // Geocodificar o endereço do ponto B
+    this.geocoder.geocode(
+      { address: destination },
+      (results: any, status: any) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+          const destinationLatLng = results[0].geometry.location;
 
-      const request = {
-        origin: origin,
-        destination: destinationLatLng,
-        travelMode: google.maps.TravelMode.DRIVING
-      };
+          const request = {
+            origin: origin,
+            destination: destinationLatLng,
+            travelMode: google.maps.TravelMode.DRIVING,
+          };
 
-      this.directionsService.route(request, (result: any, status: any) => {
-        if (status === google.maps.DirectionsStatus.OK) {
-          this.directionsRenderer.setDirections(result);
+          this.directionsService.route(request, (result: any, status: any) => {
+            if (status === google.maps.DirectionsStatus.OK) {
+              this.directionsRenderer.setDirections(result);
+            } else {
+              alert('Erro ao calcular a rota: ' + status);
+            }
+          });
         } else {
-          alert('Erro ao calcular a rota: ' + status);
+          alert(
+            'Não foi possível geocodificar o endereço do ponto B: ' + status
+          );
         }
-      });
-    } else {
-      alert('Não foi possível geocodificar o endereço do ponto B: ' + status);
-    }
-  });
-}
-
+      }
+    );
+  }
 }

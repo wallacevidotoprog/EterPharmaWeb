@@ -122,7 +122,7 @@
 
 <section div class="container modal-container">
   <input type="button" value="X" (click)="closeModal()" />
-  <main class="status-container opem-animation">
+  <main class="status-container opem-animation" >
     <tbody class="detals-order">
       <tr class="detals">
         <td class="client_info td-table">
@@ -258,7 +258,7 @@
 
             <table>
               <tbody>
-                <tr class="n-order">
+                <tr class="n-order" *>
                   <td>{{ date_hours.date }}</td>
                   <td>
                     {{ date_hours.hours }}
@@ -306,9 +306,11 @@
     </div>
 
     <div class="view-status" >
-      <div>
-        <p class="status-text">PEDIDO INICIADO</p>
-        <p class="status-time">{{ getFormattedDate(datasViewOrder?.order?.date) }}</p>
+      <div class="status in-progress">
+        <div>
+          <p class="status-text">PEDIDO INICIADO</p>
+          <p class="status-time">{{ getFormattedDate(datasViewOrder?.order?.date) }}</p>
+        </div>
       </div>
       @for (item of statusViewOrder; track $index) {
       <div class="status in-progress">
@@ -320,7 +322,7 @@
       }
     </div>
 
-    <div #mapContainer style="height: 400px; width: 100%;"></div>
+    <div #mapContainer style="height: 300px; width: 100%;"></div>
   </main>
 
 </section>
