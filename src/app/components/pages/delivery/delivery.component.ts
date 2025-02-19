@@ -101,6 +101,7 @@ export class DeliveryComponent implements OnInit {
   protected datasTypeOrder: IDatasInput[] = [];
   protected isModalDeliveryViewVisible: boolean = false;
   protected selectedRow: IViewOrder | null = null;
+  protected useractive: any;
   //@Output() close = new EventEmitter<boolean>();
 
   async ngOnInit() {
@@ -118,7 +119,7 @@ export class DeliveryComponent implements OnInit {
 
     await this.usersService.getUsersAll().subscribe({
       next: (data) => {
-        let users = data as IUsers[];
+        let users = data.users as IUsers[];
 
         for (let index = 0; index < users.length; index++) {
           if (users[index].position?.name.includes('ENTREGADOR')) {
@@ -127,6 +128,16 @@ export class DeliveryComponent implements OnInit {
               id: users[index].id,
               view: users[index].name,
             });
+          }
+        }
+        if (data.useractive) {
+          this.useractive = data.useractive;
+          if (this.useractive) {
+            this.new_delivery
+              .get('user_id')
+              ?.setValue(this.useractive.id);
+
+
           }
         }
       },
@@ -382,6 +393,6 @@ export class DeliveryComponent implements OnInit {
       this.onAction(this.selectedRow, ev);
       return;
     }
-    this.showModal = false
+    this.showModal = false;
   }
 }

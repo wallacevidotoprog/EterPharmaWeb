@@ -10,15 +10,24 @@ import { IRespAPI, IUsers } from './indexers.service';
 export class UserServiceService {
   private api = inject(HttpClient);
 
-  getUsersAll(): Observable<IUsers[]> {
+  getUsersAll(): Observable<{ users: IUsers[]; useractive: any }> {
     return this.api
-      .get<IRespAPI<IUsers[]>>(`${environment.API}api/users-default`, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      })
-      .pipe(map((resp: IRespAPI<IUsers[]>) => resp.data ?? []));
+      .get<IRespAPI<{ users: IUsers[]; useractive: any }>>(
+        `${environment.API}api/users-default`,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      )
+      .pipe(
+        map((resp) => ({
+          users: resp.data?.users ?? [],
+          useractive: resp.data?.useractive ?? null,
+        }))
+      );
   }
+
 }

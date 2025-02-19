@@ -1,13 +1,1 @@
-<div class="container">
-  <label [attr.for]="id" class="text">{{ label }}</label>
-  <select
-    name="dropdown"
-    [id]="id"
-    (change)="onchange($event)"
-    [(ngModel)]="value"
-  >
-    @for (item of dataValues; track $index) {
-    <option [value]="item['id']">{{ item["view"] }}</option>
-    }
-  </select>
-</div>
+

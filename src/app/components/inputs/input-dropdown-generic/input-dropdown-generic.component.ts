@@ -22,7 +22,21 @@ const INPUT_FIELD_VALUE_ACESSOR: any = {
   selector: 'app-input-dropdown-generic',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './input-dropdown-generic.component.html',
+  template: `
+    <div class="container">
+      <label [attr.for]="id" class="text">{{ label }}</label>
+      <select
+        name="dropdown"
+        [id]="id"
+        (change)="onchange($event)"
+        [(ngModel)]="value"
+      >
+        @for (item of dataValues; track $index) {
+        <option [value]="item['id']">{{ item['view'] }}</option>
+        }
+      </select>
+    </div>
+  `,
   styleUrl: './input-dropdown-generic.component.css',
   providers: [INPUT_FIELD_VALUE_ACESSOR],
 })
@@ -38,7 +52,7 @@ export class InputDropdownGenericComponent
   }
   @Input() id!: number;
   @Input() label: string = 'TIPO';
-  @Input() dataValues: IDatasInput[]=[];
+  @Input() dataValues: IDatasInput[] = [];
   @Output() idDP = new EventEmitter<number>();
   @Input() isReadOnly = false;
   @Input() isValue: any;
@@ -76,4 +90,3 @@ export class InputDropdownGenericComponent
     this.isReadOnly = isDisabled;
   }
 }
-

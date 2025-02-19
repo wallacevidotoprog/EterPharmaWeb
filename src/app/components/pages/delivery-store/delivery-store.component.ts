@@ -134,7 +134,7 @@ export class DeliveryStoreComponent implements OnInit {
     });
     await this.usersService.getUsersAll().subscribe({
       next: (data) => {
-        const users = data as ITypeOrder[] | any;
+        const users = data.users as ITypeOrder[] | any;
         for (let index = 0; index < users.length; index++) {
           this.datasUsers.push({
             id: users[index].id,
@@ -146,6 +146,7 @@ export class DeliveryStoreComponent implements OnInit {
         console.log(err);
       },
     });
+
     await this.deliveryService.getStatus().subscribe({
       next: (data) => {
         const typeOrders = data as IStatus[] | any;

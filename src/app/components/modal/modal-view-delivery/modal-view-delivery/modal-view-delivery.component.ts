@@ -27,6 +27,7 @@ import {
   getFormattedDate,
   ordernationStatusDelivery,
 } from '../../../../utils/global.utils';
+import { environment } from '../../../../../environments/environment';
 declare var google: any;
 @Component({
   standalone: true,
@@ -131,7 +132,7 @@ export class ModalViewDeliveryComponent implements OnInit {
       }
 
       const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=&libraries=directions`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.googleMapApi}&libraries=directions`;
       script.onload = () => resolve();
       script.onerror = (error) => reject(error);
       document.head.appendChild(script);

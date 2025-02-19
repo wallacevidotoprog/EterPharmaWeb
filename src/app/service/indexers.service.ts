@@ -29,7 +29,7 @@ export interface IMaintenanceData {
 }
 export interface IRespAPI<T> {
   message?: string;
-  actionResult: boolean;
+  actionResult?: boolean;
   data?: T;
 }
 export interface IVerifyAuth {
@@ -98,6 +98,8 @@ export interface IUsers extends IBaseDataBase {
   stats: boolean;
 
   position?: IPosition
+
+  useractive?:IUsers
 }
 export interface IPosition extends IBaseDataBase {
   name: string;
