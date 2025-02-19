@@ -218,6 +218,9 @@ tbody tr.hide td img {
   padding: 1rem 1rem;
   border-radius: 2rem;
   text-align: center;
+  font-size: 15px;
+  border-style: double;
+
 }
 
 .status.finished {
@@ -239,14 +242,14 @@ tbody tr.hide td img {
 }
 
 .status.collected {
-  background-color: #6610f2;
+  background-color: #17a2b8;
   color: #ffffff;
   border: 1px solid #4e0cb3;
 }
 
 .status.route {
-  background-color: #17a2b8;
-  color: #ffffff;
+  background-color: #ffc107;
+  color:black;
   border: 1px solid #117a8b;
 }
 
@@ -419,17 +422,19 @@ button:active {
   margin: 2px;
   font-weight: bolder;
   border-style: double;
-  background-color: rgb(81, 226, 81);
+  background-color: #28a745;
+  color: white;
   &:hover {
-    background-color: rgb(5, 92, 5);
+    background-color: #218838;
     color: white;
   }
 
 }
 .bt-detals{
-  background-color: rgb(81, 115, 226);
+  background-color: #007bff;
+  color: white;
   &:hover {
-    background-color: rgb(29, 8, 223);
+    background-color: #0056b3;
     color: white;
   }
 }
@@ -438,20 +443,28 @@ button:active {
   display: none;
 }
 .act-cancel {
-  background-color: rgb(247, 60, 60);
+  background-color: #dc3545; /* Vermelho */
+  color: white;
+  transition: background 0.3s;
   &:hover {
-    background-color: rgb(238, 18, 18);
+    background-color: #c82333;
     color: white;
   }
 }
+.select-all{
+  display: none;
+}
 // --------------------------------------------------------------NOVO
 @media screen and (max-width: 600px) {
+  .select-all{
+    display: block;
+  }
   .status {
     width: 100%;
   }
   .btn-action {
     min-width: 100px;
-    font-size: 10px;
+    font-size: 15px;
     cursor: pointer;
   }
   table {

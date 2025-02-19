@@ -135,10 +135,7 @@ export class DeliveryComponent implements OnInit {
           if (this.useractive) {
             this.new_delivery
               .get('user_id')
-              ?.setValue(this.useractive.id);
-
-
-          }
+              ?.setValue(this.useractive.id);}
         }
       },
       error: (err) => {
@@ -261,7 +258,7 @@ export class DeliveryComponent implements OnInit {
             if (!value) {
               this.tAlert.error({
                 detail: 'Falhar ao criar novo Entrega',
-                summary: value?.toString(),
+                summary: `${value}`,
                 duration: 5000,
               });
               return;
@@ -276,7 +273,7 @@ export class DeliveryComponent implements OnInit {
           error: (err) => {
             this.tAlert.error({
               detail: 'Falhar ao criar novo Entrega',
-              summary: err?.toString(),
+              summary: `${err.name} \n${err.message}`,
               duration: 5000,
             });
             console.error('Erro ao registrar Entrega:', err);
@@ -377,7 +374,7 @@ export class DeliveryComponent implements OnInit {
           catchError((err) => {
             this.tAlert.error({
               detail: 'Falhar ao atualizar Entrega',
-              summary: err?.toString(),
+              summary: `${err.name} \n${err.message}`,
               duration: 5000,
             });
             console.error('Erro ao registrar status:', err);

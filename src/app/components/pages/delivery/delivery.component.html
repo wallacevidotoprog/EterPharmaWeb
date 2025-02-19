@@ -140,11 +140,6 @@
       ph="12345"
       formControlName="motor_kilometers"
     />
-    <!-- <app-input-dropdown-generic
-        label="AÇÃO"
-        [dataValues]="datasState"
-        formControlName="status_id"
-      /> -->
     <app-input-button-generic
       class="btn-send"
       [loading]="isLoad"
@@ -154,6 +149,12 @@
   </form>
 
   <table>
+    <input
+          type="button"
+          value="SELECIONAR TUDO"
+          class="status btn-action select-all"
+          (click)="toggleAll($event)"
+        />
     <thead>
       <tr>
         <th *ngIf="checkedOrderFilter.open; else colRot">
@@ -168,7 +169,7 @@
         <th>VALOR</th>
         <th>TIPO</th>
         <th>STATUS</th>
-        <th  *ngIf="checkedOrderFilter.open;"></th>
+        <th>DETALHES </th>
       </tr>
     </thead>
     <tbody>
@@ -236,12 +237,13 @@
             {{ returnOrdernationStatusDelivery(row)?.name || "SEM STATUS" }}
           </p>
         </td>
-        <input
-              type="button"
-              value="DETALHES"
-              class="status btn-action bt-detals"
-              (click)="onRowClick(row, i)"
-            />
+        <td><input
+          type="button"
+          value="DETALHES"
+          class="status btn-action bt-detals"
+          (click)="onRowClick(row, i)"
+        /></td>
+
       </tr>
     </tbody>
   </table>

@@ -1,20 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { format } from 'date-fns';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpStatus } from '../utils/HttpStatus';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 import {
   IAddress,
   ICEP,
   IClients,
-  IDeliveryDataRes,
   IDeliverySend,
   IDeliveryStatus,
   IEndereco,
-  IOrder,
   IRespAPI,
   IStatus,
   ITypeOrder,
@@ -71,41 +66,8 @@ export class DeliveryService {
       );
   }
   async getCep(cep: number): Promise<Observable<ICEP | null>> {
-
     return this.api
-    .get(`https://viacep.com.br/ws/${cep}/json/`, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      observe: 'response',
-    })
-    .pipe(
-      map((resp) => {
-        const status: HttpStatus = resp.status as HttpStatus;
-        if (status === HttpStatus.OK) {
-          if (resp.body !== null) {
-            const respBody: IEndereco = resp.body as IEndereco;
-            const reticep:ICEP ={
-              cep:respBody.cep,
-              street:respBody.logradouro,
-              city:respBody.localidade,
-              neighborhood:respBody.bairro,
-              state:respBody.uf,
-              service:respBody.regiao
-            }
-            return reticep;
-          }
-          return null
-
-        }
-        return null;
-      })
-    );
-
-    if (true) {
-          return this.api
-      .get(`https://brasilapi.com.br/api/cep/v1/${cep}`, {
+      .get(`https://viacep.com.br/ws/${cep}/json/`, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -116,18 +78,48 @@ export class DeliveryService {
         map((resp) => {
           const status: HttpStatus = resp.status as HttpStatus;
           if (status === HttpStatus.OK) {
-            const respBody: ICEP | any = resp.body;
-            return respBody;
+            if (resp.body !== null) {
+              const respBody: IEndereco = resp.body as IEndereco;
+              const reticep: ICEP = {
+                cep: respBody.cep,
+                street: respBody.logradouro,
+                city: respBody.localidade,
+                neighborhood: respBody.bairro,
+                state: respBody.uf,
+                service: respBody.regiao,
+              };
+              return reticep;
+            }
+            return null;
           }
           return null;
         })
       );
+
+    if (true) {
+      return this.api
+        .get(`https://brasilapi.com.br/api/cep/v1/${cep}`, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          observe: 'response',
+        })
+        .pipe(
+          map((resp) => {
+            const status: HttpStatus = resp.status as HttpStatus;
+            if (status === HttpStatus.OK) {
+              const respBody: ICEP | any = resp.body;
+              return respBody;
+            }
+            return null;
+          })
+        );
     }
     return new Observable<ICEP | null>((observer) => {
       observer.next(null);
       observer.complete();
     });
-
   }
 
   getClient(cod: string, type: 'c_interno' | 'cpf') {
@@ -160,8 +152,13 @@ export class DeliveryService {
         })
       );
   }
-  getViewOrder(date:string,between:boolean=false): Observable<IViewOrder[] | null> {
-    const params = !between ? new URLSearchParams({ ['date']: date }).toString() : date;
+  getViewOrder(
+    date: string,
+    between: boolean = false
+  ): Observable<IViewOrder[] | null> {
+    const params = !between
+      ? new URLSearchParams({ ['date']: date }).toString()
+      : date;
     return this.api
       .get<IRespAPI<IViewOrder[]>>(
         `${environment.API}api/order_view?${params}`,
@@ -178,7 +175,7 @@ export class DeliveryService {
         map((resp) => {
           const status: HttpStatus = resp.status as HttpStatus;
           if (status === HttpStatus.OK || status === HttpStatus.CREATED) {
-            return resp.body?.data??null;
+            return resp.body?.data ?? null;
           }
           return null;
         })
@@ -259,11 +256,15 @@ export class DeliveryService {
       );
   }
 
-  registerDeliveryAndStatus(obj : IDeliverySend, type: 'colleted-all' | 'simple'):Observable<number|null>{
+  registerDeliveryAndStatus(
+    obj: IDeliverySend,
+    type: 'colleted-all' | 'simple'
+  ): Observable<number | null> {
     const params = new URLSearchParams({ type: type }).toString();
     return this.api
       .post<IRespAPI<number | null>>(
-        `${environment.API}api/delivery?${params}`,obj,
+        `${environment.API}api/delivery?${params}`,
+        obj,
         {
           headers: {
             Accept: 'application/json',
@@ -284,11 +285,12 @@ export class DeliveryService {
         })
       );
   }
-  registerDeliveryStatus(obj : IDeliveryStatus):Observable<number|null>{
+  registerDeliveryStatus(obj: IDeliveryStatus): Observable<number | null> {
     //const params = new URLSearchParams({ type: type }).toString();
     return this.api
       .post<IRespAPI<number | null>>(
-        `${environment.API}api/delivery_status`,obj,
+        `${environment.API}api/delivery_status`,
+        obj,
         {
           headers: {
             Accept: 'application/json',
@@ -310,15 +312,19 @@ export class DeliveryService {
       );
   }
 
-  async buscaCPFOnline(cpf: string){
+  async buscaCPFOnline(cpf: string) {
     try {
       // Realiza a primeira requisição
-      const respostaPrimeira = await this.fazerPrimeiraRequisicao(cpf).toPromise();
+      const respostaPrimeira = await this.fazerPrimeiraRequisicao(
+        cpf
+      ).toPromise();
 
       if (respostaPrimeira.sucesso) {
         console.log('Primeira requisição bem-sucedida!');
         // Realiza a segunda requisição usando o valor da primeira
-        await this.fazerSegundaRequisicao(respostaPrimeira.resposta).toPromise();
+        await this.fazerSegundaRequisicao(
+          respostaPrimeira.resposta
+        ).toPromise();
         console.log('Segunda requisição bem-sucedida!');
       } else {
         console.error('Falha na primeira requisição');
@@ -328,12 +334,14 @@ export class DeliveryService {
     }
   }
 
-
   private fazerPrimeiraRequisicao(cpf: string): Observable<any> {
     const formData = new FormData();
     formData.append('cpf', cpf);
 
-    return this.api.post('https://totalcpf.com/conteudo/apis/cpf.php', formData);
+    return this.api.post(
+      'https://totalcpf.com/conteudo/apis/cpf.php',
+      formData
+    );
   }
 
   // Função para a segunda requisição
@@ -356,18 +364,20 @@ export class DeliveryService {
 
   teste() {
     return this.api
-      .post<IRespAPI<IStatus>>(`${environment.API}api/status`,
+      .post<IRespAPI<IStatus>>(
+        `${environment.API}api/status`,
         {
-        "name":"teste"
+          name: 'teste',
         },
         {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-        observe: 'response',
-      })
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+          observe: 'response',
+        }
+      )
       .pipe(
         map((resp) => {
           const status: HttpStatus = resp.status as HttpStatus;

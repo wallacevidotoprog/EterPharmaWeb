@@ -62,7 +62,7 @@ export class DeliveryStoreComponent implements OnInit {
       error: (err) => {
         this.tAlert.error({
           detail: 'Falhar ao criar novo Entrega',
-          summary: err?.toString(),
+          summary: `${err.name} \n${err.message}`,
           duration: 5000,
         });
       },
@@ -141,6 +141,7 @@ export class DeliveryStoreComponent implements OnInit {
             view: users[index].name,
           });
         }
+        
       },
       error: (err) => {
         console.log(err);
@@ -296,10 +297,8 @@ export class DeliveryStoreComponent implements OnInit {
     this.updateViewOrder(status);
   }
   onEditClick(dvo: IViewOrder) {
-
     this.editOrder = true;
     this.selectViewOrder = dvo;
     this.openModalNewOrder();
-
   }
 }
