@@ -21,7 +21,7 @@
   width: 90%;
   position: relative;
   margin: 5px;
-  
+
   &.REGISTER_ORDER {
     animation: fadeIn 0.3s ease-in-out forwards;
   }
@@ -89,4 +89,29 @@ span{
     opacity: 0;
     transform: scale(0.8);
   }
+}
+/* Estilos para o dropdown */
+.dropdown {
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  width: 100%;
+  background-color: white;
+  z-index: 10;
+}
+
+.dropdown ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dropdown li:hover {
+  background-color: #f0f0f0;
 }

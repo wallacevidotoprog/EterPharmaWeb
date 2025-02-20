@@ -9,6 +9,7 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { LoginService } from '../../../service/login.service';
 import { LoadingModalComponent } from '../../modal/loading-modal/loading-modal.component';
 import { GlobalLoaderService } from '../../../service/loading.service';
+import { MapComponent } from "../../maps/maps.component";
 @Component({
   selector: 'app-sidebar-layout',
   standalone: true,
@@ -21,7 +22,8 @@ import { GlobalLoaderService } from '../../../service/loading.service';
     MatButtonModule,
     MatListModule,
     MatExpansionModule,
-  ],
+    MapComponent
+],
   templateUrl: './sidebar-layout.component.html',
   styleUrl: './sidebar-layout.component.scss',
 })

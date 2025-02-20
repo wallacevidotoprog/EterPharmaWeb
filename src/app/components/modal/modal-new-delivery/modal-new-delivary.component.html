@@ -141,7 +141,17 @@
         id="place"
         ph=" Exp.: Rua Auriflama"
         formControlName="place"
+        [isBtnVisible]="true"
+        btnString="Buscar por Nome"
+        (button_Click)="search()"
       />
+      <div *ngIf="isDropdownOpen" class="dropdown">
+        <ul>
+          <li *ngFor="let item of suggestions; let i = index" (click)="selectSuggestion(i)">
+            {{ item }} <!-- Exibe a sugestão -->
+          </li>
+        </ul>
+      </div>
       <app-input-generic
         type="number"
         label="NÚMERO"

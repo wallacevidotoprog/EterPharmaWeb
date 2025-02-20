@@ -28,6 +28,7 @@ import {
   ordernationStatusDelivery,
 } from '../../../../utils/global.utils';
 import { environment } from '../../../../../environments/environment';
+import { MapComponent } from "../../../maps/maps.component";
 declare var google: any;
 @Component({
   standalone: true,
@@ -37,7 +38,8 @@ declare var google: any;
     MatButtonModule,
     MatProgressBarModule,
     MatIconModule,
-  ],
+    MapComponent
+],
   selector: 'app-modal-view-delivery',
   templateUrl: './modal-view-delivery.component.html',
   styleUrls: ['./modal-view-delivery.component.css'],
@@ -62,6 +64,8 @@ export class ModalViewDeliveryComponent implements OnInit {
   private directionsRenderer: any;
   private geocoder: any;
 
+  protected dataRegion!:string
+
   @Input() datasViewOrder!: IViewOrder | null;
   @Output() close = new EventEmitter<boolean>();
 
@@ -80,15 +84,16 @@ export class ModalViewDeliveryComponent implements OnInit {
 
     }
     this.cdr.detectChanges();
-    this.loadGoogleMaps()
-      .then(() => {
-        // Aqui, garantimos que o geocoder é inicializado apenas após a API ser carregada.
-        this.geocoder = new google.maps.Geocoder();
-        this.initMap();
-      })
-      .catch((error) => {
-        console.error('Erro ao carregar a API do Google Maps', error);
-      });
+    this.dataRegion = `${this.datasViewOrder?.order?.address?.place} , ${this.datasViewOrder?.order?.address?.number} , ${this.datasViewOrder?.order?.address?.city}`;
+    // this.loadGoogleMaps()
+    //   .then(() => {
+    //     // Aqui, garantimos que o geocoder é inicializado apenas após a API ser carregada.
+    //     this.geocoder = new google.maps.Geocoder();
+    //     this.initMap();
+    //   })
+    //   .catch((error) => {
+    //     console.error('Erro ao carregar a API do Google Maps', error);
+    //   });
   }
   updateProgressBar() {
     this.stateBar.cancelled = this.statusViewOrder.some(
@@ -151,15 +156,12 @@ export class ModalViewDeliveryComponent implements OnInit {
     this.directionsRenderer = new google.maps.DirectionsRenderer();
     this.directionsRenderer.setMap(this.map);
 
-    const dataRegion = `${this.datasViewOrder?.order?.address?.place},${this.datasViewOrder?.order?.address?.number},${this.datasViewOrder?.order?.address?.neighborhood},${this.datasViewOrder?.order?.address?.city},${this.datasViewOrder?.order?.address?.uf},`;
-    this.calculateRoute(latLng, dataRegion);
+    this.dataRegion = `${this.datasViewOrder?.order?.address?.place},${this.datasViewOrder?.order?.address?.number},${this.datasViewOrder?.order?.address?.neighborhood},${this.datasViewOrder?.order?.address?.city},${this.datasViewOrder?.order?.address?.uf},`;
+    this.calculateRoute(latLng, this.dataRegion);
   }
 
-  // Função para calcular a rota entre os pontos A e B
 
-  // Função para calcular a rota entre os pontos A e B
   private calculateRoute(origin: any, destination: string) {
-    // Geocodificar o endereço do ponto B
     this.geocoder.geocode(
       { address: destination },
       (results: any, status: any) => {

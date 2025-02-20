@@ -1,18 +1,17 @@
+import { HttpClientModule } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { LoginService } from '../../service/login.service';
 import { Router } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
-import { pipe, Subject, take, takeUntil } from 'rxjs';
-import { AlertComponent, StateAlert } from '../alert/alert.component';
-import { AlertService } from '../alert/alert.service';
 import { NgToastService } from 'ng-angular-popup';
+import { Subject, takeUntil } from 'rxjs';
+import { LoginService } from '../../service/login.service';
+import { MapComponent } from '../maps/maps.component';
 @Component({
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
-  imports: [FormsModule, HttpClientModule],
+  imports: [FormsModule, HttpClientModule,MapComponent],
 })
 export class LoginComponent implements OnInit {
   protected unsubscribe = new Subject<void>();

@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  HostListener,
   inject,
   Input,
   OnInit,
@@ -18,7 +19,7 @@ import {
 } from '@angular/forms';
 import { NgToastService } from 'ng-angular-popup';
 import { DeliveryService } from '../../../service/delivery.service';
-import { IDatasInput, IViewOrder } from '../../../service/indexers.service';
+import { IDatasInput, IViewOrder, LocationInfo } from '../../../service/indexers.service';
 import {
   convertToCpfToRgToPhoneToCep,
   refineStringToNumber,
@@ -33,6 +34,7 @@ import {
   IClients,
   IOrderDelivery,
 } from './../../../service/indexers.service';
+import { GeocodeService } from '../../../service/geocode.service';
 
 @Component({
   selector: 'app-modal-new-delivary',
@@ -51,7 +53,10 @@ import {
 export class ModalNewDelivaryComponent implements OnInit {
   removeIfNull = removeIfNull;
 
+  @HostListener('document:click', ['$event'])
+
   protected deliveryService = inject(DeliveryService);
+  private geocodeService = inject(GeocodeService);
   protected tAlert = inject(NgToastService);
   private cdr = inject(ChangeDetectorRef);
 
@@ -73,6 +78,12 @@ export class ModalNewDelivaryComponent implements OnInit {
   protected StateModel = StateModel;
   protected clientIdIsEnabled = false;
   protected addressIdIsEnabled = false;
+
+  locations: LocationInfo[] = [];
+  searchTerm: string = '';
+  suggestions: string[] = [];
+  isDropdownOpen: boolean = false;
+  selectedSuggestion: string | null = null;
 
   protected orderRegisterAPI!: {
     order: IOrderDelivery;
@@ -419,6 +430,54 @@ export class ModalNewDelivaryComponent implements OnInit {
         name: client.name,
       };
       this.orderRegisterAPI.client = client;
+    }
+  }
+
+  search() {
+    this.searchTerm = this.new_address.value.place;
+    if (!this.searchTerm.trim()) return;
+
+    this.geocodeService.getListStreetsAndCoord(this.searchTerm).subscribe(
+      (data: LocationInfo[]) => {
+        this.locations = data;
+        this.generateSuggestions();
+
+      },
+      error => {
+        console.error('Erro ao buscar localização:', error);
+      }
+    );
+  }
+  generateSuggestions() {
+    this.suggestions = []
+    for (let index = 0; index < this.locations.length; index++) {
+      const element = this.locations[index];
+      this.suggestions.push(`${element.label[0]}  -  ${element.label[1]} - ${element.label[8]}`)
+    }
+    this.isDropdownOpen = true;
+    this.cdr.detectChanges();
+  }
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+  closeDropdown() {
+    this.isDropdownOpen = false;
+  }
+  selectSuggestion(index: number) {
+    this.selectedSuggestion = this.suggestions[index];
+    this.new_address.get('cep')?.setValue(this.locations[index].label[8]);
+    this.new_address.get('place')?.setValue(this.locations[index].label[0]);
+      this.new_address.get('neighborhood')?.setValue(this.locations[index].label[1]);
+      this.new_address.get('city')?.setValue(this.locations[index].label[2]);
+      this.new_address.get('uf')?.setValue('SP');
+      this.cdr.detectChanges();
+
+    this.closeDropdown();
+  }
+  onClickOutside(event: MouseEvent) {
+    const dropdown = document.querySelector('.dropdown');
+    if (dropdown && !dropdown.contains(event.target as Node)) {
+      this.closeDropdown();
     }
   }
 }

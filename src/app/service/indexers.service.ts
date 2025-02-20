@@ -65,8 +65,8 @@ export interface IDatasInput {
 }
 export interface IOrderFilter {
   open?: IViewOrder[];
-  collected?:IViewOrder[];
-  route?:IViewOrder[];
+  collected?: IViewOrder[];
+  route?: IViewOrder[];
   canceled?: IViewOrder[];
   finalized?: IViewOrder[];
 }
@@ -97,9 +97,9 @@ export interface IUsers extends IBaseDataBase {
   permissions_id?: number | null;
   stats: boolean;
 
-  position?: IPosition
+  position?: IPosition;
 
-  useractive?:IUsers
+  useractive?: IUsers;
 }
 export interface IPosition extends IBaseDataBase {
   name: string;
@@ -136,7 +136,7 @@ export interface IDelivery extends IBaseDataBase {
   motor_kilometers: number;
   delivery_status: IDeliveryStatus[];
 
-  user?: IUsers
+  user?: IUsers;
 }
 export interface IDeliveryStatus extends IBaseDataBase {
   delivery_id?: string;
@@ -151,13 +151,13 @@ export interface IOrder extends IBaseDataBase {
   address_id?: string;
   type_order_id?: string;
   value: number;
-  obs:string
+  obs: string;
 
   delivery?: IDelivery;
   client?: IClients;
   address?: IAddress;
-  type_order?:ITypeOrder
-  user?: IUsers
+  type_order?: ITypeOrder;
+  user?: IUsers;
 }
 
 //API REQ/RES
@@ -201,4 +201,22 @@ export interface IEndereco {
   gia: string;
   ddd: string;
   siafi: string;
+}
+export interface LocationInfo {
+  label: string[];
+  coordinates: [lon: number, lat: number];
+}
+export interface CustomFeature {
+  properties: {
+    geocoding: {
+      label: string;
+    };
+  };
+  geometry: {
+    coordinates: [lon: number, lat: number];
+  };
+}
+
+export interface ApiResponse {
+  features: CustomFeature[];
 }
