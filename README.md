@@ -1,8 +1,16 @@
-# SITE PARA GERENCIAR ENTREGAR, PARADA DE MOTO E MANUTENÇÕES PARA UMA REDE DE FARMACIA. A API ESTA QUE FAZ O GERENCIAMENTO BACK-END ESTA EM : https://github.com/wallacevidotoprog/Monitoramento-MotoEntregado
+# SITE PARA GERENCIAR ENTREGAR, PARADA DE MOTO E MANUTENÇÕES PARA UMA REDE DE FARMACIA. A API ESTA QUE FAZ O GERENCIAMENTO BACK-END ESTA EM : https://github.com/wallacevidotoprog/API-EterPharmaPro
 
 
 
-
+![Logo do Projeto](https://github.com/wallacevidotoprog/EterPharmaWeb/blob/main/fotos/loging.png)
+![Logo do Projeto](https://github.com/wallacevidotoprog/EterPharmaWeb/blob/main/fotos/main.png)
+![Logo do Projeto](https://github.com/wallacevidotoprog/EterPharmaWeb/blob/main/fotos/main2.png)
+![Logo do Projeto](https://github.com/wallacevidotoprog/EterPharmaWeb/blob/main/fotos/main3.png)
+![Logo do Projeto](https://github.com/wallacevidotoprog/EterPharmaWeb/blob/main/fotos/main4.png)
+![Logo do Projeto](https://github.com/wallacevidotoprog/EterPharmaWeb/blob/main/fotos/entrega.png)
+![Logo do Projeto](https://github.com/wallacevidotoprog/EterPharmaWeb/blob/main/fotos/entrega1.png)
+![Logo do Projeto](https://github.com/wallacevidotoprog/EterPharmaWeb/blob/main/fotos/entrega2.png)
+![Logo do Projeto](https://github.com/wallacevidotoprog/EterPharmaWeb/blob/main/fotos/report.png)
 
 
 
